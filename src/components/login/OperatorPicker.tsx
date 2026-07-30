@@ -33,17 +33,8 @@ export function OperatorPicker({ onSelect }: OperatorPickerProps) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <div
-        style={{
-          fontSize: 11,
-          fontWeight: 700,
-          color: colors.textDim,
-          textTransform: 'uppercase',
-          letterSpacing: '0.1em',
-          textAlign: 'center',
-        }}
-      >
-        Selecciona tu turno
+      <div style={{ fontSize: 13, fontWeight: 600, color: colors.textMuted, textAlign: 'center' }}>
+        Seleccioná tu turno
       </div>
 
       {loading && (
@@ -66,8 +57,8 @@ export function OperatorPicker({ onSelect }: OperatorPickerProps) {
               display: 'flex',
               alignItems: 'center',
               gap: 12,
-              border: `1.5px solid ${colors.border}`,
-              background: colors.bgInput,
+              border: `1px solid ${colors.border}`,
+              background: colors.bgCard,
               borderRadius: 12,
               padding: '13px 16px',
               cursor: 'pointer',
@@ -77,17 +68,17 @@ export function OperatorPicker({ onSelect }: OperatorPickerProps) {
           >
             <span
               style={{
-                width: 34,
-                height: 34,
-                borderRadius: 8,
-                background: colors.accentBgSofter,
-                color: colors.accentText,
+                width: 32,
+                height: 32,
+                borderRadius: 9,
+                border: `1px solid ${colors.borderDashed}`,
+                color: colors.textMuted,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontFamily: fonts.display,
-                fontWeight: 800,
-                fontSize: 15,
+                fontFamily: fonts.mono,
+                fontWeight: 600,
+                fontSize: 12,
                 flexShrink: 0,
               }}
             >

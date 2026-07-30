@@ -18,10 +18,10 @@ export function ThemeToggle({ style }: ThemeToggleProps) {
       aria-label={isLight ? 'Cambiar a tema oscuro' : 'Cambiar a tema claro'}
       title={isLight ? 'Tema oscuro' : 'Tema claro'}
       style={{
-        width: 38,
-        height: 38,
-        borderRadius: 10,
-        border: `1.5px solid ${colors.border}`,
+        width: 34,
+        height: 34,
+        borderRadius: 9,
+        border: `1px solid ${colors.border}`,
         background: colors.bgCard,
         color: colors.textMuted,
         display: 'flex',
@@ -34,7 +34,7 @@ export function ThemeToggle({ style }: ThemeToggleProps) {
         ...style,
       }}
     >
-      {isLight ? <Moon size={17} strokeWidth={2} /> : <Sun size={17} strokeWidth={2} />}
+      {isLight ? <Moon size={16} strokeWidth={2} /> : <Sun size={16} strokeWidth={2} />}
     </button>
   );
 }

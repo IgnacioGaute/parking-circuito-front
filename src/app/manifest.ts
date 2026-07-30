@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Registro de entradas y salidas de vehículos',
     start_url: '/',
     display: 'standalone',
-    background_color: '#101114',
-    theme_color: '#f6a723',
+    background_color: '#0A0B0D',
+    theme_color: '#D9A441',
     icons: [
       {
         src: '/icons/icon-192.png',

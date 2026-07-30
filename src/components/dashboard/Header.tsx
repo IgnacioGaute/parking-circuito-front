@@ -1,6 +1,6 @@
 'use client';
 
-import { LogOut } from 'lucide-react';
+import { Clock, LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -37,24 +37,23 @@ export function Header({ operatorName }: HeaderProps) {
         top: 0,
         zIndex: 20,
         background: colors.bgHeader,
-        borderRadius: '0 0 22px 22px',
-        boxShadow: `0 10px 28px ${colors.shadow}`,
-        padding: '14px 20px 12px',
+        borderBottom: `1px solid ${colors.border}`,
+        padding: '16px 20px 13px',
         display: 'flex',
         flexDirection: 'column',
-        gap: 10,
+        gap: 11,
         animation: 'fadeUp .45s both',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 11, minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 9, minWidth: 0 }}>
           <div
             style={{
-              width: 36,
-              height: 36,
+              width: 26,
+              height: 26,
               flexShrink: 0,
+              borderRadius: 7,
               background: colors.accent,
-              clipPath: 'polygon(0 0,100% 0,100% 70%,70% 100%,0 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -62,8 +61,8 @@ export function Header({ operatorName }: HeaderProps) {
           >
             <div
               style={{
-                width: 22,
-                height: 4.5,
+                width: 15,
+                height: 3.5,
                 background: colors.accentContrast,
                 transform: 'rotate(-24deg)',
                 borderRadius: 2,
@@ -72,11 +71,8 @@ export function Header({ operatorName }: HeaderProps) {
           </div>
           <div
             style={{
-              fontFamily: fonts.display,
-              fontWeight: 800,
-              fontSize: 17,
-              letterSpacing: '0.03em',
-              textTransform: 'uppercase',
+              fontWeight: 700,
+              fontSize: 15,
               lineHeight: 1.15,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -87,23 +83,14 @@ export function Header({ operatorName }: HeaderProps) {
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-          <div
-            style={{
-              textAlign: 'right',
-              background: colors.bgInputAlt,
-              borderRadius: 12,
-              padding: '5px 12px',
-              lineHeight: 1.2,
-            }}
-          >
-            <div
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: colors.textMuted }}>
+            <Clock size={14} strokeWidth={2} />
+            <span
               style={{
-                fontFamily: fonts.display,
-                fontSize: 16,
-                fontWeight: 800,
+                fontFamily: fonts.mono,
+                fontSize: 12.5,
                 fontVariantNumeric: 'tabular-nums',
-                letterSpacing: '0.02em',
               }}
             >
               {now
@@ -113,41 +100,14 @@ export function Header({ operatorName }: HeaderProps) {
                     second: '2-digit',
                   })
                 : '--:--:--'}
-            </div>
-            <div
-              style={{
-                fontSize: 9,
-                color: colors.textDim,
-                textTransform: 'uppercase',
-                letterSpacing: '0.06em',
-                marginTop: 1,
-              }}
-            >
-              {now
-                ? now.toLocaleDateString('es', {
-                    weekday: 'short',
-                    day: '2-digit',
-                    month: 'short',
-                  })
-                : ''}
-            </div>
+            </span>
           </div>
           <ThemeToggle />
         </div>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            background: colors.bgInputAlt,
-            borderRadius: 999,
-            padding: '6px 12px 6px 10px',
-            minWidth: 0,
-          }}
-        >
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
           <span
             style={{
               width: 7,
@@ -158,53 +118,29 @@ export function Header({ operatorName }: HeaderProps) {
               animation: 'pulseDot 2s ease-in-out infinite',
             }}
           />
-          <span
-            style={{
-              fontSize: 10.5,
-              color: colors.textMuted,
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              flexShrink: 0,
-            }}
-          >
-            En turno
-          </span>
-          <span
-            style={{
-              fontWeight: 700,
-              color: colors.accentText,
-              fontSize: 12,
-              letterSpacing: '0.02em',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
+          <span style={{ fontSize: 13, fontWeight: 600, color: colors.textPrimary, flexShrink: 0 }}>
             {operatorName}
           </span>
         </div>
 
         <button
           onClick={handleChange}
+          title="Cerrar turno"
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 6,
-            border: `1.5px solid ${colors.border}`,
+            justifyContent: 'center',
+            width: 26,
+            height: 26,
+            border: `1px solid ${colors.border}`,
             background: 'transparent',
             color: colors.textMuted,
-            borderRadius: 999,
-            padding: '6px 14px',
-            fontSize: 11,
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em',
+            borderRadius: 7,
             cursor: 'pointer',
             flexShrink: 0,
           }}
         >
           <LogOut size={13} strokeWidth={2.2} />
-          Cambiar turno
         </button>
       </div>
     </header>

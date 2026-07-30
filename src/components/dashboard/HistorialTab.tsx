@@ -6,13 +6,10 @@ import { createPortal } from 'react-dom';
 import { getHistoryAction } from '@/actions/parking-records.actions';
 import {
   dateKey,
-  formatDate,
   formatDateHeading,
   formatDuration,
   formatTime,
   timeKey,
-  tipoColors,
-  tipoLabel,
 } from '@/lib/format';
 import { colors, fonts } from '@/styles/theme';
 import type { ParkingRecord, VehicleType } from '@/types';
@@ -20,11 +17,7 @@ import type { ParkingRecord, VehicleType } from '@/types';
 const PAGE_SIZE = 8;
 
 function VehicleIcon({ tipo, size = 18 }: { tipo: 'auto' | 'moto'; size?: number }) {
-  return tipo === 'auto' ? (
-    <Car size={size} strokeWidth={1.8} />
-  ) : (
-    <Bike size={size} strokeWidth={1.8} />
-  );
+  return tipo === 'auto' ? <Car size={size} strokeWidth={2} /> : <Bike size={size} strokeWidth={2} />;
 }
 
 // Records don't carry a plain "date" — a completed visit is dated by its
@@ -122,46 +115,35 @@ export function HistorialTab() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18, animation: 'fadeUp .3s both' }}>
-      <div
-        style={{
-          fontFamily: fonts.display,
-          fontSize: 22,
-          fontWeight: 800,
-          textTransform: 'uppercase',
-          letterSpacing: '0.03em',
-        }}
-      >
-        Historial
-      </div>
+      <div style={{ fontSize: 18, fontWeight: 700 }}>Historial</div>
 
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
         <div style={{ position: 'relative', flex: 2, minWidth: 160 }}>
           <Search
             size={16}
-            strokeWidth={1.8}
+            strokeWidth={2}
             style={{
               position: 'absolute',
               left: 13,
               top: '50%',
               transform: 'translateY(-50%)',
-              color: colors.textDimmer,
+              color: colors.textDim,
               pointerEvents: 'none',
             }}
           />
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="BUSCAR POR PLACA…"
+            placeholder="Buscar por placa"
             style={{
               width: '100%',
               boxSizing: 'border-box',
-              border: `1.5px solid ${colors.border}`,
-              background: colors.bgCard,
-              borderRadius: 10,
+              border: `1px solid ${colors.border}`,
+              background: colors.bgInput,
+              borderRadius: 12,
               padding: '12px 14px 12px 38px',
               font: 'inherit',
               fontSize: 14,
-              letterSpacing: '0.03em',
               outline: 'none',
               color: colors.textPrimary,
             }}
@@ -175,9 +157,9 @@ export function HistorialTab() {
               width: '100%',
               boxSizing: 'border-box',
               appearance: 'none',
-              border: `1.5px solid ${colors.border}`,
-              background: colors.bgCard,
-              borderRadius: 10,
+              border: `1px solid ${colors.border}`,
+              background: colors.bgInput,
+              borderRadius: 12,
               padding: '12px 36px 12px 14px',
               font: 'inherit',
               fontSize: 14,
@@ -209,11 +191,11 @@ export function HistorialTab() {
             position: 'relative',
             flexShrink: 0,
             width: 46,
-            border: `1.5px solid ${activeTimeFilters > 0 ? colors.accent : colors.border}`,
-            background: colors.bgCard,
-            color: activeTimeFilters > 0 ? colors.accentText : colors.textPrimary,
+            border: `1px solid ${activeTimeFilters > 0 ? colors.accent : colors.border}`,
+            background: colors.bgInput,
+            color: activeTimeFilters > 0 ? colors.accent : colors.textPrimary,
             cursor: 'pointer',
-            borderRadius: 10,
+            borderRadius: 12,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -221,7 +203,7 @@ export function HistorialTab() {
           aria-label="Filtrar por fecha y horario"
           title="Filtrar por fecha y horario"
         >
-          <SlidersHorizontal size={17} strokeWidth={1.8} />
+          <SlidersHorizontal size={17} strokeWidth={2} />
           {activeTimeFilters > 0 && (
             <span
               style={{
@@ -251,10 +233,10 @@ export function HistorialTab() {
           style={{
             textAlign: 'center',
             padding: '60px 16px',
-            color: colors.textDimmer,
+            color: colors.textDim,
             fontSize: 14,
             border: `1px dashed ${colors.border}`,
-            borderRadius: 10,
+            borderRadius: 12,
           }}
         >
           Sin registros que coincidan.
@@ -276,25 +258,15 @@ export function HistorialTab() {
                 gap: 8,
               }}
             >
-              <span
-                style={{
-                  fontFamily: fonts.display,
-                  fontSize: 13,
-                  fontWeight: 800,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  color: colors.textMuted,
-                }}
-              >
+              <span style={{ fontSize: 13, fontWeight: 700, color: colors.textMuted }}>
                 {formatDateHeading(key)}
               </span>
-              <span style={{ fontSize: 11.5, color: colors.textDimmer }}>
+              <span style={{ fontSize: 11.5, color: colors.textDim }}>
                 {groupRecords.length} {groupRecords.length === 1 ? 'registro' : 'registros'}
               </span>
             </div>
 
             {groupRecords.map((record) => {
-              const typeColors = tipoColors(record.tipo);
               return (
                 <div
                   key={record.id}
@@ -302,127 +274,60 @@ export function HistorialTab() {
                     background: colors.bgCard,
                     border: `1px solid ${colors.border}`,
                     borderRadius: 14,
-                    padding: '14px 18px',
+                    padding: '14px 16px',
                     display: 'flex',
-                    alignItems: 'center',
-                    gap: 16,
-                    flexWrap: 'wrap',
+                    flexDirection: 'column',
+                    gap: 9,
                   }}
                 >
-                  <span
-                    style={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: 9,
-                      background: typeColors.bg,
-                      color: typeColors.color,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0,
-                    }}
-                  >
-                    <VehicleIcon tipo={record.tipo} size={16} />
-                  </span>
-                  <div style={{ minWidth: 110 }}>
-                    <div
-                      style={{
-                        display: 'inline-block',
-                        background: colors.plateBg,
-                        color: colors.plateText,
-                        borderRadius: 6,
-                        padding: '2px 8px',
-                        fontFamily: fonts.display,
-                        fontWeight: 800,
-                        fontSize: 16,
-                        letterSpacing: '0.05em',
-                      }}
-                    >
-                      {record.placa}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+                      <span style={{ display: 'flex', color: colors.textDim, flexShrink: 0 }}>
+                        <VehicleIcon tipo={record.tipo} size={15} />
+                      </span>
+                      <span style={{ fontFamily: fonts.mono, fontWeight: 700, fontSize: 14.5 }}>
+                        {record.placa}
+                      </span>
                     </div>
-                    <div
+                    <span
                       style={{
                         fontSize: 10.5,
-                        color: colors.textDim,
-                        marginTop: 5,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.04em',
+                        fontWeight: 700,
+                        padding: '3px 9px',
+                        borderRadius: 999,
+                        background: colors.bgInputAlt,
+                        color: colors.textMuted,
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
                       }}
                     >
-                      {tipoLabel(record.tipo)} · {record.salidaTime ? formatDate(record.salidaTime) : ''}
-                    </div>
-                  </div>
-                  <div style={{ flex: 1, minWidth: 150, display: 'flex', gap: 20 }}>
-                    <div>
-                      <div
-                        style={{
-                          fontSize: 10,
-                          color: colors.textDimmer,
-                          fontWeight: 700,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.08em',
-                        }}
-                      >
-                        Entrada
-                      </div>
-                      <div style={{ fontFamily: fonts.display, fontSize: 15, fontWeight: 700 }}>
-                        {formatTime(record.entradaTime)}
-                      </div>
-                    </div>
-                    <div>
-                      <div
-                        style={{
-                          fontSize: 10,
-                          color: colors.textDimmer,
-                          fontWeight: 700,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.08em',
-                        }}
-                      >
-                        Salida
-                      </div>
-                      <div style={{ fontFamily: fonts.display, fontSize: 15, fontWeight: 700 }}>
-                        {record.salidaTime ? formatTime(record.salidaTime) : '—'}
-                      </div>
-                    </div>
-                    <div>
-                      <div
-                        style={{
-                          fontSize: 10,
-                          color: colors.textDimmer,
-                          fontWeight: 700,
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.08em',
-                        }}
-                      >
-                        Duración
-                      </div>
-                      <div
-                        style={{
-                          fontFamily: fonts.display,
-                          fontSize: 15,
-                          fontWeight: 700,
-                          color: colors.accentText,
-                        }}
-                      >
-                        {record.salidaTime
-                          ? formatDuration(
-                              new Date(record.salidaTime).getTime() - new Date(record.entradaTime).getTime(),
-                            )
-                          : '—'}
-                      </div>
-                    </div>
+                      {record.operadorEntrada.name}
+                      {record.operadorSalida && record.operadorSalida.id !== record.operadorEntrada.id
+                        ? ` → ${record.operadorSalida.name}`
+                        : ''}
+                    </span>
                   </div>
                   <div
                     style={{
-                      fontSize: 11,
-                      color: colors.textDimmer,
-                      whiteSpace: 'nowrap',
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.04em',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      gap: 8,
+                      fontFamily: fonts.mono,
+                      fontSize: 11.5,
+                      color: colors.textMuted,
                     }}
                   >
-                    {record.operadorEntrada.name} → {record.operadorSalida?.name ?? '—'}
+                    <span>
+                      {formatTime(record.entradaTime)}
+                      {record.salidaTime ? ` – ${formatTime(record.salidaTime)}` : ''}
+                    </span>
+                    <span style={{ color: colors.accent, fontWeight: 700, flexShrink: 0 }}>
+                      {record.salidaTime
+                        ? formatDuration(
+                            new Date(record.salidaTime).getTime() - new Date(record.entradaTime).getTime(),
+                          )
+                        : '—'}
+                    </span>
                   </div>
                 </div>
               );
@@ -434,18 +339,15 @@ export function HistorialTab() {
           <button
             onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
             style={{
-              border: `1.5px dashed ${colors.border}`,
+              border: `1px dashed ${colors.borderDashed}`,
               background: 'transparent',
               color: colors.textMuted,
               cursor: 'pointer',
               padding: '13px 18px',
               borderRadius: 12,
               font: 'inherit',
-              fontFamily: fonts.display,
-              fontWeight: 700,
+              fontWeight: 600,
               fontSize: 13,
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
             }}
           >
             Cargar {Math.min(remaining, PAGE_SIZE)} más ({remaining} restantes)
@@ -485,11 +387,9 @@ interface DateTimeFiltersSheetProps {
 }
 
 const fieldLabelStyle: React.CSSProperties = {
-  fontSize: 11,
-  fontWeight: 700,
-  color: colors.textDimmer,
-  textTransform: 'uppercase',
-  letterSpacing: '0.06em',
+  fontSize: 12,
+  fontWeight: 600,
+  color: colors.textMuted,
   marginBottom: 6,
   display: 'block',
 };
@@ -497,7 +397,7 @@ const fieldLabelStyle: React.CSSProperties = {
 const dateTimeInputStyle: React.CSSProperties = {
   width: '100%',
   boxSizing: 'border-box',
-  border: `1.5px solid ${colors.border}`,
+  border: `1px solid ${colors.border}`,
   background: colors.bgInput,
   borderRadius: 10,
   padding: '11px 12px',
@@ -568,24 +468,14 @@ function DateTimeFiltersSheet({
             flexShrink: 0,
           }}
         >
-          <div
-            style={{
-              fontFamily: fonts.display,
-              fontWeight: 800,
-              fontSize: 19,
-              textTransform: 'uppercase',
-              letterSpacing: '0.02em',
-            }}
-          >
-            Filtrar historial
-          </div>
+          <div style={{ fontWeight: 700, fontSize: 17 }}>Filtrar historial</div>
           <button
             onClick={onClose}
             aria-label="Cerrar"
             style={{
               width: 34,
               height: 34,
-              border: `1.5px solid ${colors.border}`,
+              border: `1px solid ${colors.border}`,
               borderRadius: 10,
               background: 'transparent',
               color: colors.textMuted,
@@ -668,7 +558,7 @@ function DateTimeFiltersSheet({
                 />
               </div>
             </div>
-            <div style={{ fontSize: 11.5, color: colors.textDimmer, marginTop: 8 }}>
+            <div style={{ fontSize: 11.5, color: colors.textDim, marginTop: 8 }}>
               Filtra por la hora del día, sin importar la fecha. Si &quot;Desde&quot; es mayor
               que &quot;Hasta&quot;, se interpreta como un rango que cruza la medianoche.
             </div>
@@ -688,18 +578,15 @@ function DateTimeFiltersSheet({
             onClick={onClear}
             style={{
               flex: 1,
-              border: `1.5px solid ${colors.border}`,
+              border: `1px solid ${colors.border}`,
               background: 'transparent',
               color: colors.textMuted,
               cursor: 'pointer',
               padding: 15,
-              borderRadius: 14,
+              borderRadius: 12,
               font: 'inherit',
-              fontFamily: fonts.display,
-              fontWeight: 700,
+              fontWeight: 600,
               fontSize: 14,
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
             }}
           >
             Limpiar
@@ -713,13 +600,10 @@ function DateTimeFiltersSheet({
               color: colors.accentContrast,
               cursor: 'pointer',
               padding: 15,
-              borderRadius: 14,
+              borderRadius: 12,
               font: 'inherit',
-              fontFamily: fonts.display,
-              fontWeight: 800,
+              fontWeight: 700,
               fontSize: 14,
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
             }}
           >
             Aplicar

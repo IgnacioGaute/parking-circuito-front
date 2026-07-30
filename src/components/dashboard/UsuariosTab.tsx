@@ -20,17 +20,7 @@ export function UsuariosTab() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18, animation: 'fadeUp .3s both' }}>
-      <div
-        style={{
-          fontFamily: fonts.display,
-          fontSize: 22,
-          fontWeight: 800,
-          textTransform: 'uppercase',
-          letterSpacing: '0.03em',
-        }}
-      >
-        Registro de operadores
-      </div>
+      <div style={{ fontSize: 18, fontWeight: 700 }}>Registro de operadores</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {operators.map((op) => {
           const active = op.onDuty;
@@ -41,7 +31,7 @@ export function UsuariosTab() {
                 background: colors.bgCard,
                 border: `1px solid ${active ? colors.accent : colors.border}`,
                 borderRadius: 14,
-                padding: '16px 18px',
+                padding: '15px 16px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 14,
@@ -49,17 +39,17 @@ export function UsuariosTab() {
             >
               <span
                 style={{
-                  width: 40,
-                  height: 40,
+                  width: 38,
+                  height: 38,
                   borderRadius: 10,
                   background: active ? colors.accent : colors.accentBgSoft,
                   color: active ? colors.accentContrast : colors.textMuted,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontFamily: fonts.display,
-                  fontWeight: 800,
-                  fontSize: 16,
+                  fontFamily: fonts.mono,
+                  fontWeight: 600,
+                  fontSize: 13,
                   flexShrink: 0,
                 }}
               >
@@ -67,31 +57,19 @@ export function UsuariosTab() {
               </span>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontWeight: 700, fontSize: 15 }}>{op.name}</div>
-                <div
-                  style={{
-                    fontSize: 11,
-                    color: colors.textDim,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    marginTop: 3,
-                  }}
-                >
-                  Operador
-                </div>
+                <div style={{ fontSize: 12, color: colors.textMuted, marginTop: 3 }}>Operador</div>
               </div>
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: 6,
-                  background: active ? colors.greenBgSoft : colors.border,
+                  background: active ? colors.greenBgSoft : colors.bgInputAlt,
                   color: active ? colors.green : colors.textDim,
                   padding: '5px 12px',
                   borderRadius: 999,
-                  fontSize: 11,
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
+                  fontSize: 11.5,
+                  fontWeight: 600,
                   flexShrink: 0,
                 }}
               >

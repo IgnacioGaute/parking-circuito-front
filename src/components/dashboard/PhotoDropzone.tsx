@@ -36,7 +36,7 @@ export function PhotoDropzone({ onFileSelected }: PhotoDropzoneProps) {
       style={{
         width: '100%',
         height: 140,
-        border: `1.5px dashed ${dragOver ? colors.accent : colors.borderDashed}`,
+        border: `1px dashed ${dragOver ? colors.accent : colors.borderDashed}`,
         borderRadius: 12,
         display: 'flex',
         alignItems: 'center',
@@ -69,13 +69,13 @@ export function PhotoDropzone({ onFileSelected }: PhotoDropzoneProps) {
             alignItems: 'center',
             gap: 8,
             fontSize: 13,
-            color: colors.textDimmer,
+            color: colors.textDim,
             padding: '0 16px',
             textAlign: 'center',
           }}
         >
-          <Camera size={22} strokeWidth={1.6} />
-          Arrastra una foto del vehículo
+          <Camera size={22} strokeWidth={2} />
+          Arrastrá una foto del vehículo
         </span>
       )}
     </div>

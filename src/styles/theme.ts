@@ -16,10 +16,6 @@ export const colors = {
   textDim: 'var(--c-text-dim)',
   textDimmer: 'var(--c-text-dimmer)',
   accent: 'var(--c-accent)',
-  // Same hue as `accent`, but darkened for the light theme so it stays
-  // legible as *text on a page background* (accent itself is tuned to sit
-  // on filled buttons/badges, where a bright, light-theme-friendly orange
-  // still contrasts fine against dark button text in both themes).
   accentText: 'var(--c-accent-text)',
   accentContrast: 'var(--c-accent-contrast)',
   accentBgSoft: 'var(--c-accent-bg-soft)',
@@ -28,28 +24,26 @@ export const colors = {
   accentDisabledBg: 'var(--c-accent-disabled-bg)',
   green: 'var(--c-green)',
   greenBgSoft: 'var(--c-green-bg-soft)',
-  cyanAuto: 'var(--c-cyan-auto)',
-  cyanAutoBgSoft: 'var(--c-cyan-auto-bg-soft)',
-  cyanAutoBgSofter: 'var(--c-cyan-auto-bg-softer)',
-  pinkMoto: 'var(--c-pink-moto)',
-  pinkMotoBgSoft: 'var(--c-pink-moto-bg-soft)',
-  pinkMotoBgSofter: 'var(--c-pink-moto-bg-softer)',
-  teal: 'var(--c-teal)',
-  tealText: 'var(--c-teal-text)',
-  badgeInsideBg: 'var(--c-badge-inside-bg)',
   error: 'var(--c-error)',
-  plateBg: 'var(--c-plate-bg)',
-  plateText: 'var(--c-plate-text)',
   shadow: 'var(--c-shadow)',
 } as const;
 
 export const fonts = {
-  display: 'var(--font-barlow-condensed), sans-serif',
-  body: 'var(--font-space-grotesk), system-ui, sans-serif',
+  // Numeric/data readouts — clock, plates, initials, PIN pad, durations.
+  mono: 'var(--font-ibm-plex-mono), monospace',
+  // Everything else, including headings (no separate uppercase display
+  // face in this design — hierarchy comes from weight/size/color).
+  body: 'var(--font-manrope), system-ui, sans-serif',
 } as const;
 
-export const gridBackground = {
+// The halo's size is in viewport units, not %, on purpose: a %-sized radial
+// gradient is relative to the element's own box, and this background sits on
+// wrapper divs that grow taller than the viewport on long scrollable pages —
+// with % sizing the glow stretched down the whole page instead of staying a
+// contained highlight near the top like the source design.
+export const screenBackground = {
   backgroundImage:
-    'linear-gradient(var(--c-grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--c-grid-line) 1px,transparent 1px)',
-  backgroundSize: '34px 34px',
+    'radial-gradient(60vw 40vh at 100% 0%, var(--c-halo) 0%, transparent 80%), radial-gradient(var(--c-grid-dot) 1px, transparent 0)',
+  backgroundSize: 'auto, 14px 14px',
+  backgroundPosition: '0 0, 0 0',
 } as const;

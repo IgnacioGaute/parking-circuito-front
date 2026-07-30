@@ -8,7 +8,7 @@ import {
   getFieldDefinitionsAction,
   updateFieldDefinitionAction,
 } from '@/actions/field-definitions.actions';
-import { colors, fonts } from '@/styles/theme';
+import { colors } from '@/styles/theme';
 import type { FieldDefinition, FieldType } from '@/types';
 
 interface FieldDefinitionsAdminPanelProps {
@@ -16,7 +16,7 @@ interface FieldDefinitionsAdminPanelProps {
 }
 
 const inputStyle: React.CSSProperties = {
-  border: `1.5px solid ${colors.border}`,
+  border: `1px solid ${colors.border}`,
   background: colors.bgInput,
   borderRadius: 10,
   padding: '11px 14px',
@@ -190,24 +190,14 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
       <div>
-        <div
-          style={{
-            fontFamily: fonts.display,
-            fontSize: 18,
-            fontWeight: 800,
-            textTransform: 'uppercase',
-            letterSpacing: '0.03em',
-          }}
-        >
-          Formulario de registrar entrada
-        </div>
+        <div style={{ fontSize: 16, fontWeight: 700 }}>Formulario de registrar entrada</div>
         <div style={{ fontSize: 12.5, color: colors.textDim, marginTop: 4 }}>
           Arrastrá cualquier campo para reordenarlo. Los fijos (placa, tipo, foto) no se
           pueden eliminar, pero sí mover de lugar.
         </div>
       </div>
 
-      {loading && <div style={{ color: colors.textDimmer, fontSize: 13 }}>Cargando…</div>}
+      {loading && <div style={{ color: colors.textDim, fontSize: 13 }}>Cargando…</div>}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {fields.map((field) => (
@@ -236,7 +226,7 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
               onPointerCancel={handlePointerUp}
               style={{
                 display: 'flex',
-                color: colors.textDimmer,
+                color: colors.textDim,
                 width: 18,
                 justifyContent: 'center',
                 flexShrink: 0,
@@ -245,9 +235,9 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
               }}
             >
               {field.isSystem ? (
-                <Lock size={15} strokeWidth={1.8} />
+                <Lock size={15} strokeWidth={2} />
               ) : (
-                <GripVertical size={16} strokeWidth={1.8} />
+                <GripVertical size={16} strokeWidth={2} />
               )}
             </span>
             <div style={{ flex: 1, minWidth: 160 }}>
@@ -260,29 +250,19 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
               >
                 {field.label}
                 {field.required && !field.isSystem && (
-                  <span style={{ color: colors.accentText }}> *</span>
+                  <span style={{ color: colors.accent }}> *</span>
                 )}
               </div>
-              <div
-                style={{
-                  fontSize: 11,
-                  color: field.isSystem ? colors.textDimmer : colors.textDim,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.04em',
-                  marginTop: 3,
-                }}
-              >
+              <div style={{ fontSize: 12, color: colors.textDim, marginTop: 3 }}>
                 {field.isSystem ? fieldHint(field) : `${field.key} · ${fieldHint(field)}`}
               </div>
             </div>
             {field.isSystem ? (
               <span
                 style={{
-                  fontSize: 10.5,
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  color: colors.textDimmer,
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: colors.textDim,
                   border: `1px solid ${colors.border}`,
                   borderRadius: 999,
                   padding: '3px 10px',
@@ -298,7 +278,7 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
                 style={{
                   width: 34,
                   height: 34,
-                  border: `1.5px solid ${colors.error}`,
+                  border: `1px solid ${colors.error}`,
                   background: 'transparent',
                   color: colors.error,
                   cursor: 'pointer',
@@ -309,7 +289,7 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
                   flexShrink: 0,
                 }}
               >
-                <Trash2 size={15} strokeWidth={1.8} />
+                <Trash2 size={15} strokeWidth={2} />
               </button>
             )}
           </div>
@@ -373,7 +353,7 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
               />
             )}
             {label.trim() && (
-              <div style={{ fontSize: 11, color: colors.textDimmer }}>
+              <div style={{ fontSize: 11.5, color: colors.textDim }}>
                 key: <code>{keySlug(label)}</code>
               </div>
             )}
@@ -390,11 +370,8 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
                   padding: '11px 20px',
                   borderRadius: 10,
                   font: 'inherit',
-                  fontFamily: fonts.display,
-                  fontWeight: 800,
-                  fontSize: 13.5,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
+                  fontWeight: 700,
+                  fontSize: 14,
                   opacity: creating ? 0.7 : 1,
                 }}
               >
@@ -403,18 +380,15 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
               <button
                 onClick={resetCreateForm}
                 style={{
-                  border: `1.5px solid ${colors.border}`,
+                  border: `1px solid ${colors.border}`,
                   background: 'transparent',
                   color: colors.textMuted,
                   cursor: 'pointer',
                   padding: '11px 20px',
                   borderRadius: 10,
                   font: 'inherit',
-                  fontFamily: fonts.display,
-                  fontWeight: 700,
-                  fontSize: 13.5,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
+                  fontWeight: 600,
+                  fontSize: 14,
                 }}
               >
                 Cancelar
@@ -425,7 +399,7 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
           <button
             onClick={() => setShowCreateForm(true)}
             style={{
-              border: `1.5px dashed ${colors.border}`,
+              border: `1px dashed ${colors.borderDashed}`,
               background: 'transparent',
               color: colors.textMuted,
               cursor: 'pointer',
@@ -436,15 +410,12 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
               justifyContent: 'center',
               gap: 8,
               font: 'inherit',
-              fontFamily: fonts.display,
-              fontWeight: 700,
+              fontWeight: 600,
               fontSize: 13.5,
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
               textAlign: 'center',
             }}
           >
-            <Plus size={15} strokeWidth={2.2} />
+            <Plus size={15} strokeWidth={2} />
             Agregar campo
           </button>
         )}

@@ -55,8 +55,8 @@ export function tipoLabel(tipo: 'auto' | 'moto'): string {
   return tipo === 'auto' ? 'Auto' : 'Moto';
 }
 
-export function tipoColors(tipo: 'auto' | 'moto'): { bg: string; color: string } {
-  return tipo === 'auto'
-    ? { bg: colors.cyanAutoBgSoft, color: colors.cyanAuto }
-    : { bg: colors.pinkMotoBgSoft, color: colors.pinkMoto };
+// Vehicle type is no longer color-coded (design mockup uses one neutral
+// muted-stroke icon for both auto and moto) — same treatment regardless of type.
+export function tipoColors(): { bg: string; color: string } {
+  return { bg: colors.bgInputAlt, color: colors.textMuted };
 }

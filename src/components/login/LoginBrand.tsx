@@ -1,4 +1,4 @@
-import { colors, fonts } from '@/styles/theme';
+import { colors } from '@/styles/theme';
 
 export function LoginBrand() {
   return (
@@ -13,10 +13,10 @@ export function LoginBrand() {
     >
       <div
         style={{
-          width: 56,
-          height: 56,
+          width: 44,
+          height: 44,
+          borderRadius: 11,
           background: colors.accent,
-          clipPath: 'polygon(0 0,100% 0,100% 70%,70% 100%,0 100%)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -24,8 +24,8 @@ export function LoginBrand() {
       >
         <div
           style={{
-            width: 34,
-            height: 6,
+            width: 26,
+            height: 5,
             background: colors.accentContrast,
             transform: 'rotate(-24deg)',
             borderRadius: 2,
@@ -35,17 +35,12 @@ export function LoginBrand() {
       <div>
         <div
           style={{
-            fontFamily: fonts.display,
-            fontWeight: 800,
-            fontSize: 24,
-            textTransform: 'uppercase',
-            letterSpacing: '0.03em',
-            lineHeight: 1.1,
+            fontWeight: 700,
+            fontSize: 20,
+            lineHeight: 1.2,
           }}
         >
-          Control de
-          <br />
-          Estacionamiento
+          Control de Estacionamiento
         </div>
         <div
           style={{
@@ -65,16 +60,7 @@ export function LoginBrand() {
               animation: 'pulseDot 2s ease-in-out infinite',
             }}
           />
-          <span
-            style={{
-              fontSize: 11,
-              color: colors.textMuted,
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-            }}
-          >
-            Acceso de operador
-          </span>
+          <span style={{ fontSize: 12, color: colors.textMuted }}>Acceso de operador</span>
         </div>
       </div>
     </div>

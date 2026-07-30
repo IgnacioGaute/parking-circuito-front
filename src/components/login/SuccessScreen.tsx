@@ -2,7 +2,7 @@
 
 import { ArrowRight, Check } from 'lucide-react';
 import Link from 'next/link';
-import { colors, fonts } from '@/styles/theme';
+import { colors } from '@/styles/theme';
 import type { Operator } from '@/types';
 
 interface SuccessScreenProps {
@@ -36,17 +36,7 @@ export function SuccessScreen({ operator }: SuccessScreenProps) {
         <Check size={28} strokeWidth={2.6} />
       </div>
       <div style={{ textAlign: 'center' }}>
-        <div
-          style={{
-            fontFamily: fonts.display,
-            fontWeight: 800,
-            fontSize: 19,
-            textTransform: 'uppercase',
-            letterSpacing: '0.03em',
-          }}
-        >
-          Turno iniciado
-        </div>
+        <div style={{ fontWeight: 700, fontSize: 18 }}>Turno iniciado</div>
         <div style={{ fontSize: 12.5, color: colors.textMuted, marginTop: 6 }}>
           {operator.name} · acceso concedido
         </div>
@@ -61,12 +51,9 @@ export function SuccessScreen({ operator }: SuccessScreenProps) {
           border: 'none',
           cursor: 'pointer',
           padding: 15,
-          borderRadius: 14,
-          fontFamily: fonts.display,
-          fontWeight: 800,
-          fontSize: 16,
-          textTransform: 'uppercase',
-          letterSpacing: '0.06em',
+          borderRadius: 12,
+          fontWeight: 700,
+          fontSize: 15,
           background: colors.accent,
           color: colors.accentContrast,
           display: 'flex',

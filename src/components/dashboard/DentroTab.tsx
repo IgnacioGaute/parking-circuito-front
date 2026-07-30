@@ -104,29 +104,16 @@ export function DentroTab({ isDesktop, onCountChange }: DentroTabProps) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18, animation: 'fadeUp .3s both' }}>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
+        <span style={{ fontSize: 18, fontWeight: 700 }}>Dentro</span>
         <span
           style={{
-            fontFamily: fonts.display,
-            fontSize: 22,
-            fontWeight: 800,
-            textTransform: 'uppercase',
-            letterSpacing: '0.03em',
+            fontFamily: fonts.mono,
+            fontSize: 13,
+            color: colors.textMuted,
           }}
         >
-          Vehículos dentro
-        </span>
-        <span
-          style={{
-            background: colors.badgeInsideBg,
-            color: colors.accentText,
-            fontSize: 12.5,
-            fontWeight: 700,
-            padding: '2px 10px',
-            borderRadius: 999,
-          }}
-        >
-          {records.length}
+          {records.length} vehículo{records.length === 1 ? '' : 's'}
         </span>
       </div>
 
@@ -134,30 +121,29 @@ export function DentroTab({ isDesktop, onCountChange }: DentroTabProps) {
         <div style={{ position: 'relative' }}>
           <Search
             size={16}
-            strokeWidth={1.8}
+            strokeWidth={2}
             style={{
               position: 'absolute',
               left: 13,
               top: '50%',
               transform: 'translateY(-50%)',
-              color: colors.textDimmer,
+              color: colors.textDim,
               pointerEvents: 'none',
             }}
           />
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="BUSCAR POR PLACA…"
+            placeholder="Buscar por placa"
             style={{
               width: '100%',
               boxSizing: 'border-box',
-              border: `1.5px solid ${colors.border}`,
-              background: colors.bgCard,
-              borderRadius: 10,
+              border: `1px solid ${colors.border}`,
+              background: colors.bgInput,
+              borderRadius: 12,
               padding: '12px 14px 12px 38px',
               font: 'inherit',
               fontSize: 14,
-              letterSpacing: '0.03em',
               outline: 'none',
               color: colors.textPrimary,
             }}
@@ -203,121 +189,71 @@ export function DentroTab({ isDesktop, onCountChange }: DentroTabProps) {
         }}
       >
         {matches.map((record) => {
-          const typeColors = tipoColors(record.tipo);
+          const durationMs = now - new Date(record.entradaTime).getTime();
+          const attention = durationMs > 60 * 60 * 1000;
           return (
             <div
               key={record.id}
               style={{
                 background: colors.bgCard,
                 border: `1px solid ${colors.border}`,
-                borderRadius: 16,
-                padding: 18,
+                borderRadius: 14,
+                padding: 15,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 14,
+                gap: 12,
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span
-                  style={{
-                    width: 38,
-                    height: 38,
-                    borderRadius: 10,
-                    background: typeColors.bg,
-                    color: typeColors.color,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
-                  }}
-                >
-                  <VehicleIcon tipo={record.tipo} />
-                </span>
-                <div style={{ minWidth: 0 }}>
-                  <div
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+                  <span style={{ display: 'flex', color: colors.textDim, flexShrink: 0 }}>
+                    <VehicleIcon tipo={record.tipo} size={15} />
+                  </span>
+                  <span
                     style={{
-                      display: 'inline-block',
-                      background: colors.plateBg,
-                      color: colors.plateText,
-                      borderRadius: 6,
-                      padding: '2px 9px',
-                      fontFamily: fonts.display,
-                      fontWeight: 800,
-                      fontSize: 19,
-                      letterSpacing: '0.05em',
+                      fontFamily: fonts.mono,
+                      fontWeight: 700,
+                      fontSize: 15,
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
                     }}
                   >
                     {record.placa}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: 11,
-                      color: colors.textDim,
-                      marginTop: 5,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.04em',
-                    }}
-                  >
-                    {tipoLabel(record.tipo)} · {record.operadorEntrada.name}
-                  </div>
+                  </span>
                 </div>
+                <span
+                  style={{
+                    fontSize: 10.5,
+                    fontWeight: 700,
+                    padding: '3px 9px',
+                    borderRadius: 999,
+                    flexShrink: 0,
+                    background: attention ? 'rgba(240,97,110,0.14)' : colors.accentBgSoft,
+                    color: attention ? colors.error : colors.accent,
+                  }}
+                >
+                  {attention ? 'Atención' : 'OK'}
+                </span>
               </div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  borderTop: `1px dashed ${colors.border}`,
-                  paddingTop: 12,
-                }}
-              >
-                <div>
-                  <div
-                    style={{
-                      fontSize: 10,
-                      color: colors.textDimmer,
-                      fontWeight: 700,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.08em',
-                    }}
-                  >
-                    Entrada
-                  </div>
-                  <div style={{ fontFamily: fonts.display, fontSize: 16, fontWeight: 700 }}>
-                    {formatTime(record.entradaTime)}
-                  </div>
-                </div>
-                <div style={{ textAlign: 'right' }}>
-                  <div
-                    style={{
-                      fontSize: 10,
-                      color: colors.textDimmer,
-                      fontWeight: 700,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.08em',
-                    }}
-                  >
-                    Tiempo
-                  </div>
-                  <div style={{ fontFamily: fonts.display, fontSize: 16, fontWeight: 700, color: colors.accentText }}>
-                    {formatDuration(now - new Date(record.entradaTime).getTime())}
-                  </div>
-                </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, fontSize: 12, color: colors.textMuted }}>
+                <span>Entró {formatTime(record.entradaTime)}</span>
+                <span style={{ color: colors.accent, fontWeight: 700, flexShrink: 0 }}>
+                  {formatDuration(durationMs)}
+                </span>
               </div>
               <button
                 onClick={() => setConfirmingRecord(record)}
                 style={{
-                  border: `1.5px solid ${colors.border}`,
+                  border: `1px solid ${colors.border}`,
                   background: 'transparent',
                   color: colors.textPrimary,
                   cursor: 'pointer',
                   padding: 11,
                   borderRadius: 10,
                   font: 'inherit',
-                  fontFamily: fonts.display,
-                  fontWeight: 700,
+                  fontWeight: 600,
                   fontSize: 13.5,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
                 }}
               >
                 Registrar salida
@@ -363,7 +299,7 @@ function ExitConfirmModal({
   onCancel,
   onConfirm,
 }: ExitConfirmModalProps) {
-  const typeColors = tipoColors(record.tipo);
+  const typeColors = tipoColors();
   const extraFields = record.extraFields ?? {};
   const extraEntries = customFields
     .map((field) => ({ field, value: extraFields[field.key] }))
@@ -449,17 +385,7 @@ function ExitConfirmModal({
           flexShrink: 0,
         }}
       >
-        <div
-          style={{
-            fontFamily: fonts.display,
-            fontWeight: 800,
-            fontSize: 19,
-            textTransform: 'uppercase',
-            letterSpacing: '0.02em',
-          }}
-        >
-          Confirmar salida
-        </div>
+        <div style={{ fontWeight: 700, fontSize: 17 }}>Confirmar salida</div>
         <button
           onClick={onCancel}
           disabled={busy}
@@ -467,7 +393,7 @@ function ExitConfirmModal({
           style={{
             width: 34,
             height: 34,
-            border: `1.5px solid ${colors.border}`,
+            border: `1px solid ${colors.border}`,
             borderRadius: 10,
             background: 'transparent',
             color: colors.textMuted,
@@ -495,12 +421,12 @@ function ExitConfirmModal({
         }}
       >
         <div style={{ width: '100%', maxWidth: 420, display: 'flex', flexDirection: 'column', gap: 20 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <span
               style={{
-                width: 52,
-                height: 52,
-                borderRadius: 14,
+                width: 44,
+                height: 44,
+                borderRadius: 12,
                 background: typeColors.bg,
                 color: typeColors.color,
                 display: 'flex',
@@ -509,21 +435,9 @@ function ExitConfirmModal({
                 flexShrink: 0,
               }}
             >
-              <VehicleIcon tipo={record.tipo} size={24} />
+              <VehicleIcon tipo={record.tipo} size={21} />
             </span>
-            <div
-              style={{
-                display: 'inline-block',
-                background: colors.plateBg,
-                color: colors.plateText,
-                borderRadius: 8,
-                padding: '5px 14px',
-                fontFamily: fonts.display,
-                fontWeight: 800,
-                fontSize: 26,
-                letterSpacing: '0.06em',
-              }}
-            >
+            <div style={{ fontFamily: fonts.mono, fontWeight: 700, fontSize: 22 }}>
               {record.placa}
             </div>
           </div>
@@ -533,10 +447,10 @@ function ExitConfirmModal({
               display: 'flex',
               flexDirection: 'column',
               gap: 10,
-              background: colors.bgCard,
+              background: colors.bgInput,
               border: `1px solid ${colors.border}`,
-              borderRadius: 16,
-              padding: '18px 20px',
+              borderRadius: 14,
+              padding: '16px 18px',
             }}
           >
             {rows.map((row) => (
@@ -598,18 +512,15 @@ function ExitConfirmModal({
             disabled={busy}
             style={{
               flex: 1,
-              border: `1.5px solid ${colors.border}`,
+              border: `1px solid ${colors.border}`,
               background: 'transparent',
               color: colors.textMuted,
               cursor: busy ? 'default' : 'pointer',
               padding: 15,
-              borderRadius: 14,
+              borderRadius: 12,
               font: 'inherit',
-              fontFamily: fonts.display,
-              fontWeight: 700,
+              fontWeight: 600,
               fontSize: 14,
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
               opacity: busy ? 0.5 : 1,
             }}
           >
@@ -621,17 +532,14 @@ function ExitConfirmModal({
             style={{
               flex: 2,
               border: 'none',
-              background: colors.error,
-              color: '#fff',
+              background: colors.accent,
+              color: colors.accentContrast,
               cursor: busy ? 'default' : 'pointer',
               padding: 15,
-              borderRadius: 14,
+              borderRadius: 12,
               font: 'inherit',
-              fontFamily: fonts.display,
-              fontWeight: 800,
+              fontWeight: 700,
               fontSize: 14,
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
               opacity: busy ? 0.7 : 1,
             }}
           >
@@ -661,7 +569,7 @@ function ExitConfirmModal({
               left: 0,
               bottom: 0,
               width: '100%',
-              background: 'linear-gradient(180deg,#1c2030,#101114)',
+              background: `linear-gradient(180deg, ${colors.bgCard}, ${colors.bg})`,
               animation:
                 phase === 'closing'
                   ? 'waveDrain .8s cubic-bezier(.65,0,.35,1) forwards'
@@ -682,7 +590,7 @@ function ExitConfirmModal({
             <svg width="60" height="60" viewBox="0 0 24 24" fill="none">
               <path
                 d="m5 13 4 4 10-10"
-                stroke="#4ade80"
+                stroke={colors.green}
                 strokeWidth="2.8"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -700,19 +608,10 @@ function ExitConfirmModal({
                 gap: 6,
               }}
             >
-              <div
-                style={{
-                  fontFamily: fonts.display,
-                  fontWeight: 800,
-                  fontSize: 22,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.03em',
-                  color: '#f7f8fa',
-                }}
-              >
+              <div style={{ fontWeight: 700, fontSize: 20, color: colors.textPrimary }}>
                 Salida confirmada
               </div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: 'rgba(247,248,250,0.65)' }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: colors.textMuted }}>
                 {record.placa} · {tipoLabel(record.tipo)}
               </div>
             </div>

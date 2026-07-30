@@ -17,7 +17,7 @@ interface AdminPanelProps {
 }
 
 const inputStyle: React.CSSProperties = {
-  border: `1.5px solid ${colors.border}`,
+  border: `1px solid ${colors.border}`,
   background: colors.bgInput,
   borderRadius: 10,
   padding: '11px 14px',
@@ -28,9 +28,9 @@ const inputStyle: React.CSSProperties = {
 };
 
 const iconButtonStyle: React.CSSProperties = {
-  width: 36,
-  height: 36,
-  border: `1.5px solid ${colors.border}`,
+  width: 34,
+  height: 34,
+  border: `1px solid ${colors.border}`,
   background: 'transparent',
   color: colors.textPrimary,
   cursor: 'pointer',
@@ -42,18 +42,15 @@ const iconButtonStyle: React.CSSProperties = {
 };
 
 const smallButtonStyle: React.CSSProperties = {
-  border: `1.5px solid ${colors.border}`,
+  border: `1px solid ${colors.border}`,
   background: 'transparent',
   color: colors.textPrimary,
   cursor: 'pointer',
   padding: '8px 14px',
   borderRadius: 9,
   font: 'inherit',
-  fontFamily: fonts.display,
-  fontWeight: 700,
-  fontSize: 12.5,
-  textTransform: 'uppercase',
-  letterSpacing: '0.05em',
+  fontWeight: 600,
+  fontSize: 13,
 };
 
 export function OperatorsAdminPanel({ currentOperatorId, onToast }: AdminPanelProps) {
@@ -116,17 +113,7 @@ export function OperatorsAdminPanel({ currentOperatorId, onToast }: AdminPanelPr
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
       {showCreateForm ? (
         <>
-          <div
-            style={{
-              fontFamily: fonts.display,
-              fontSize: 18,
-              fontWeight: 800,
-              textTransform: 'uppercase',
-              letterSpacing: '0.03em',
-            }}
-          >
-            Crear operador
-          </div>
+          <div style={{ fontSize: 16, fontWeight: 700 }}>Crear operador</div>
           <div
             style={{
               background: colors.bgCard,
@@ -176,11 +163,8 @@ export function OperatorsAdminPanel({ currentOperatorId, onToast }: AdminPanelPr
                 padding: '11px 20px',
                 borderRadius: 10,
                 font: 'inherit',
-                fontFamily: fonts.display,
-                fontWeight: 800,
-                fontSize: 13.5,
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
+                fontWeight: 700,
+                fontSize: 14,
                 opacity: creating ? 0.7 : 1,
               }}
             >
@@ -200,7 +184,7 @@ export function OperatorsAdminPanel({ currentOperatorId, onToast }: AdminPanelPr
         <button
           onClick={() => setShowCreateForm(true)}
           style={{
-            border: `1.5px dashed ${colors.border}`,
+            border: `1px dashed ${colors.borderDashed}`,
             background: 'transparent',
             color: colors.textMuted,
             cursor: 'pointer',
@@ -211,33 +195,19 @@ export function OperatorsAdminPanel({ currentOperatorId, onToast }: AdminPanelPr
             justifyContent: 'center',
             gap: 8,
             font: 'inherit',
-            fontFamily: fonts.display,
-            fontWeight: 700,
+            fontWeight: 600,
             fontSize: 13.5,
-            textTransform: 'uppercase',
-            letterSpacing: '0.05em',
             textAlign: 'center',
           }}
         >
-          <Plus size={15} strokeWidth={2.2} />
+          <Plus size={15} strokeWidth={2} />
           Crear operador
         </button>
       )}
 
-      <div
-        style={{
-          fontFamily: fonts.display,
-          fontSize: 18,
-          fontWeight: 800,
-          textTransform: 'uppercase',
-          letterSpacing: '0.03em',
-          marginTop: 8,
-        }}
-      >
-        Operadores
-      </div>
+      <div style={{ fontSize: 16, fontWeight: 700, marginTop: 8 }}>Operadores</div>
 
-      {loading && <div style={{ color: colors.textDimmer, fontSize: 13 }}>Cargando…</div>}
+      {loading && <div style={{ color: colors.textDim, fontSize: 13 }}>Cargando…</div>}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {operators.map((operator) =>
@@ -269,17 +239,17 @@ export function OperatorsAdminPanel({ currentOperatorId, onToast }: AdminPanelPr
             >
               <span
                 style={{
-                  width: 38,
-                  height: 38,
+                  width: 36,
+                  height: 36,
                   borderRadius: 10,
                   background: operator.role === 'admin' ? colors.accent : colors.accentBgSoft,
                   color: operator.role === 'admin' ? colors.accentContrast : colors.textMuted,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontFamily: fonts.display,
-                  fontWeight: 800,
-                  fontSize: 15,
+                  fontFamily: fonts.mono,
+                  fontWeight: 600,
+                  fontSize: 13,
                   flexShrink: 0,
                 }}
               >
@@ -289,15 +259,13 @@ export function OperatorsAdminPanel({ currentOperatorId, onToast }: AdminPanelPr
                 <div style={{ fontWeight: 700, fontSize: 15 }}>
                   {operator.name}
                   {operator.id === currentOperatorId && (
-                    <span style={{ color: colors.textDimmer, fontWeight: 400 }}> (vos)</span>
+                    <span style={{ color: colors.textDim, fontWeight: 400 }}> (vos)</span>
                   )}
                 </div>
                 <div
                   style={{
-                    fontSize: 11,
-                    color: operator.role === 'admin' ? colors.accentText : colors.textDim,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
+                    fontSize: 12,
+                    color: operator.role === 'admin' ? colors.accent : colors.textDim,
                     marginTop: 3,
                   }}
                 >
@@ -310,7 +278,7 @@ export function OperatorsAdminPanel({ currentOperatorId, onToast }: AdminPanelPr
                 title="Editar"
                 onClick={() => setEditingId(operator.id)}
               >
-                <Pencil size={15} strokeWidth={1.8} />
+                <Pencil size={15} strokeWidth={2} />
               </button>
               <button
                 style={{ ...iconButtonStyle, color: colors.error, borderColor: colors.error }}
@@ -318,7 +286,7 @@ export function OperatorsAdminPanel({ currentOperatorId, onToast }: AdminPanelPr
                 title="Eliminar"
                 onClick={() => handleDelete(operator)}
               >
-                <Trash2 size={15} strokeWidth={1.8} />
+                <Trash2 size={15} strokeWidth={2} />
               </button>
             </div>
           ),
@@ -394,17 +362,14 @@ function OperatorEditRow({ operator, onCancel, onSaved, onError }: OperatorEditR
         disabled={saving}
         style={{
           border: 'none',
-          background: colors.teal,
-          color: colors.tealText,
+          background: colors.accent,
+          color: colors.accentContrast,
           cursor: 'pointer',
           padding: '10px 18px',
           borderRadius: 10,
           font: 'inherit',
-          fontFamily: fonts.display,
-          fontWeight: 800,
-          fontSize: 13,
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em',
+          fontWeight: 700,
+          fontSize: 13.5,
           opacity: saving ? 0.7 : 1,
         }}
       >

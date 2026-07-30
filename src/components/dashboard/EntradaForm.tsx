@@ -53,20 +53,13 @@ const DEFAULT_FIELDS: FieldDefinition[] = [
 ];
 
 const labelStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: 7,
-  fontSize: 11,
-  fontWeight: 700,
+  fontSize: 12,
+  fontWeight: 600,
   color: colors.textMuted,
-  textTransform: 'uppercase',
-  letterSpacing: '0.1em',
 };
 
-const bulletStyle: React.CSSProperties = { width: 6, height: 6, background: colors.accent };
-
 const customInputStyle: React.CSSProperties = {
-  border: `1.5px solid ${colors.border}`,
+  border: `1px solid ${colors.border}`,
   background: colors.bgInput,
   borderRadius: 10,
   padding: '14px 16px',
@@ -149,25 +142,21 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
   };
 
   const renderPlaca = () => (
-    <div key="placa" style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
-      <label style={labelStyle}>
-        <span style={bulletStyle} />
-        Placa
-      </label>
+    <div key="placa" style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+      <label style={labelStyle}>Placa</label>
       <input
         value={placa}
         onChange={(event) => setPlaca(event.target.value.toUpperCase())}
         placeholder="ABC-123"
         style={{
-          border: `2px dashed ${colors.borderDashed}`,
+          border: `1px solid ${colors.borderDashed}`,
           background: colors.bgInput,
-          borderRadius: 10,
-          padding: '16px 18px',
-          fontFamily: fonts.display,
-          fontSize: 34,
-          fontWeight: 800,
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
+          borderRadius: 12,
+          padding: '14px 16px',
+          fontFamily: fonts.mono,
+          fontSize: 23,
+          fontWeight: 600,
+          letterSpacing: '0.03em',
           color: colors.textPrimary,
           outline: 'none',
         }}
@@ -176,108 +165,57 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
   );
 
   const renderTipo = () => (
-    <div key="tipo" style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
-      <label style={labelStyle}>
-        <span style={bulletStyle} />
-        Tipo de vehículo
-      </label>
-      <div style={{ display: 'flex', gap: 12 }}>
+    <div key="tipo" style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+      <label style={labelStyle}>Tipo de vehículo</label>
+      <div style={{ display: 'flex', border: `1px solid ${colors.border}`, borderRadius: 12, overflow: 'hidden' }}>
         <button
           onClick={() => setTipo('auto')}
           style={{
             flex: 1,
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
+            justifyContent: 'center',
             alignItems: 'center',
             gap: 8,
-            border: `1.5px solid ${tipo === 'auto' ? colors.cyanAuto : colors.border}`,
-            background: tipo === 'auto' ? colors.cyanAutoBgSofter : colors.bgInputAlt,
-            borderRadius: 12,
-            padding: '16px 10px',
+            border: 'none',
+            background: tipo === 'auto' ? colors.accentBgSoft : 'transparent',
+            color: tipo === 'auto' ? colors.accent : colors.textMuted,
+            padding: '12px 0',
+            fontSize: 14,
+            fontWeight: 700,
             cursor: 'pointer',
+            display: 'flex',
           }}
         >
-          <span
-            style={{
-              width: 34,
-              height: 34,
-              borderRadius: 8,
-              background: tipo === 'auto' ? colors.cyanAuto : colors.cyanAutoBgSoft,
-              color: tipo === 'auto' ? colors.accentContrast : colors.cyanAuto,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Car size={19} strokeWidth={1.8} />
-          </span>
-          <span
-            style={{
-              fontFamily: fonts.display,
-              fontWeight: 700,
-              fontSize: 14,
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-              color: tipo === 'auto' ? colors.cyanAuto : colors.textPrimary,
-            }}
-          >
-            Auto
-          </span>
+          <Car size={17} strokeWidth={2} />
+          Auto
         </button>
         <button
           onClick={() => setTipo('moto')}
           style={{
             flex: 1,
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'column',
+            justifyContent: 'center',
             alignItems: 'center',
             gap: 8,
-            border: `1.5px solid ${tipo === 'moto' ? colors.pinkMoto : colors.border}`,
-            background: tipo === 'moto' ? colors.pinkMotoBgSofter : colors.bgInputAlt,
-            borderRadius: 12,
-            padding: '16px 10px',
+            border: 'none',
+            borderLeft: `1px solid ${colors.border}`,
+            background: tipo === 'moto' ? colors.accentBgSoft : 'transparent',
+            color: tipo === 'moto' ? colors.accent : colors.textMuted,
+            padding: '12px 0',
+            fontSize: 14,
+            fontWeight: 700,
             cursor: 'pointer',
+            display: 'flex',
           }}
         >
-          <span
-            style={{
-              width: 34,
-              height: 34,
-              borderRadius: 8,
-              background: tipo === 'moto' ? colors.pinkMoto : colors.pinkMotoBgSoft,
-              color: tipo === 'moto' ? colors.accentContrast : colors.pinkMoto,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Bike size={19} strokeWidth={1.8} />
-          </span>
-          <span
-            style={{
-              fontFamily: fonts.display,
-              fontWeight: 700,
-              fontSize: 14,
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-              color: tipo === 'moto' ? colors.pinkMoto : colors.textPrimary,
-            }}
-          >
-            Moto
-          </span>
+          <Bike size={17} strokeWidth={2} />
+          Moto
         </button>
       </div>
     </div>
   );
 
   const renderFoto = () => (
-    <div key="foto" style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
-      <label style={labelStyle}>
-        <span style={bulletStyle} />
-        Foto (opcional)
-      </label>
+    <div key="foto" style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+      <label style={labelStyle}>Foto (opcional)</label>
       <PhotoDropzone onFileSelected={() => undefined} />
     </div>
   );
@@ -285,9 +223,8 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
   const renderCustom = (field: FieldDefinition) => {
     const value = customValues[field.key];
     return (
-      <div key={field.id} style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+      <div key={field.id} style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
         <label style={labelStyle}>
-          <span style={bulletStyle} />
           {field.label}
           {field.required ? '' : ' (opcional)'}
         </label>
@@ -351,11 +288,11 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
       style={{
         background: colors.bgCard,
         border: `1px solid ${colors.border}`,
-        borderRadius: 20,
-        padding: 26,
+        borderRadius: 14,
+        padding: 18,
         display: 'flex',
         flexDirection: 'column',
-        gap: 20,
+        gap: 18,
       }}
     >
       {fields.map((field) => {
@@ -376,14 +313,11 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
         style={{
           border: 'none',
           cursor: disabled ? 'default' : 'pointer',
-          padding: 16,
-          borderRadius: 14,
+          padding: 15,
+          borderRadius: 12,
           font: 'inherit',
-          fontFamily: fonts.display,
-          fontWeight: 800,
-          fontSize: 17,
-          textTransform: 'uppercase',
-          letterSpacing: '0.08em',
+          fontWeight: 700,
+          fontSize: 15,
           background: disabled ? colors.accentDisabledBg : colors.accent,
           color: colors.accentContrast,
           opacity: disabled ? 0.6 : 1,
@@ -412,7 +346,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
                 left: 0,
                 bottom: 0,
                 width: '100%',
-                background: 'linear-gradient(180deg,#1c2030,#101114)',
+                background: `linear-gradient(180deg, ${colors.bgCard}, ${colors.bg})`,
                 animation:
                   phase === 'closing'
                     ? 'waveDrain .8s cubic-bezier(.65,0,.35,1) forwards'
@@ -433,7 +367,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
               <svg width="60" height="60" viewBox="0 0 24 24" fill="none">
                 <path
                   d="m5 13 4 4 10-10"
-                  stroke="#4ade80"
+                  stroke={colors.green}
                   strokeWidth="2.8"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -451,19 +385,10 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
                   gap: 6,
                 }}
               >
-                <div
-                  style={{
-                    fontFamily: fonts.display,
-                    fontWeight: 800,
-                    fontSize: 22,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.03em',
-                    color: '#f7f8fa',
-                  }}
-                >
+                <div style={{ fontWeight: 700, fontSize: 20, color: colors.textPrimary }}>
                   Entrada registrada
                 </div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'rgba(247,248,250,0.65)' }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: colors.textMuted }}>
                   {successInfo.placa} · {successInfo.tipo === 'auto' ? 'Auto' : 'Moto'}
                 </div>
               </div>

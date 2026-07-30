@@ -12,7 +12,7 @@ import { Toast } from '@/components/dashboard/Toast';
 import { UsuariosTab } from '@/components/dashboard/UsuariosTab';
 import { readActiveOperator } from '@/lib/active-operator';
 import { useToast } from '@/lib/use-toast';
-import { colors, gridBackground } from '@/styles/theme';
+import { colors, screenBackground } from '@/styles/theme';
 import type { Operator } from '@/types';
 
 export default function DashboardPage() {
@@ -47,30 +47,15 @@ export default function DashboardPage() {
         minHeight: '100vh',
         position: 'relative',
         background: colors.bg,
-        ...gridBackground,
-        fontFamily: 'var(--font-space-grotesk), system-ui, sans-serif',
+        ...screenBackground,
+        fontFamily: 'var(--font-manrope), system-ui, sans-serif',
         color: colors.textPrimary,
         // Plain `overflowX: hidden` would force overflow-y to `auto` too (per the
         // CSS overflow spec), which makes this box the sticky containing block
         // instead of the viewport — breaking the sticky Header/NavTabs below.
-        // `clip` suppresses the horizontal bleed from the decorative circle
-        // without turning this box into a scroll container.
         overflowX: 'clip',
       }}
     >
-      <div
-        style={{
-          position: 'absolute',
-          top: -160,
-          right: -120,
-          width: 420,
-          height: 420,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle,rgba(246,167,35,0.14),transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
-
       <Header operatorName={activeOperator?.name ?? '—'} />
 
       <div

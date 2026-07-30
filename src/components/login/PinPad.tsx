@@ -87,9 +87,8 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
           color: colors.textDim,
           cursor: 'pointer',
           font: 'inherit',
-          fontSize: 12,
-          textTransform: 'uppercase',
-          letterSpacing: '0.08em',
+          fontSize: 12.5,
+          fontWeight: 600,
           display: 'flex',
           alignItems: 'center',
           gap: 6,
@@ -112,30 +111,20 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
           style={{
             width: 38,
             height: 38,
-            borderRadius: 8,
-            background: colors.accentBgSofter,
-            color: colors.accentText,
+            borderRadius: 10,
+            border: `1px solid ${colors.borderDashed}`,
+            color: colors.textMuted,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontFamily: fonts.display,
-            fontWeight: 800,
-            fontSize: 16,
+            fontFamily: fonts.mono,
+            fontWeight: 600,
+            fontSize: 13,
           }}
         >
           {operator.initials}
         </span>
-        <span
-          style={{
-            fontFamily: fonts.display,
-            fontWeight: 700,
-            fontSize: 19,
-            textTransform: 'uppercase',
-            letterSpacing: '0.02em',
-          }}
-        >
-          {operator.name}
-        </span>
+        <span style={{ fontWeight: 700, fontSize: 18 }}>{operator.name}</span>
       </div>
 
       <div
@@ -159,39 +148,22 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
               <div
                 key={i}
                 style={{
-                  width: 18,
-                  height: 18,
-                  borderRadius: '50%',
-                  border: `2px solid ${error ? colors.error : filled ? colors.accent : colors.borderDashed}`,
+                  width: 9,
+                  height: 9,
+                  borderRadius: 2,
                   background: filled ? colors.accent : 'transparent',
+                  border: filled ? 'none' : `1px solid ${colors.borderDashed}`,
                 }}
               />
             );
           })}
         </div>
         {error ? (
-          <div
-            style={{
-              fontSize: 12,
-              color: colors.error,
-              fontWeight: 600,
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-            }}
-          >
-            PIN incorrecto — intenta de nuevo
+          <div style={{ fontSize: 12.5, color: colors.error, fontWeight: 600 }}>
+            PIN incorrecto — intentá de nuevo
           </div>
         ) : (
-          <div
-            style={{
-              fontSize: 11,
-              color: colors.textDimmer,
-              textTransform: 'uppercase',
-              letterSpacing: '0.05em',
-            }}
-          >
-            PIN de prueba: 1234
-          </div>
+          <div style={{ fontSize: 11.5, color: colors.textDim }}>PIN de prueba: 1234</div>
         )}
       </div>
 
@@ -211,14 +183,14 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
               disabled={isEmpty || submitting}
               onClick={isEmpty ? undefined : isBack ? backspace : () => press(label)}
               style={{
-                border: `1.5px solid ${colors.border}`,
+                border: `1px solid ${colors.border}`,
                 background: colors.bgInput,
                 color: colors.textPrimary,
                 borderRadius: 12,
                 padding: '16px 0',
-                fontFamily: fonts.display,
-                fontSize: 22,
-                fontWeight: 700,
+                fontFamily: fonts.mono,
+                fontSize: 19,
+                fontWeight: 600,
                 cursor: isEmpty ? 'default' : 'pointer',
                 visibility: isEmpty ? 'hidden' : 'visible',
                 display: 'flex',

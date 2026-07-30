@@ -1,18 +1,18 @@
 import type { Metadata, Viewport } from 'next';
-import { Barlow_Condensed, Space_Grotesk } from 'next/font/google';
+import { IBM_Plex_Mono, Manrope } from 'next/font/google';
 import { RegisterServiceWorker } from '@/components/RegisterServiceWorker';
 import './globals.css';
 
-const barlowCondensed = Barlow_Condensed({
-  variable: '--font-barlow-condensed',
+const manrope = Manrope({
+  variable: '--font-manrope',
   subsets: ['latin'],
-  weight: ['600', '700', '800', '900'],
+  weight: ['400', '500', '600', '700', '800'],
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: '--font-space-grotesk',
+const ibmPlexMono = IBM_Plex_Mono({
+  variable: '--font-ibm-plex-mono',
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#f6a723',
+  themeColor: '#D9A441',
 };
 
 // Runs before hydration so a stored "light" preference doesn't flash the
@@ -42,13 +42,13 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${barlowCondensed.variable} ${spaceGrotesk.variable}`}
+      className={`${manrope.variable} ${ibmPlexMono.variable}`}
       suppressHydrationWarning
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
-      <body style={{ fontFamily: 'var(--font-space-grotesk), system-ui, sans-serif' }}>
+      <body style={{ fontFamily: 'var(--font-manrope), system-ui, sans-serif' }}>
         <RegisterServiceWorker />
         {children}
       </body>

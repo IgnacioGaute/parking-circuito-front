@@ -14,14 +14,11 @@ const buttonStyle: React.CSSProperties = {
   boxSizing: 'border-box',
   border: 'none',
   cursor: 'pointer',
-  padding: '18px 20px',
-  borderRadius: 16,
+  padding: '17px 20px',
+  borderRadius: 14,
   font: 'inherit',
-  fontFamily: fonts.display,
-  fontWeight: 800,
-  fontSize: 18,
-  textTransform: 'uppercase',
-  letterSpacing: '0.06em',
+  fontWeight: 700,
+  fontSize: 16,
   background: colors.accent,
   color: colors.accentContrast,
   display: 'flex',
@@ -55,10 +52,10 @@ const stepNumberStyle: React.CSSProperties = {
   height: 20,
   borderRadius: 7,
   background: colors.accentBgSofter,
-  color: colors.accentText,
-  fontFamily: fonts.display,
-  fontWeight: 800,
-  fontSize: 11.5,
+  color: colors.accent,
+  fontFamily: fonts.mono,
+  fontWeight: 600,
+  fontSize: 11,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -132,15 +129,7 @@ export function InstallAppButton() {
           padding: '16px 18px',
         }}
       >
-        <div
-          style={{
-            fontSize: 11,
-            fontWeight: 700,
-            color: colors.accentText,
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
-          }}
-        >
+        <div style={{ fontSize: 13, fontWeight: 700, color: colors.accent }}>
           Para instalarla en tu iPhone
         </div>
         <div style={stepStyle}>

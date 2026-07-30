@@ -12,82 +12,67 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Dark is the app's default/brand theme (matches the current palette). */
+/* Dark is the app's default/brand theme. Palette follows the
+   "Estacionamiento App" design mockup (Claude Design project
+   a50bd4a3-f1b5-4100-8b1b-40a229622a85). */
 :root,
 :root[data-theme='dark'] {
-  --c-bg: #101114;
-  --c-bg-header: #15171b;
-  --c-bg-card: #191b20;
-  --c-bg-input: #0e0f12;
-  --c-bg-input-alt: #101114;
-  --c-border: #2b2e35;
-  --c-border-dashed: #383c44;
-  --c-text-primary: #f2f0ea;
-  --c-text-muted: #8b8f98;
-  --c-text-dim: #63676f;
-  --c-text-dimmer: #54585f;
-  --c-accent: #f6a723;
-  --c-accent-text: #f6a723;
-  --c-accent-contrast: #15171b;
-  --c-accent-bg-soft: rgba(246, 167, 35, 0.08);
-  --c-accent-bg-softer: rgba(246, 167, 35, 0.14);
-  --c-accent-bg-badge: rgba(246, 167, 35, 0.2);
-  --c-accent-disabled-bg: #5a4c26;
-  --c-green: #4ade80;
-  --c-green-bg-soft: rgba(74, 222, 128, 0.14);
-  --c-cyan-auto: #35c6d9;
-  --c-cyan-auto-bg-soft: rgba(53, 198, 217, 0.14);
-  --c-cyan-auto-bg-softer: rgba(53, 198, 217, 0.08);
-  --c-pink-moto: #e8548a;
-  --c-pink-moto-bg-soft: rgba(232, 84, 138, 0.14);
-  --c-pink-moto-bg-softer: rgba(232, 84, 138, 0.08);
-  --c-teal: #37d3a3;
-  --c-teal-text: #0b1410;
-  --c-badge-inside-bg: #2a2e12;
-  --c-error: #e8548a;
-  --c-plate-bg: #f2f0ea;
-  --c-plate-text: #101114;
-  --c-grid-line: rgba(255, 255, 255, 0.025);
+  --c-bg: #0a0b0d;
+  --c-bg-header: var(--c-bg);
+  --c-bg-card: #121317;
+  --c-bg-input: #151619;
+  --c-bg-input-alt: #17181d;
+  --c-border: rgba(255, 255, 255, 0.08);
+  --c-border-dashed: rgba(255, 255, 255, 0.16);
+  --c-text-primary: #e6e7ea;
+  --c-text-muted: #8b8d97;
+  --c-text-dim: #5b5d66;
+  --c-text-dimmer: #5b5d66;
+  --c-accent: #d9a441;
+  --c-accent-text: var(--c-accent);
+  --c-accent-contrast: #0a0b0d;
+  --c-accent-bg-soft: rgba(217, 164, 65, 0.12);
+  --c-accent-bg-softer: rgba(217, 164, 65, 0.08);
+  --c-accent-bg-badge: rgba(217, 164, 65, 0.18);
+  --c-accent-disabled-bg: #4a3f28;
+  --c-green: #34d399;
+  --c-green-bg-soft: rgba(52, 211, 153, 0.14);
+  --c-error: #f0616e;
+  --c-grid-dot: rgba(255, 255, 255, 0.05);
+  --c-halo: rgba(217, 164, 65, 0.16);
   --c-shadow: rgba(0, 0, 0, 0.45);
   color-scheme: dark;
 }
 
-/* Light theme — lighter surfaces per the new design, brand orange kept as
-   the accent (per user: "mantené los colores que tenemos"). */
+/* Light theme — same design system, lighter surfaces. */
 :root[data-theme='light'] {
-  --c-bg: #eef0f3;
-  --c-bg-header: #ffffff;
+  --c-bg: #f7f7f8;
+  --c-bg-header: var(--c-bg);
   --c-bg-card: #ffffff;
-  --c-bg-input: #ffffff;
-  --c-bg-input-alt: #f4f5f7;
-  --c-border: #e2e4e9;
-  --c-border-dashed: #c9ccd3;
-  --c-text-primary: #14161b;
-  --c-text-muted: #6b7280;
-  --c-text-dim: #7d8290;
-  --c-text-dimmer: #9aa1b0;
-  --c-accent: #f6a723;
-  --c-accent-text: #b3650c;
-  --c-accent-contrast: #15171b;
-  --c-accent-bg-soft: rgba(246, 167, 35, 0.1);
-  --c-accent-bg-softer: rgba(246, 167, 35, 0.16);
-  --c-accent-bg-badge: rgba(246, 167, 35, 0.22);
-  --c-accent-disabled-bg: #f1dfb8;
-  --c-green: #16a34a;
-  --c-green-bg-soft: rgba(22, 163, 74, 0.12);
-  --c-cyan-auto: #0f8fa3;
-  --c-cyan-auto-bg-soft: rgba(15, 143, 163, 0.12);
-  --c-cyan-auto-bg-softer: rgba(15, 143, 163, 0.07);
-  --c-pink-moto: #c23d72;
-  --c-pink-moto-bg-soft: rgba(194, 61, 114, 0.12);
-  --c-pink-moto-bg-softer: rgba(194, 61, 114, 0.07);
-  --c-teal: #0f9d75;
-  --c-teal-text: #ffffff;
-  --c-badge-inside-bg: #fdf1d8;
-  --c-error: #dc2626;
-  --c-plate-bg: #14161b;
-  --c-plate-text: #f2f0ea;
-  --c-grid-line: rgba(20, 22, 27, 0.04);
+  --c-bg-input: #f0f0f2;
+  --c-bg-input-alt: #f0f0f2;
+  --c-border: rgba(10, 10, 15, 0.09);
+  --c-border-dashed: rgba(10, 10, 15, 0.18);
+  --c-text-primary: #14151a;
+  --c-text-muted: #6b6d78;
+  --c-text-dim: #9a9ca6;
+  --c-text-dimmer: #9a9ca6;
+  --c-accent: #b3800e;
+  --c-accent-text: var(--c-accent);
+  --c-accent-contrast: #ffffff;
+  --c-accent-bg-soft: rgba(179, 128, 14, 0.1);
+  --c-accent-bg-softer: rgba(179, 128, 14, 0.06);
+  --c-accent-bg-badge: rgba(179, 128, 14, 0.16);
+  --c-accent-disabled-bg: #e8dcc0;
+  --c-green: #0f9d75;
+  --c-green-bg-soft: rgba(15, 157, 117, 0.12);
+  --c-error: #dc3545;
+  --c-grid-dot: rgba(10, 10, 15, 0.1);
+  /* Uses the dark theme's brighter accent hue, not the muted light-theme
+     accent — a decorative glow doesn't need text-contrast tuning, and the
+     vivid gold reads as an actual orange glow against the white background
+     instead of a barely-there tint. */
+  --c-halo: rgba(217, 164, 65, 0.35);
   --c-shadow: rgba(20, 22, 27, 0.12);
   color-scheme: light;
 }
