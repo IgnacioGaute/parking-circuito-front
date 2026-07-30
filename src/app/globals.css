@@ -1,0 +1,236 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Dark is the app's default/brand theme (matches the current palette). */
+:root,
+:root[data-theme='dark'] {
+  --c-bg: #101114;
+  --c-bg-header: #15171b;
+  --c-bg-card: #191b20;
+  --c-bg-input: #0e0f12;
+  --c-bg-input-alt: #101114;
+  --c-border: #2b2e35;
+  --c-border-dashed: #383c44;
+  --c-text-primary: #f2f0ea;
+  --c-text-muted: #8b8f98;
+  --c-text-dim: #63676f;
+  --c-text-dimmer: #54585f;
+  --c-accent: #f6a723;
+  --c-accent-text: #f6a723;
+  --c-accent-contrast: #15171b;
+  --c-accent-bg-soft: rgba(246, 167, 35, 0.08);
+  --c-accent-bg-softer: rgba(246, 167, 35, 0.14);
+  --c-accent-bg-badge: rgba(246, 167, 35, 0.2);
+  --c-accent-disabled-bg: #5a4c26;
+  --c-green: #4ade80;
+  --c-green-bg-soft: rgba(74, 222, 128, 0.14);
+  --c-cyan-auto: #35c6d9;
+  --c-cyan-auto-bg-soft: rgba(53, 198, 217, 0.14);
+  --c-cyan-auto-bg-softer: rgba(53, 198, 217, 0.08);
+  --c-pink-moto: #e8548a;
+  --c-pink-moto-bg-soft: rgba(232, 84, 138, 0.14);
+  --c-pink-moto-bg-softer: rgba(232, 84, 138, 0.08);
+  --c-teal: #37d3a3;
+  --c-teal-text: #0b1410;
+  --c-badge-inside-bg: #2a2e12;
+  --c-error: #e8548a;
+  --c-plate-bg: #f2f0ea;
+  --c-plate-text: #101114;
+  --c-grid-line: rgba(255, 255, 255, 0.025);
+  --c-shadow: rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
+
+/* Light theme — lighter surfaces per the new design, brand orange kept as
+   the accent (per user: "mantené los colores que tenemos"). */
+:root[data-theme='light'] {
+  --c-bg: #eef0f3;
+  --c-bg-header: #ffffff;
+  --c-bg-card: #ffffff;
+  --c-bg-input: #ffffff;
+  --c-bg-input-alt: #f4f5f7;
+  --c-border: #e2e4e9;
+  --c-border-dashed: #c9ccd3;
+  --c-text-primary: #14161b;
+  --c-text-muted: #6b7280;
+  --c-text-dim: #7d8290;
+  --c-text-dimmer: #9aa1b0;
+  --c-accent: #f6a723;
+  --c-accent-text: #b3650c;
+  --c-accent-contrast: #15171b;
+  --c-accent-bg-soft: rgba(246, 167, 35, 0.1);
+  --c-accent-bg-softer: rgba(246, 167, 35, 0.16);
+  --c-accent-bg-badge: rgba(246, 167, 35, 0.22);
+  --c-accent-disabled-bg: #f1dfb8;
+  --c-green: #16a34a;
+  --c-green-bg-soft: rgba(22, 163, 74, 0.12);
+  --c-cyan-auto: #0f8fa3;
+  --c-cyan-auto-bg-soft: rgba(15, 143, 163, 0.12);
+  --c-cyan-auto-bg-softer: rgba(15, 143, 163, 0.07);
+  --c-pink-moto: #c23d72;
+  --c-pink-moto-bg-soft: rgba(194, 61, 114, 0.12);
+  --c-pink-moto-bg-softer: rgba(194, 61, 114, 0.07);
+  --c-teal: #0f9d75;
+  --c-teal-text: #ffffff;
+  --c-badge-inside-bg: #fdf1d8;
+  --c-error: #dc2626;
+  --c-plate-bg: #14161b;
+  --c-plate-text: #f2f0ea;
+  --c-grid-line: rgba(20, 22, 27, 0.04);
+  --c-shadow: rgba(20, 22, 27, 0.12);
+  color-scheme: light;
+}
+
+body {
+  background: var(--c-bg);
+  color: var(--c-text-primary);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select {
+  font-family: inherit;
+}
+
+@keyframes pulseDot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 14px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeUpLg {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sheetUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes backdropIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes waveFill {
+  from {
+    height: 0%;
+  }
+  to {
+    height: 100%;
+  }
+}
+
+@keyframes waveDrain {
+  from {
+    height: 100%;
+  }
+  to {
+    height: 0%;
+  }
+}
+
+@keyframes fadeOutFast {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes textRise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateX(-3px);
+  }
+  20%,
+  80% {
+    transform: translateX(5px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-8px);
+  }
+  40%,
+  60% {
+    transform: translateX(8px);
+  }
+}
