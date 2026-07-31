@@ -9,9 +9,10 @@ import { colors, fonts } from '@/styles/theme';
 
 interface HeaderProps {
   operatorName: string;
+  isDesktop?: boolean;
 }
 
-export function Header({ operatorName }: HeaderProps) {
+export function Header({ operatorName, isDesktop = false }: HeaderProps) {
   const router = useRouter();
   const [now, setNow] = useState<Date | null>(null);
 
@@ -29,6 +30,94 @@ export function Header({ operatorName }: HeaderProps) {
     clearActiveOperator();
     router.push('/login');
   };
+
+  const clockAndTheme = (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: colors.textMuted }}>
+        <Clock size={14} strokeWidth={2} />
+        <span
+          style={{
+            fontFamily: fonts.mono,
+            fontSize: 12.5,
+            fontVariantNumeric: 'tabular-nums',
+          }}
+        >
+          {now
+            ? now.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+            : '--:--:--'}
+        </span>
+      </div>
+      <ThemeToggle />
+    </div>
+  );
+
+  const operatorStatus = (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+      <span
+        style={{
+          width: 7,
+          height: 7,
+          borderRadius: '50%',
+          background: colors.green,
+          flexShrink: 0,
+          animation: 'pulseDot 2s ease-in-out infinite',
+        }}
+      />
+      <span style={{ fontSize: 13, fontWeight: 600, color: colors.textPrimary, flexShrink: 0 }}>
+        {operatorName}
+      </span>
+    </div>
+  );
+
+  const logoutButton = (
+    <button
+      onClick={handleChange}
+      title="Cerrar turno"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 26,
+        height: 26,
+        border: `1px solid ${colors.border}`,
+        background: 'transparent',
+        color: colors.textMuted,
+        borderRadius: 7,
+        cursor: 'pointer',
+        flexShrink: 0,
+      }}
+    >
+      <LogOut size={13} strokeWidth={2.2} />
+    </button>
+  );
+
+  // Desktop: the brand mark lives in the sidebar now, so this is a slim
+  // single-row utility bar instead of the mobile two-row layout.
+  if (isDesktop) {
+    return (
+      <header
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 20,
+          background: colors.bgHeader,
+          borderBottom: `1px solid ${colors.border}`,
+          padding: '14px 28px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 14,
+          animation: 'fadeUp .45s both',
+        }}
+      >
+        {operatorStatus}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          {clockAndTheme}
+          {logoutButton}
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header
@@ -83,65 +172,12 @@ export function Header({ operatorName }: HeaderProps) {
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: colors.textMuted }}>
-            <Clock size={14} strokeWidth={2} />
-            <span
-              style={{
-                fontFamily: fonts.mono,
-                fontSize: 12.5,
-                fontVariantNumeric: 'tabular-nums',
-              }}
-            >
-              {now
-                ? now.toLocaleTimeString('es', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                  })
-                : '--:--:--'}
-            </span>
-          </div>
-          <ThemeToggle />
-        </div>
+        {clockAndTheme}
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
-          <span
-            style={{
-              width: 7,
-              height: 7,
-              borderRadius: '50%',
-              background: colors.green,
-              flexShrink: 0,
-              animation: 'pulseDot 2s ease-in-out infinite',
-            }}
-          />
-          <span style={{ fontSize: 13, fontWeight: 600, color: colors.textPrimary, flexShrink: 0 }}>
-            {operatorName}
-          </span>
-        </div>
-
-        <button
-          onClick={handleChange}
-          title="Cerrar turno"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 26,
-            height: 26,
-            border: `1px solid ${colors.border}`,
-            background: 'transparent',
-            color: colors.textMuted,
-            borderRadius: 7,
-            cursor: 'pointer',
-            flexShrink: 0,
-          }}
-        >
-          <LogOut size={13} strokeWidth={2.2} />
-        </button>
+        {operatorStatus}
+        {logoutButton}
       </div>
     </header>
   );

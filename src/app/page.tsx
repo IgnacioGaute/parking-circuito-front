@@ -15,8 +15,11 @@ import { useToast } from '@/lib/use-toast';
 import { colors, screenBackground } from '@/styles/theme';
 import type { Operator } from '@/types';
 
+const SIDEBAR_COLLAPSED_KEY = 'sidebar_collapsed';
+
 export default function DashboardPage() {
   const [isDesktop, setIsDesktop] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeTab, setActiveTab] = useState<TabKey>('registrar');
   const [activeOperator, setActiveOperator] = useState<Operator | null>(null);
   const [insideCount, setInsideCount] = useState(0);
@@ -28,6 +31,7 @@ export default function DashboardPage() {
     // initial read has to happen here rather than during render.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setActiveOperator(readActiveOperator());
+    setSidebarCollapsed(localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === 'true');
 
     const checkDesktop = () => setIsDesktop(window.innerWidth >= 900);
     checkDesktop();
@@ -40,6 +44,54 @@ export default function DashboardPage() {
       .then((records) => setInsideCount(records.length))
       .catch(() => undefined);
   }, []);
+
+  const toggleSidebarCollapsed = () => {
+    setSidebarCollapsed((current) => {
+      const next = !current;
+      try {
+        localStorage.setItem(SIDEBAR_COLLAPSED_KEY, String(next));
+      } catch {
+        // Private browsing / storage disabled — collapse just won't persist.
+      }
+      return next;
+    });
+  };
+
+  const nav = (
+    <NavTabs
+      isDesktop={isDesktop}
+      activeTab={activeTab}
+      insideCount={insideCount}
+      isAdmin={isAdmin}
+      onSelect={setActiveTab}
+      collapsed={sidebarCollapsed}
+      onToggleCollapsed={toggleSidebarCollapsed}
+    />
+  );
+
+  const content = (
+    <div
+      style={{
+        maxWidth: isDesktop ? 1120 : '100%',
+        margin: '0 auto',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 18,
+      }}
+    >
+      {activeTab === 'registrar' && (
+        <RegistrarTab onEntradaRegistered={() => setInsideCount((count) => count + 1)} />
+      )}
+      {activeTab === 'dentro' && (
+        <DentroTab isDesktop={isDesktop} onCountChange={setInsideCount} />
+      )}
+      {activeTab === 'historial' && <HistorialTab />}
+      {activeTab === 'usuarios' && <UsuariosTab />}
+      {activeTab === 'admin' && isAdmin && (
+        <AdminTab currentOperatorId={activeOperator?.id ?? null} onToast={showToast} />
+      )}
+    </div>
+  );
 
   return (
     <div
@@ -56,58 +108,53 @@ export default function DashboardPage() {
         overflowX: 'clip',
       }}
     >
-      <Header operatorName={activeOperator?.name ?? '—'} />
-
-      <div
-        style={{
-          display: 'flex',
-          position: 'relative',
-          zIndex: 1,
-          flexDirection: isDesktop ? 'row' : 'column',
-        }}
-      >
-        <NavTabs
-          isDesktop={isDesktop}
-          activeTab={activeTab}
-          insideCount={insideCount}
-          isAdmin={isAdmin}
-          onSelect={setActiveTab}
-        />
-
-        <main
-          style={{
-            flex: 1,
-            minWidth: 0,
-            overflowY: 'auto',
-            padding: isDesktop ? '32px 36px' : 16,
-            paddingBottom: isDesktop ? 36 : 'calc(88px + env(safe-area-inset-bottom))',
-          }}
-        >
+      {isDesktop ? (
+        // Classic dashboard shell: full-height sidebar alongside a column
+        // holding a slim utility header + the scrollable content — distinct
+        // from the mobile structure below (full-width header on top, tab
+        // bar fixed to the bottom), not a shared layout stretched to fit.
+        <div style={{ display: 'flex', position: 'relative', zIndex: 1 }}>
+          {nav}
+          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
+            <Header operatorName={activeOperator?.name ?? '—'} isDesktop />
+            <main
+              style={{
+                flex: 1,
+                minWidth: 0,
+                overflowY: 'auto',
+                padding: '32px 36px',
+              }}
+            >
+              {content}
+            </main>
+          </div>
+        </div>
+      ) : (
+        <>
+          <Header operatorName={activeOperator?.name ?? '—'} />
           <div
             style={{
-              maxWidth: isDesktop ? 920 : '100%',
-              margin: '0 auto',
               display: 'flex',
               flexDirection: 'column',
-              gap: 18,
+              position: 'relative',
+              zIndex: 1,
             }}
           >
-            {activeTab === 'registrar' && (
-              <RegistrarTab
-                onEntradaRegistered={() => setInsideCount((count) => count + 1)}
-              />
-            )}
-            {activeTab === 'dentro' && (
-              <DentroTab isDesktop={isDesktop} onCountChange={setInsideCount} />
-            )}
-            {activeTab === 'historial' && <HistorialTab />}
-            {activeTab === 'usuarios' && <UsuariosTab />}
-            {activeTab === 'admin' && isAdmin && (
-              <AdminTab currentOperatorId={activeOperator?.id ?? null} onToast={showToast} />
-            )}
+            {nav}
+            <main
+              style={{
+                flex: 1,
+                minWidth: 0,
+                overflowY: 'auto',
+                padding: 16,
+                paddingBottom: 'calc(88px + env(safe-area-inset-bottom))',
+              }}
+            >
+              {content}
+            </main>
           </div>
-        </main>
-      </div>
+        </>
+      )}
 
       <Toast message={toast} />
     </div>
