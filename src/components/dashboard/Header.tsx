@@ -1,6 +1,6 @@
 'use client';
 
-import { Clock, LogOut } from 'lucide-react';
+import { CircleHelp, Clock, LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -10,9 +10,10 @@ import { colors, fonts } from '@/styles/theme';
 interface HeaderProps {
   operatorName: string;
   isDesktop?: boolean;
+  onStartTour: () => void;
 }
 
-export function Header({ operatorName, isDesktop = false }: HeaderProps) {
+export function Header({ operatorName, isDesktop = false, onStartTour }: HeaderProps) {
   const router = useRouter();
   const [now, setNow] = useState<Date | null>(null);
 
@@ -31,6 +32,29 @@ export function Header({ operatorName, isDesktop = false }: HeaderProps) {
     router.push('/login');
   };
 
+  const helpButton = (
+    <button
+      onClick={onStartTour}
+      title="Ver recorrido guiado"
+      aria-label="Ver recorrido guiado"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 34,
+        height: 34,
+        border: `1px solid ${colors.border}`,
+        background: 'transparent',
+        color: colors.textMuted,
+        borderRadius: 9,
+        cursor: 'pointer',
+        flexShrink: 0,
+      }}
+    >
+      <CircleHelp size={16} strokeWidth={2} />
+    </button>
+  );
+
   const clockAndTheme = (
     <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: colors.textMuted }}>
@@ -47,6 +71,7 @@ export function Header({ operatorName, isDesktop = false }: HeaderProps) {
             : '--:--:--'}
         </span>
       </div>
+      {helpButton}
       <ThemeToggle />
     </div>
   );

@@ -118,7 +118,7 @@ export function DentroTab({ isDesktop, onCountChange }: DentroTabProps) {
       </div>
 
       {records.length > 0 && (
-        <div style={{ position: 'relative' }}>
+        <div data-tour="dentro-buscar" style={{ position: 'relative' }}>
           <Search
             size={16}
             strokeWidth={2}
@@ -182,6 +182,7 @@ export function DentroTab({ isDesktop, onCountChange }: DentroTabProps) {
       )}
 
       <div
+        data-tour="dentro-salida"
         style={{
           display: 'grid',
           gridTemplateColumns: isDesktop ? 'repeat(auto-fill,minmax(270px,1fr))' : '1fr',

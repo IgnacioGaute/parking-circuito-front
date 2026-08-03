@@ -110,7 +110,7 @@ export function OperatorsAdminPanel({ currentOperatorId, onToast }: AdminPanelPr
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+    <div data-tour="admin-operadores" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
       {showCreateForm ? (
         <>
           <div style={{ fontSize: 16, fontWeight: 700 }}>Crear operador</div>

@@ -10,10 +10,22 @@ type Section = 'operadores' | 'campos';
 interface AdminTabProps {
   currentOperatorId: string | null;
   onToast: (message: string) => void;
+  // Lets the guided tour drive which sub-section is shown; normal clicks
+  // still work through local state when this isn't set.
+  forcedSection?: Section;
 }
 
-export function AdminTab({ currentOperatorId, onToast }: AdminTabProps) {
+export function AdminTab({ currentOperatorId, onToast, forcedSection }: AdminTabProps) {
   const [section, setSection] = useState<Section>('operadores');
+
+  // Adjusted during render rather than in an effect (React's documented
+  // pattern for "sync state to a changed prop") to avoid an extra
+  // cascading render.
+  const [appliedForcedSection, setAppliedForcedSection] = useState(forcedSection);
+  if (forcedSection !== appliedForcedSection) {
+    setAppliedForcedSection(forcedSection);
+    if (forcedSection) setSection(forcedSection);
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18, animation: 'fadeUp .3s both' }}>

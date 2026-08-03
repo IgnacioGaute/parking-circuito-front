@@ -285,6 +285,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
 
   return (
     <div
+      data-tour="registrar-form"
       style={{
         background: colors.bgCard,
         border: `1px solid ${colors.border}`,

@@ -188,7 +188,7 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+    <div data-tour="admin-campos" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
       <div>
         <div style={{ fontSize: 16, fontWeight: 700 }}>Formulario de registrar entrada</div>
         <div style={{ fontSize: 12.5, color: colors.textDim, marginTop: 4 }}>

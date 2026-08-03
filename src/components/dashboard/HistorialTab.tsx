@@ -117,7 +117,7 @@ export function HistorialTab() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18, animation: 'fadeUp .3s both' }}>
       <div style={{ fontSize: 18, fontWeight: 700 }}>Historial</div>
 
-      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+      <div data-tour="historial-filtros" style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
         <div style={{ position: 'relative', flex: 2, minWidth: 160 }}>
           <Search
             size={16}
@@ -243,7 +243,7 @@ export function HistorialTab() {
         </div>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      <div data-tour="historial-lista" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         {groups.map(([key, groupRecords]) => (
           <div key={key} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <div

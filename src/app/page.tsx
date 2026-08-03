@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getInsideAction } from '@/actions/parking-records.actions';
 import { AdminTab } from '@/components/admin/AdminTab';
 import { DentroTab } from '@/components/dashboard/DentroTab';
@@ -9,8 +9,10 @@ import { HistorialTab } from '@/components/dashboard/HistorialTab';
 import { NavTabs, type TabKey } from '@/components/dashboard/NavTabs';
 import { RegistrarTab } from '@/components/dashboard/RegistrarTab';
 import { Toast } from '@/components/dashboard/Toast';
+import { TourOverlay } from '@/components/tour/TourOverlay';
 import { UsuariosTab } from '@/components/dashboard/UsuariosTab';
 import { readActiveOperator } from '@/lib/active-operator';
+import { TOUR_STEPS } from '@/lib/tour-steps';
 import { useToast } from '@/lib/use-toast';
 import { colors, screenBackground } from '@/styles/theme';
 import type { Operator } from '@/types';
@@ -23,8 +25,16 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<TabKey>('registrar');
   const [activeOperator, setActiveOperator] = useState<Operator | null>(null);
   const [insideCount, setInsideCount] = useState(0);
+  const [tourStep, setTourStep] = useState<number | null>(null);
+  const [tourAdminSection, setTourAdminSection] = useState<'operadores' | 'campos' | undefined>(
+    undefined,
+  );
   const { toast, showToast } = useToast();
   const isAdmin = activeOperator?.role === 'admin';
+  const tourSteps = useMemo(
+    () => TOUR_STEPS.filter((step) => !step.adminOnly || isAdmin),
+    [isAdmin],
+  );
 
   useEffect(() => {
     // localStorage and window.innerWidth only exist client-side, so the
@@ -55,6 +65,34 @@ export default function DashboardPage() {
       }
       return next;
     });
+  };
+
+  // Drives the actual screen (and, for admin steps, the Operadores/Campos
+  // sub-section) to match whatever the guided tour is currently explaining,
+  // so the spotlighted element is real on-screen content, not a description
+  // of a screen the user isn't looking at. Adjusted during render (React's
+  // documented pattern for this) rather than in an effect, to avoid an
+  // extra cascading render.
+  const [tourSyncedStep, setTourSyncedStep] = useState<number | null>(null);
+  if (tourStep !== tourSyncedStep) {
+    setTourSyncedStep(tourStep);
+    if (tourStep !== null) {
+      const step = tourSteps[tourStep];
+      if (step) {
+        setActiveTab(step.tab);
+        setTourAdminSection(step.adminSection);
+      }
+    }
+  }
+
+  const startTour = () => setTourStep(0);
+  const nextTourStep = () =>
+    setTourStep((current) => (current === null ? null : Math.min(current + 1, tourSteps.length - 1)));
+  const prevTourStep = () =>
+    setTourStep((current) => (current === null ? null : Math.max(current - 1, 0)));
+  const closeTour = () => {
+    setTourStep(null);
+    setTourAdminSection(undefined);
   };
 
   const nav = (
@@ -88,7 +126,11 @@ export default function DashboardPage() {
       {activeTab === 'historial' && <HistorialTab />}
       {activeTab === 'usuarios' && <UsuariosTab />}
       {activeTab === 'admin' && isAdmin && (
-        <AdminTab currentOperatorId={activeOperator?.id ?? null} onToast={showToast} />
+        <AdminTab
+          currentOperatorId={activeOperator?.id ?? null}
+          onToast={showToast}
+          forcedSection={tourAdminSection}
+        />
       )}
     </div>
   );
@@ -116,7 +158,11 @@ export default function DashboardPage() {
         <div style={{ display: 'flex', position: 'relative', zIndex: 1 }}>
           {nav}
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
-            <Header operatorName={activeOperator?.name ?? '—'} isDesktop />
+            <Header
+              operatorName={activeOperator?.name ?? '—'}
+              isDesktop
+              onStartTour={startTour}
+            />
             <main
               style={{
                 flex: 1,
@@ -131,7 +177,7 @@ export default function DashboardPage() {
         </div>
       ) : (
         <>
-          <Header operatorName={activeOperator?.name ?? '—'} />
+          <Header operatorName={activeOperator?.name ?? '—'} onStartTour={startTour} />
           <div
             style={{
               display: 'flex',
@@ -157,6 +203,16 @@ export default function DashboardPage() {
       )}
 
       <Toast message={toast} />
+
+      {tourStep !== null && (
+        <TourOverlay
+          steps={tourSteps}
+          stepIndex={tourStep}
+          onNext={nextTourStep}
+          onBack={prevTourStep}
+          onClose={closeTour}
+        />
+      )}
     </div>
   );
 }
