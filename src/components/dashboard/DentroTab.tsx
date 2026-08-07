@@ -135,6 +135,7 @@ export function DentroTab({ isDesktop, onCountChange }: DentroTabProps) {
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Buscar por placa"
+            className="ui-input"
             style={{
               width: '100%',
               boxSizing: 'border-box',
@@ -245,6 +246,7 @@ export function DentroTab({ isDesktop, onCountChange }: DentroTabProps) {
               </div>
               <button
                 onClick={() => setConfirmingRecord(record)}
+                className="ui-btn ui-outline-btn"
                 style={{
                   border: `1px solid ${colors.border}`,
                   background: 'transparent',

@@ -7,16 +7,17 @@ export function LoginBrand() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 14,
+        gap: 16,
         textAlign: 'center',
       }}
     >
       <div
         style={{
-          width: 44,
-          height: 44,
-          borderRadius: 11,
+          width: 52,
+          height: 52,
+          borderRadius: 14,
           background: colors.accent,
+          boxShadow: `0 0 0 7px ${colors.accentBgSofter}, 0 10px 28px ${colors.accentBgSoft}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -24,11 +25,11 @@ export function LoginBrand() {
       >
         <div
           style={{
-            width: 26,
-            height: 5,
+            width: 30,
+            height: 5.5,
             background: colors.accentContrast,
             transform: 'rotate(-24deg)',
-            borderRadius: 2,
+            borderRadius: 3,
           }}
         />
       </div>
@@ -38,29 +39,35 @@ export function LoginBrand() {
             fontWeight: 700,
             fontSize: 20,
             lineHeight: 1.2,
+            letterSpacing: '-0.01em',
           }}
         >
           Control de Estacionamiento
         </div>
         <div
           style={{
-            display: 'flex',
+            display: 'inline-flex',
             alignItems: 'center',
-            justifyContent: 'center',
             gap: 6,
+            background: colors.greenBgSoft,
+            borderRadius: 999,
+            padding: '4px 10px',
             marginTop: 10,
           }}
         >
           <span
             style={{
-              width: 7,
-              height: 7,
+              width: 6,
+              height: 6,
               borderRadius: '50%',
               background: colors.green,
               animation: 'pulseDot 2s ease-in-out infinite',
+              flexShrink: 0,
             }}
           />
-          <span style={{ fontSize: 12, color: colors.textMuted }}>Acceso de operador</span>
+          <span style={{ fontSize: 11.5, fontWeight: 600, color: colors.green }}>
+            Sistema activo
+          </span>
         </div>
       </div>
     </div>

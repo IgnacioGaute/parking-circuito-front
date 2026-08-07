@@ -1,5 +1,6 @@
 'use client';
 
+import { ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { getOperatorsAction } from '@/actions/operators.actions';
 import { colors, fonts } from '@/styles/theme';
@@ -32,35 +33,43 @@ export function OperatorPicker({ onSelect }: OperatorPickerProps) {
   }, []);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <div style={{ fontSize: 13, fontWeight: 600, color: colors.textMuted, textAlign: 'center' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div
+        style={{
+          fontSize: 11,
+          fontWeight: 700,
+          color: colors.textDim,
+          textAlign: 'center',
+          letterSpacing: '0.06em',
+          textTransform: 'uppercase',
+        }}
+      >
         Seleccioná tu turno
       </div>
 
       {loading && (
-        <div style={{ textAlign: 'center', color: colors.textDimmer, fontSize: 13 }}>
+        <div style={{ textAlign: 'center', color: colors.textDimmer, fontSize: 13, padding: '12px 0' }}>
           Cargando operadores…
         </div>
       )}
       {error && (
-        <div style={{ textAlign: 'center', color: colors.error, fontSize: 12.5 }}>
-          {error}
-        </div>
+        <div style={{ textAlign: 'center', color: colors.error, fontSize: 12.5 }}>{error}</div>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {operators.map((op) => (
           <button
             key={op.id}
             onClick={() => onSelect(op)}
+            className="ui-btn ui-operator-btn"
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: 12,
               border: `1px solid ${colors.border}`,
-              background: colors.bgCard,
+              background: colors.bgInput,
               borderRadius: 12,
-              padding: '13px 16px',
+              padding: '11px 14px',
               cursor: 'pointer',
               font: 'inherit',
               textAlign: 'left',
@@ -68,25 +77,50 @@ export function OperatorPicker({ onSelect }: OperatorPickerProps) {
           >
             <span
               style={{
-                width: 32,
-                height: 32,
-                borderRadius: 9,
-                border: `1px solid ${colors.borderDashed}`,
-                color: colors.textMuted,
+                width: 38,
+                height: 38,
+                borderRadius: 10,
+                background: colors.accentBgSoft,
+                color: colors.accent,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontFamily: fonts.mono,
-                fontWeight: 600,
-                fontSize: 12,
+                fontWeight: 700,
+                fontSize: 12.5,
                 flexShrink: 0,
               }}
             >
               {op.initials}
             </span>
-            <span style={{ fontWeight: 600, fontSize: 14.5, color: colors.textPrimary }}>
-              {op.name}
+            <span
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+                minWidth: 0,
+              }}
+            >
+              <span
+                style={{
+                  fontWeight: 700,
+                  fontSize: 14.5,
+                  color: colors.textPrimary,
+                  lineHeight: 1.2,
+                }}
+              >
+                {op.name}
+              </span>
+              <span style={{ fontSize: 11, fontWeight: 600, color: colors.textDim, lineHeight: 1 }}>
+                {op.role === 'admin' ? 'Admin' : 'Operador'}
+              </span>
             </span>
+            <ChevronRight
+              size={15}
+              strokeWidth={2.2}
+              style={{ color: colors.textDimmer, flexShrink: 0 }}
+            />
           </button>
         ))}
       </div>

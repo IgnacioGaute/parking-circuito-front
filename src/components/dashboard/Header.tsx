@@ -37,6 +37,7 @@ export function Header({ operatorName, isDesktop = false, onStartTour }: HeaderP
       onClick={onStartTour}
       title="Ver recorrido guiado"
       aria-label="Ver recorrido guiado"
+      className="ui-btn ui-ghost"
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -98,21 +99,22 @@ export function Header({ operatorName, isDesktop = false, onStartTour }: HeaderP
     <button
       onClick={handleChange}
       title="Cerrar turno"
+      className="ui-btn ui-ghost"
       style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: 26,
-        height: 26,
+        width: 30,
+        height: 30,
         border: `1px solid ${colors.border}`,
         background: 'transparent',
         color: colors.textMuted,
-        borderRadius: 7,
+        borderRadius: 8,
         cursor: 'pointer',
         flexShrink: 0,
       }}
     >
-      <LogOut size={13} strokeWidth={2.2} />
+      <LogOut size={14} strokeWidth={2.2} />
     </button>
   );
 
@@ -126,6 +128,8 @@ export function Header({ operatorName, isDesktop = false, onStartTour }: HeaderP
           top: 0,
           zIndex: 20,
           background: colors.bgHeader,
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
           borderBottom: `1px solid ${colors.border}`,
           padding: '14px 28px',
           display: 'flex',
@@ -151,6 +155,8 @@ export function Header({ operatorName, isDesktop = false, onStartTour }: HeaderP
         top: 0,
         zIndex: 20,
         background: colors.bgHeader,
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
         borderBottom: `1px solid ${colors.border}`,
         padding: '16px 20px 13px',
         display: 'flex',

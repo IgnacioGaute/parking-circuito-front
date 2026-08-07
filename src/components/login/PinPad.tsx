@@ -80,9 +80,10 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
     >
       <button
         onClick={onBack}
+        className="ui-btn ui-ghost"
         style={{
           alignSelf: 'flex-start',
-          border: 'none',
+          border: `1px solid ${colors.border}`,
           background: 'transparent',
           color: colors.textDim,
           cursor: 'pointer',
@@ -92,10 +93,11 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
           display: 'flex',
           alignItems: 'center',
           gap: 6,
-          padding: 0,
+          padding: '6px 10px',
+          borderRadius: 8,
         }}
       >
-        <ArrowLeft size={14} strokeWidth={2.2} />
+        <ArrowLeft size={13} strokeWidth={2.2} />
         Cambiar turno
       </button>
 
@@ -109,22 +111,24 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
       >
         <span
           style={{
-            width: 38,
-            height: 38,
-            borderRadius: 10,
-            border: `1px solid ${colors.borderDashed}`,
-            color: colors.textMuted,
+            width: 40,
+            height: 40,
+            borderRadius: 11,
+            background: colors.accentBgSoft,
+            color: colors.accent,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontFamily: fonts.mono,
-            fontWeight: 600,
-            fontSize: 13,
+            fontWeight: 700,
+            fontSize: 13.5,
           }}
         >
           {operator.initials}
         </span>
-        <span style={{ fontWeight: 700, fontSize: 18 }}>{operator.name}</span>
+        <span style={{ fontWeight: 700, fontSize: 18, letterSpacing: '-0.01em' }}>
+          {operator.name}
+        </span>
       </div>
 
       <div
@@ -138,7 +142,7 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
         <div
           style={{
             display: 'flex',
-            gap: 14,
+            gap: 16,
             animation: shake ? 'shake .5s' : 'none',
           }}
         >
@@ -148,11 +152,13 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
               <div
                 key={i}
                 style={{
-                  width: 9,
-                  height: 9,
-                  borderRadius: 2,
+                  width: 11,
+                  height: 11,
+                  borderRadius: '50%',
                   background: filled ? colors.accent : 'transparent',
-                  border: filled ? 'none' : `1px solid ${colors.borderDashed}`,
+                  border: filled ? 'none' : `1.5px solid ${colors.borderDashed}`,
+                  transition: 'background 0.1s ease, border-color 0.1s ease',
+                  boxShadow: filled ? `0 0 8px ${colors.accentBgSoft}` : 'none',
                 }}
               />
             );
@@ -171,7 +177,7 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3,1fr)',
-          gap: 10,
+          gap: 9,
         }}
       >
         {KEYPAD_LAYOUT.map((label, index) => {
@@ -182,14 +188,15 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
               key={`${label || 'empty'}-${index}`}
               disabled={isEmpty || submitting}
               onClick={isEmpty ? undefined : isBack ? backspace : () => press(label)}
+              className={isEmpty ? undefined : 'ui-btn ui-pinkey'}
               style={{
                 border: `1px solid ${colors.border}`,
                 background: colors.bgInput,
                 color: colors.textPrimary,
                 borderRadius: 12,
-                padding: '16px 0',
+                padding: '17px 0',
                 fontFamily: fonts.mono,
-                fontSize: 19,
+                fontSize: 20,
                 fontWeight: 600,
                 cursor: isEmpty ? 'default' : 'pointer',
                 visibility: isEmpty ? 'hidden' : 'visible',

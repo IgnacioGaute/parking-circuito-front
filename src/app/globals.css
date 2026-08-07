@@ -219,3 +219,91 @@ select {
     transform: translateX(8px);
   }
 }
+
+/* ---- Interaction state utilities ----------------------------------------
+   Inline styles can't express :hover/:active/:focus — these utility classes
+   fill that gap without adding a framework or changing the inline-style
+   architecture. Classes handle only states; base layout/color stays in each
+   component's style prop.                                                   */
+
+.ui-btn {
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease,
+    color 0.12s ease,
+    opacity 0.12s ease,
+    transform 0.08s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.ui-btn:active:not([disabled]) {
+  transform: scale(0.97);
+}
+
+/* ghost — icon buttons, back links */
+.ui-ghost:hover:not([disabled]) {
+  background: rgba(255, 255, 255, 0.07) !important;
+  color: var(--c-text-primary) !important;
+}
+[data-theme='light'] .ui-ghost:hover:not([disabled]) {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: var(--c-text-primary) !important;
+}
+
+/* operator picker row */
+.ui-operator-btn:hover:not([disabled]) {
+  background: var(--c-accent-bg-softer) !important;
+  border-color: rgba(217, 164, 65, 0.32) !important;
+}
+[data-theme='light'] .ui-operator-btn:hover:not([disabled]) {
+  border-color: rgba(179, 128, 14, 0.32) !important;
+}
+
+/* PIN keypad keys */
+.ui-pinkey:hover:not([disabled]) {
+  background: var(--c-bg-input-alt) !important;
+}
+.ui-pinkey:active:not([disabled]) {
+  transform: scale(0.93) !important;
+}
+
+/* primary CTA (accent filled) */
+.ui-cta:hover:not([disabled]) {
+  opacity: 0.88 !important;
+}
+.ui-cta:active:not([disabled]) {
+  transform: scale(0.985) !important;
+}
+
+/* outlined card button → goes accent on hover */
+.ui-outline-btn:hover:not([disabled]) {
+  background: var(--c-accent-bg-softer) !important;
+  border-color: rgba(217, 164, 65, 0.32) !important;
+  color: var(--c-accent-text) !important;
+}
+[data-theme='light'] .ui-outline-btn:hover:not([disabled]) {
+  border-color: rgba(179, 128, 14, 0.32) !important;
+}
+
+/* vehicle type toggle */
+.ui-tipo-btn:hover:not([disabled]) {
+  background: var(--c-accent-bg-softer) !important;
+  color: var(--c-accent-text) !important;
+}
+
+/* sidebar / bottom nav tab */
+.ui-navtab:hover:not([disabled]) {
+  color: var(--c-text-primary) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+[data-theme='light'] .ui-navtab:hover:not([disabled]) {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* text input focus ring */
+.ui-input:focus {
+  border-color: rgba(217, 164, 65, 0.5) !important;
+  box-shadow: 0 0 0 3px var(--c-accent-bg-softer);
+  outline: none;
+}
+[data-theme='light'] .ui-input:focus {
+  border-color: rgba(179, 128, 14, 0.5) !important;
+}

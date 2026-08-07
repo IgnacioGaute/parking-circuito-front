@@ -17,12 +17,13 @@ export function ThemeToggle({ style }: ThemeToggleProps) {
       onClick={toggleTheme}
       aria-label={isLight ? 'Cambiar a tema oscuro' : 'Cambiar a tema claro'}
       title={isLight ? 'Tema oscuro' : 'Tema claro'}
+      className="ui-btn ui-ghost"
       style={{
         width: 34,
         height: 34,
         borderRadius: 9,
         border: `1px solid ${colors.border}`,
-        background: colors.bgCard,
+        background: 'transparent',
         color: colors.textMuted,
         display: 'flex',
         alignItems: 'center',
@@ -30,7 +31,6 @@ export function ThemeToggle({ style }: ThemeToggleProps) {
         cursor: 'pointer',
         flexShrink: 0,
         padding: 0,
-        transition: 'color .15s ease, border-color .15s ease',
         ...style,
       }}
     >

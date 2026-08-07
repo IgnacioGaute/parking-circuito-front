@@ -145,6 +145,7 @@ export function NavTabs({
               key={tab.key}
               onClick={() => onSelect(tab.key)}
               title={rail ? tab.label : undefined}
+              className="ui-btn ui-navtab"
               style={{
                 flex: isDesktop ? 'none' : 1,
                 // Flex items default to `min-width: auto`, i.e. their
@@ -167,9 +168,14 @@ export function NavTabs({
                     : '2px solid transparent',
                 cursor: 'pointer',
                 padding: isDesktop ? (rail ? '10px 0' : '10px 12px') : '9px 4px 7px',
-                background: isDesktop && active ? colors.accentBgSoft : 'transparent',
+                background: isDesktop && active
+                  ? colors.accentBgSoft
+                  : !isDesktop && active
+                    ? colors.accentBgSofter
+                    : 'transparent',
+                boxShadow: isDesktop && active ? `inset 3px 0 0 ${colors.accent}` : 'none',
                 color: active ? colors.accent : colors.textMuted,
-                transition: 'color .15s,background .15s',
+                transition: 'color .15s, background .15s, box-shadow .15s',
                 font: 'inherit',
                 position: 'relative',
               }}
@@ -235,6 +241,7 @@ export function NavTabs({
         <button
           onClick={onToggleCollapsed}
           title={collapsed ? 'Expandir menú' : 'Contraer menú'}
+          className="ui-btn ui-ghost"
           style={{
             display: 'flex',
             alignItems: 'center',

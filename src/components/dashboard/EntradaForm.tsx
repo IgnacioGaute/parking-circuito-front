@@ -148,6 +148,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
         value={placa}
         onChange={(event) => setPlaca(event.target.value.toUpperCase())}
         placeholder="ABC-123"
+        className="ui-input"
         style={{
           border: `1px solid ${colors.borderDashed}`,
           background: colors.bgInput,
@@ -170,6 +171,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
       <div style={{ display: 'flex', border: `1px solid ${colors.border}`, borderRadius: 12, overflow: 'hidden' }}>
         <button
           onClick={() => setTipo('auto')}
+          className={tipo === 'auto' ? undefined : 'ui-btn ui-tipo-btn'}
           style={{
             flex: 1,
             justifyContent: 'center',
@@ -183,6 +185,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
             fontWeight: 700,
             cursor: 'pointer',
             display: 'flex',
+            transition: 'background 0.12s ease, color 0.12s ease',
           }}
         >
           <Car size={17} strokeWidth={2} />
@@ -190,6 +193,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
         </button>
         <button
           onClick={() => setTipo('moto')}
+          className={tipo === 'moto' ? undefined : 'ui-btn ui-tipo-btn'}
           style={{
             flex: 1,
             justifyContent: 'center',
@@ -204,6 +208,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
             fontWeight: 700,
             cursor: 'pointer',
             display: 'flex',
+            transition: 'background 0.12s ease, color 0.12s ease',
           }}
         >
           <Bike size={17} strokeWidth={2} />
@@ -311,6 +316,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
       <button
         onClick={handleSubmit}
         disabled={disabled}
+        className={disabled ? undefined : 'ui-btn ui-cta'}
         style={{
           border: 'none',
           cursor: disabled ? 'default' : 'pointer',
