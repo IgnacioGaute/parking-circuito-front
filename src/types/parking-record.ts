@@ -26,3 +26,11 @@ export interface HistoryFilters {
   placa?: string;
   tipo?: VehicleType;
 }
+
+export interface FrequentPlate {
+  placa: string;
+  tipo: VehicleType;
+  lastEntradaTime: string;
+  extraFields: Record<string, unknown> | null;
+  visitCount: number;
+}

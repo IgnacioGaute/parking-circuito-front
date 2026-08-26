@@ -1,6 +1,7 @@
 import 'server-only';
 import type {
   CreateEntradaPayload,
+  FrequentPlate,
   HistoryFilters,
   ParkingRecord,
 } from '@/types';
@@ -38,6 +39,10 @@ export function fetchHistoryRequest(
   return apiFetch<ParkingRecord[]>(`/parking-records/history${query}`, {
     token,
   });
+}
+
+export function fetchFrequentRequest(token: string): Promise<FrequentPlate[]> {
+  return apiFetch<FrequentPlate[]>('/parking-records/frequent', { token });
 }
 
 export function registerSalidaRequest(

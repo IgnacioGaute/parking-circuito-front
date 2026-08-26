@@ -1,18 +1,23 @@
 'use client';
 
-import { Bike, Car, ChevronDown, Search, SlidersHorizontal, X } from 'lucide-react';
+import { Bike, Car, ChevronDown, FileDown, Search, SlidersHorizontal, X } from 'lucide-react';
+import jsPDF from 'jspdf';
+import { autoTable } from 'jspdf-autotable';
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { getFieldDefinitionsAction } from '@/actions/field-definitions.actions';
 import { getHistoryAction } from '@/actions/parking-records.actions';
+import { readActiveOperator } from '@/lib/active-operator';
 import {
   dateKey,
   formatDateHeading,
   formatDuration,
   formatTime,
   timeKey,
+  tipoLabel,
 } from '@/lib/format';
 import { colors, fonts } from '@/styles/theme';
-import type { ParkingRecord, VehicleType } from '@/types';
+import type { FieldDefinition, ParkingRecord, VehicleType } from '@/types';
 
 const PAGE_SIZE = 8;
 
@@ -27,6 +32,21 @@ function referenceTime(record: ParkingRecord): string {
   return record.salidaTime ?? record.entradaTime;
 }
 
+function formatExtraValue(value: unknown, field?: FieldDefinition): string {
+  if (value === undefined || value === null || value === '') return '—';
+  if (field?.type === 'boolean') return value === true ? 'Sí' : 'No';
+  return String(value);
+}
+
+// All field definitions, not just active ones: a record can carry data for a
+// field that was later deactivated, and it still needs a label to show it.
+function getExtraEntries(record: ParkingRecord, customFields: FieldDefinition[]) {
+  const extraFields = record.extraFields ?? {};
+  return customFields
+    .map((field) => ({ field, value: extraFields[field.key] }))
+    .filter(({ value }) => value !== undefined && value !== null && value !== '');
+}
+
 export function HistorialTab() {
   const [query, setQuery] = useState('');
   const [tipoFilter, setTipoFilter] = useState<VehicleType | 'todos'>('todos');
@@ -38,6 +58,17 @@ export function HistorialTab() {
   const [records, setRecords] = useState<ParkingRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [customFields, setCustomFields] = useState<FieldDefinition[]>([]);
+
+  useEffect(() => {
+    getFieldDefinitionsAction()
+      .then((result) =>
+        setCustomFields(
+          result.filter((f) => f.key !== 'placa' && f.key !== 'tipo' && f.key !== 'foto'),
+        ),
+      )
+      .catch(() => undefined);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -104,6 +135,66 @@ export function HistorialTab() {
     }
     return [...map.entries()];
   }, [visibleRecords]);
+
+  // Independent from `groups`/pagination: a day's PDF always includes every
+  // record for that date under the current search/type filters, even if not
+  // all of them have been scrolled into view yet via "Cargar más".
+  const downloadDayPdf = (key: string) => {
+    const dayRecords = filteredRecords
+      .filter((record) => dateKey(referenceTime(record)) === key)
+      .sort((a, b) => new Date(a.entradaTime).getTime() - new Date(b.entradaTime).getTime());
+    if (dayRecords.length === 0) return;
+
+    const operator = readActiveOperator();
+    const [y, m, d] = key.split('-').map(Number);
+    const longDate = new Date(y, m - 1, d).toLocaleDateString('es', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+
+    const doc = new jsPDF({ orientation: 'landscape' });
+    doc.setFontSize(16);
+    doc.text('Historial de estacionamiento', 14, 16);
+    doc.setFontSize(11);
+    doc.text(longDate.charAt(0).toUpperCase() + longDate.slice(1), 14, 24);
+    doc.setFontSize(9);
+    doc.setTextColor(110, 110, 110);
+    doc.text(
+      `Generado por ${operator?.name ?? '—'} · ${new Date().toLocaleString('es')} · ${dayRecords.length} registro${dayRecords.length === 1 ? '' : 's'}`,
+      14,
+      30,
+    );
+
+    autoTable(doc, {
+      startY: 36,
+      head: [
+        ['Placa', 'Tipo', 'Entrada', 'Operador entrada', 'Salida', 'Operador salida', 'Duración', 'Detalles'],
+      ],
+      body: dayRecords.map((record) => [
+        record.placa,
+        tipoLabel(record.tipo),
+        formatTime(record.entradaTime),
+        record.operadorEntrada.name,
+        record.salidaTime ? formatTime(record.salidaTime) : '—',
+        record.operadorSalida?.name ?? '—',
+        record.salidaTime
+          ? formatDuration(
+              new Date(record.salidaTime).getTime() - new Date(record.entradaTime).getTime(),
+            )
+          : '—',
+        getExtraEntries(record, customFields)
+          .map(({ field, value }) => `${field.label}: ${formatExtraValue(value, field)}`)
+          .join(' · ') || '—',
+      ]),
+      styles: { fontSize: 8, cellPadding: 3 },
+      headStyles: { fillColor: [246, 167, 35], textColor: [21, 23, 27] },
+      columnStyles: { 7: { cellWidth: 70 } },
+    });
+
+    doc.save(`historial-${key}.pdf`);
+  };
 
   const activeTimeFilters = [dateFrom, dateTo, timeFrom, timeTo].filter(Boolean).length;
   const clearTimeFilters = () => {
@@ -254,19 +345,46 @@ export function HistorialTab() {
                 background: colors.bg,
                 padding: '6px 2px',
                 display: 'flex',
-                alignItems: 'baseline',
+                alignItems: 'center',
+                justifyContent: 'space-between',
                 gap: 8,
               }}
             >
-              <span style={{ fontSize: 13, fontWeight: 700, color: colors.textMuted }}>
-                {formatDateHeading(key)}
-              </span>
-              <span style={{ fontSize: 11.5, color: colors.textDim }}>
-                {groupRecords.length} {groupRecords.length === 1 ? 'registro' : 'registros'}
-              </span>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                <span style={{ fontSize: 13, fontWeight: 700, color: colors.textMuted }}>
+                  {formatDateHeading(key)}
+                </span>
+                <span style={{ fontSize: 11.5, color: colors.textDim }}>
+                  {groupRecords.length} {groupRecords.length === 1 ? 'registro' : 'registros'}
+                </span>
+              </div>
+              <button
+                onClick={() => downloadDayPdf(key)}
+                aria-label={`Descargar PDF del ${formatDateHeading(key)}`}
+                title="Descargar PDF del día"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  border: `1px solid ${colors.border}`,
+                  background: colors.bgCard,
+                  color: colors.textMuted,
+                  cursor: 'pointer',
+                  padding: '5px 10px',
+                  borderRadius: 999,
+                  font: 'inherit',
+                  fontWeight: 600,
+                  fontSize: 11,
+                  flexShrink: 0,
+                }}
+              >
+                <FileDown size={13} strokeWidth={2} />
+                PDF
+              </button>
             </div>
 
             {groupRecords.map((record) => {
+              const extraEntries = getExtraEntries(record, customFields);
               return (
                 <div
                   key={record.id}
@@ -329,6 +447,25 @@ export function HistorialTab() {
                         : '—'}
                     </span>
                   </div>
+
+                  {extraEntries.length > 0 && (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                      {extraEntries.map(({ field, value }) => (
+                        <span
+                          key={field.id}
+                          style={{
+                            fontSize: 10.5,
+                            color: colors.textMuted,
+                            background: colors.bgInputAlt,
+                            borderRadius: 999,
+                            padding: '3px 9px',
+                          }}
+                        >
+                          {field.label}: {formatExtraValue(value, field)}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
               );
             })}

@@ -25,7 +25,7 @@ export const TOUR_STEPS: TourStep[] = [
     target: '[data-tour="registrar-form"]',
     title: 'Registrar entrada',
     description:
-      'Completá la placa y el tipo de vehículo para registrar un ingreso. La foto y los campos marcados "(opcional)" no son obligatorios. Al confirmar, el vehículo pasa a la lista de "Dentro".',
+      'Completá la placa y el tipo de vehículo para registrar un ingreso. Los campos marcados "(opcional)" no son obligatorios. Al confirmar, el vehículo pasa a la lista de "Dentro".',
   },
   {
     id: 'dentro-buscar',
@@ -81,7 +81,7 @@ export const TOUR_STEPS: TourStep[] = [
     target: '[data-tour="admin-campos"]',
     title: 'Campos del formulario',
     description:
-      'Agregá campos personalizados al formulario de registro, o arrastrá cualquier campo para cambiar su orden. Los campos fijos (placa, tipo, foto) no se pueden eliminar.',
+      'Agregá campos personalizados al formulario de registro, o arrastrá cualquier campo para cambiar su orden. Los campos fijos (placa, tipo) no se pueden eliminar.',
     adminOnly: true,
   },
 ];

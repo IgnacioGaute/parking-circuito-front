@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { getInsideAction } from '@/actions/parking-records.actions';
 import { AdminTab } from '@/components/admin/AdminTab';
 import { DentroTab } from '@/components/dashboard/DentroTab';
+import { FrecuentesTab } from '@/components/dashboard/FrecuentesTab';
 import { Header } from '@/components/dashboard/Header';
 import { HistorialTab } from '@/components/dashboard/HistorialTab';
 import { NavTabs, type TabKey } from '@/components/dashboard/NavTabs';
@@ -123,6 +124,7 @@ export default function DashboardPage() {
       {activeTab === 'dentro' && (
         <DentroTab isDesktop={isDesktop} onCountChange={setInsideCount} />
       )}
+      {activeTab === 'frecuentes' && <FrecuentesTab />}
       {activeTab === 'historial' && <HistorialTab />}
       {activeTab === 'usuarios' && <UsuariosTab />}
       {activeTab === 'admin' && isAdmin && (

@@ -1,13 +1,13 @@
 'use client';
 
-import { Bike, Car } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Bike, Car, Search, Star } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { getActiveFieldDefinitionsAction } from '@/actions/field-definitions.actions';
-import { createEntradaAction } from '@/actions/parking-records.actions';
+import { createEntradaAction, getFrequentAction } from '@/actions/parking-records.actions';
+import { tipoLabel } from '@/lib/format';
 import { colors, fonts } from '@/styles/theme';
-import type { FieldDefinition, VehicleType } from '@/types';
-import { PhotoDropzone } from './PhotoDropzone';
+import type { FieldDefinition, FrequentPlate, VehicleType } from '@/types';
 
 interface EntradaFormProps {
   onRegistered: () => void;
@@ -34,18 +34,6 @@ const DEFAULT_FIELDS: FieldDefinition[] = [
     required: true,
     options: ['auto', 'moto'],
     sortOrder: 1,
-    active: true,
-    isSystem: true,
-    createdAt: '',
-  },
-  {
-    id: 'sys-foto',
-    key: 'foto',
-    label: 'Foto',
-    type: 'text',
-    required: false,
-    options: null,
-    sortOrder: 2,
     active: true,
     isSystem: true,
     createdAt: '',
@@ -85,14 +73,52 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
     null,
   );
   const [error, setError] = useState<string | null>(null);
+  const [frequentPlates, setFrequentPlates] = useState<FrequentPlate[]>([]);
+  const [frequentQuery, setFrequentQuery] = useState('');
 
   useEffect(() => {
     getActiveFieldDefinitionsAction()
       .then((result) => setFields([...result].sort((a, b) => a.sortOrder - b.sortOrder)))
       .catch(() => undefined);
+    getFrequentAction()
+      .then(setFrequentPlates)
+      .catch(() => undefined);
   }, []);
 
-  const customFields = fields.filter((f) => !f.isSystem);
+  // Everything rendered through the generic input (renderCustom), not just
+  // non-system fields — some system fields (nombre, dni) are locked/required
+  // but still plain text/number inputs, not the bespoke placa/tipo UI. "foto"
+  // is a leftover system field with no UI anymore (photo upload was removed).
+  const customFields = fields.filter(
+    (f) => f.key !== 'placa' && f.key !== 'tipo' && f.key !== 'foto',
+  );
+
+  const frequentMatches = useMemo(
+    () =>
+      frequentQuery.trim()
+        ? frequentPlates
+            .filter((plate) => plate.placa.toLowerCase().includes(frequentQuery.trim().toLowerCase()))
+            .slice(0, 6)
+        : [],
+    [frequentPlates, frequentQuery],
+  );
+
+  // Loads the plate's last known data into the form so the operator only has
+  // to review and confirm with "Registrar entrada" — same one-tap-confirm
+  // pattern the rest of the app uses for anything that mutates state.
+  const applyFrequent = (plate: FrequentPlate) => {
+    setPlaca(plate.placa);
+    setTipo(plate.tipo);
+    const nextValues: Record<string, CustomValue> = {};
+    for (const field of customFields) {
+      const value = plate.extraFields?.[field.key];
+      if (value !== undefined && value !== null) {
+        nextValues[field.key] = value as CustomValue;
+      }
+    }
+    setCustomValues(nextValues);
+    setFrequentQuery('');
+  };
   const busy = phase !== 'idle';
   const disabled =
     !placa.trim() ||
@@ -218,13 +244,6 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
     </div>
   );
 
-  const renderFoto = () => (
-    <div key="foto" style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-      <label style={labelStyle}>Foto (opcional)</label>
-      <PhotoDropzone onFileSelected={() => undefined} />
-    </div>
-  );
-
   const renderCustom = (field: FieldDefinition) => {
     const value = customValues[field.key];
     return (
@@ -301,12 +320,106 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
         gap: 18,
       }}
     >
+      {frequentPlates.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 7, position: 'relative' }}>
+          <label style={{ ...labelStyle, display: 'flex', alignItems: 'center', gap: 5 }}>
+            <Star size={12} strokeWidth={2.4} fill="currentColor" />
+            Buscar frecuente (opcional)
+          </label>
+          <div style={{ position: 'relative' }}>
+            <Search
+              size={16}
+              strokeWidth={2}
+              style={{
+                position: 'absolute',
+                left: 13,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                color: colors.textDim,
+                pointerEvents: 'none',
+              }}
+            />
+            <input
+              value={frequentQuery}
+              onChange={(event) => setFrequentQuery(event.target.value)}
+              placeholder="Placa ya registrada antes…"
+              className="ui-input"
+              style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                border: `1px solid ${colors.border}`,
+                background: colors.bgInput,
+                borderRadius: 10,
+                padding: '12px 14px 12px 38px',
+                font: 'inherit',
+                fontSize: 14,
+                outline: 'none',
+                color: colors.textPrimary,
+              }}
+            />
+          </div>
+
+          {frequentQuery.trim() && (
+            <div
+              style={{
+                border: `1px solid ${colors.border}`,
+                background: colors.bgCard,
+                borderRadius: 10,
+                overflow: 'hidden',
+              }}
+            >
+              {frequentMatches.length === 0 ? (
+                <div style={{ padding: '12px 14px', fontSize: 13, color: colors.textDim }}>
+                  No se encontraron patentes frecuentes con esa placa.
+                </div>
+              ) : (
+                frequentMatches.map((plate) => (
+                  <button
+                    key={plate.placa}
+                    onClick={() => applyFrequent(plate)}
+                    className="ui-btn"
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 10,
+                      border: 'none',
+                      borderBottom: `1px solid ${colors.border}`,
+                      background: 'transparent',
+                      cursor: 'pointer',
+                      padding: '10px 14px',
+                      font: 'inherit',
+                      textAlign: 'left',
+                    }}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      {plate.tipo === 'auto' ? (
+                        <Car size={15} strokeWidth={2} />
+                      ) : (
+                        <Bike size={15} strokeWidth={2} />
+                      )}
+                      <span style={{ fontFamily: fonts.mono, fontWeight: 700, fontSize: 14 }}>
+                        {plate.placa}
+                      </span>
+                      <span style={{ fontSize: 12, color: colors.textDim }}>{tipoLabel(plate.tipo)}</span>
+                    </span>
+                    <span style={{ fontSize: 11, color: colors.textDim, whiteSpace: 'nowrap' }}>
+                      {plate.visitCount} visitas
+                    </span>
+                  </button>
+                ))
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
       {fields.map((field) => {
+        if (field.key === 'foto') return null;
         if (field.isSystem && field.key === 'placa') return renderPlaca();
         if (field.isSystem && field.key === 'tipo') return renderTipo();
-        if (field.isSystem && field.key === 'foto') return renderFoto();
-        if (!field.isSystem) return renderCustom(field);
-        return null;
+        return renderCustom(field);
       })}
 
       {error && (

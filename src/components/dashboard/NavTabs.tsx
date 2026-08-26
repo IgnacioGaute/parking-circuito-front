@@ -1,10 +1,19 @@
 'use client';
 
-import { Car, List, PanelLeftClose, PanelLeftOpen, Plus, Settings, Users } from 'lucide-react';
+import {
+  Car,
+  List,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Plus,
+  Settings,
+  Star,
+  Users,
+} from 'lucide-react';
 import type { ComponentType } from 'react';
 import { colors } from '@/styles/theme';
 
-export type TabKey = 'registrar' | 'dentro' | 'historial' | 'usuarios' | 'admin';
+export type TabKey = 'registrar' | 'dentro' | 'frecuentes' | 'historial' | 'usuarios' | 'admin';
 
 interface TabDef {
   key: TabKey;
@@ -35,6 +44,7 @@ export function NavTabs({
   const tabs: TabDef[] = [
     { key: 'registrar', label: 'Registrar', Icon: Plus, badge: null },
     { key: 'dentro', label: 'Dentro', Icon: Car, badge: insideCount || null },
+    { key: 'frecuentes', label: 'Frecuentes', Icon: Star, badge: null },
     { key: 'historial', label: 'Historial', Icon: List, badge: null },
     { key: 'usuarios', label: 'Usuarios', Icon: Users, badge: null },
     ...(isAdmin

@@ -51,7 +51,14 @@ export function DentroTab({ isDesktop, onCountChange }: DentroTabProps) {
     // that was later deactivated, and it still needs a label to display it.
     getFieldDefinitionsAction()
       .then((result) => {
-        if (!cancelled) setCustomFields(result.filter((f) => !f.isSystem));
+        // "isSystem" here just means locked/required (e.g. nombre, dni) —
+        // their values still live in extraFields, unlike placa/tipo which
+        // have their own dedicated columns.
+        if (!cancelled) {
+          setCustomFields(
+            result.filter((f) => f.key !== 'placa' && f.key !== 'tipo' && f.key !== 'foto'),
+          );
+        }
       })
       .catch(() => undefined);
     return () => {

@@ -36,7 +36,6 @@ const TYPE_LABELS: Record<FieldType, string> = {
 const SYSTEM_HINTS: Record<string, string> = {
   placa: 'Texto libre',
   tipo: 'Auto / Moto',
-  foto: 'Imagen (opcional)',
 };
 
 function fieldHint(field: FieldDefinition): string {
@@ -73,7 +72,11 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
   const load = () => {
     getFieldDefinitionsAction()
       .then((result) =>
-        setFields(result.filter((f) => f.active).sort((a, b) => a.sortOrder - b.sortOrder)),
+        setFields(
+          result
+            .filter((f) => f.active && f.key !== 'foto')
+            .sort((a, b) => a.sortOrder - b.sortOrder),
+        ),
       )
       .finally(() => setLoading(false));
   };
@@ -192,7 +195,7 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
       <div>
         <div style={{ fontSize: 16, fontWeight: 700 }}>Formulario de registrar entrada</div>
         <div style={{ fontSize: 12.5, color: colors.textDim, marginTop: 4 }}>
-          Arrastrá cualquier campo para reordenarlo. Los fijos (placa, tipo, foto) no se
+          Arrastrá cualquier campo para reordenarlo. Los fijos (placa, tipo) no se
           pueden eliminar, pero sí mover de lugar.
         </div>
       </div>
