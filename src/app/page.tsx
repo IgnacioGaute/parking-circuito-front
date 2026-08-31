@@ -122,10 +122,14 @@ export default function DashboardPage() {
         <RegistrarTab onEntradaRegistered={() => setInsideCount((count) => count + 1)} />
       )}
       {activeTab === 'dentro' && (
-        <DentroTab isDesktop={isDesktop} onCountChange={setInsideCount} />
+        <DentroTab
+          isDesktop={isDesktop}
+          onCountChange={setInsideCount}
+          onToast={showToast}
+        />
       )}
-      {activeTab === 'frecuentes' && <FrecuentesTab />}
-      {activeTab === 'historial' && <HistorialTab />}
+      {activeTab === 'frecuentes' && <FrecuentesTab onToast={showToast} />}
+      {activeTab === 'historial' && <HistorialTab isAdmin={isAdmin} onToast={showToast} />}
       {activeTab === 'usuarios' && <UsuariosTab />}
       {activeTab === 'admin' && isAdmin && (
         <AdminTab

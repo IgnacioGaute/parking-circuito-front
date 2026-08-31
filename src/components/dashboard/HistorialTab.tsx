@@ -1,12 +1,25 @@
 'use client';
 
-import { Bike, Car, ChevronDown, FileDown, Search, SlidersHorizontal, X } from 'lucide-react';
+import {
+  ChevronDown,
+  FileDown,
+  Pencil,
+  Search,
+  SlidersHorizontal,
+  Trash2,
+  Undo2,
+  X,
+} from 'lucide-react';
 import jsPDF from 'jspdf';
 import { autoTable } from 'jspdf-autotable';
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { getFieldDefinitionsAction } from '@/actions/field-definitions.actions';
-import { getHistoryAction } from '@/actions/parking-records.actions';
+import {
+  cancelRecordAction,
+  getHistoryAction,
+  reopenRecordAction,
+} from '@/actions/parking-records.actions';
 import { readActiveOperator } from '@/lib/active-operator';
 import {
   dateKey,
@@ -18,24 +31,31 @@ import {
 } from '@/lib/format';
 import { colors, fonts } from '@/styles/theme';
 import type { FieldDefinition, ParkingRecord, VehicleType } from '@/types';
+import { ConfirmActionSheet } from './ConfirmActionSheet';
+import { EditRecordModal } from './EditRecordModal';
+import { formatExtraValue, VehicleIcon } from './record-display-utils';
 
 const PAGE_SIZE = 8;
 
-function VehicleIcon({ tipo, size = 18 }: { tipo: 'auto' | 'moto'; size?: number }) {
-  return tipo === 'auto' ? <Car size={size} strokeWidth={2} /> : <Bike size={size} strokeWidth={2} />;
-}
+const iconButtonStyle: React.CSSProperties = {
+  width: 30,
+  height: 30,
+  border: `1px solid ${colors.border}`,
+  background: 'transparent',
+  color: colors.textMuted,
+  cursor: 'pointer',
+  borderRadius: 8,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flexShrink: 0,
+};
 
 // Records don't carry a plain "date" — a completed visit is dated by its
 // exit, an in-progress one (shouldn't normally reach /history, but just in
 // case) by its entry.
 function referenceTime(record: ParkingRecord): string {
   return record.salidaTime ?? record.entradaTime;
-}
-
-function formatExtraValue(value: unknown, field?: FieldDefinition): string {
-  if (value === undefined || value === null || value === '') return '—';
-  if (field?.type === 'boolean') return value === true ? 'Sí' : 'No';
-  return String(value);
 }
 
 // All field definitions, not just active ones: a record can carry data for a
@@ -47,7 +67,12 @@ function getExtraEntries(record: ParkingRecord, customFields: FieldDefinition[])
     .filter(({ value }) => value !== undefined && value !== null && value !== '');
 }
 
-export function HistorialTab() {
+interface HistorialTabProps {
+  isAdmin: boolean;
+  onToast: (message: string) => void;
+}
+
+export function HistorialTab({ isAdmin, onToast }: HistorialTabProps) {
   const [query, setQuery] = useState('');
   const [tipoFilter, setTipoFilter] = useState<VehicleType | 'todos'>('todos');
   const [dateFrom, setDateFrom] = useState('');
@@ -59,6 +84,14 @@ export function HistorialTab() {
   const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [customFields, setCustomFields] = useState<FieldDefinition[]>([]);
+  const [editingRecord, setEditingRecord] = useState<ParkingRecord | null>(null);
+  const [cancelingRecord, setCancelingRecord] = useState<ParkingRecord | null>(null);
+  const [cancelBusy, setCancelBusy] = useState(false);
+  const [cancelError, setCancelError] = useState<string | null>(null);
+  const [cancelReason, setCancelReason] = useState('');
+  const [reopeningRecord, setReopeningRecord] = useState<ParkingRecord | null>(null);
+  const [reopenBusy, setReopenBusy] = useState(false);
+  const [reopenError, setReopenError] = useState<string | null>(null);
 
   useEffect(() => {
     getFieldDefinitionsAction()
@@ -202,6 +235,67 @@ export function HistorialTab() {
     setDateTo('');
     setTimeFrom('');
     setTimeTo('');
+  };
+
+  // Every action here is admin-only (records in Historial are always closed
+  // — see the permission rule in parking-records.service.ts) and any record
+  // touched has to disappear from this list: an edited-and-still-closed
+  // record stays but updates in place, while cancel/reopen both remove it
+  // (cancelled records vanish everywhere; reopened ones move to "Dentro").
+  const handleEditSaved = (updated: ParkingRecord) => {
+    setRecords((current) => current.map((r) => (r.id === updated.id ? updated : r)));
+    setEditingRecord(null);
+    onToast('Registro actualizado');
+  };
+
+  const openCancel = (record: ParkingRecord) => {
+    setCancelingRecord(record);
+    setCancelReason('');
+    setCancelError(null);
+  };
+
+  const closeCancel = () => {
+    if (cancelBusy) return;
+    setCancelingRecord(null);
+    setCancelError(null);
+  };
+
+  const confirmCancel = async () => {
+    if (!cancelingRecord) return;
+    setCancelBusy(true);
+    setCancelError(null);
+    try {
+      await cancelRecordAction(cancelingRecord.id, { reason: cancelReason.trim() || undefined });
+      setRecords((current) => current.filter((r) => r.id !== cancelingRecord.id));
+      setCancelingRecord(null);
+      onToast('Registro cancelado');
+    } catch {
+      setCancelError('No se pudo cancelar el registro');
+    } finally {
+      setCancelBusy(false);
+    }
+  };
+
+  const closeReopen = () => {
+    if (reopenBusy) return;
+    setReopeningRecord(null);
+    setReopenError(null);
+  };
+
+  const confirmReopen = async () => {
+    if (!reopeningRecord) return;
+    setReopenBusy(true);
+    setReopenError(null);
+    try {
+      await reopenRecordAction(reopeningRecord.id);
+      setRecords((current) => current.filter((r) => r.id !== reopeningRecord.id));
+      setReopeningRecord(null);
+      onToast('Registro reabierto — ahora figura en Dentro');
+    } catch {
+      setReopenError('No se pudo reabrir el registro');
+    } finally {
+      setReopenBusy(false);
+    }
   };
 
   return (
@@ -466,6 +560,38 @@ export function HistorialTab() {
                       ))}
                     </div>
                   )}
+
+                  {isAdmin && (
+                    <div style={{ display: 'flex', gap: 6, borderTop: `1px dashed ${colors.border}`, paddingTop: 9 }}>
+                      <button
+                        onClick={() => setEditingRecord(record)}
+                        className="ui-btn"
+                        aria-label="Editar registro"
+                        title="Editar"
+                        style={iconButtonStyle}
+                      >
+                        <Pencil size={14} strokeWidth={2} />
+                      </button>
+                      <button
+                        onClick={() => setReopeningRecord(record)}
+                        className="ui-btn"
+                        aria-label="Reabrir salida"
+                        title="Reabrir salida"
+                        style={iconButtonStyle}
+                      >
+                        <Undo2 size={14} strokeWidth={2} />
+                      </button>
+                      <button
+                        onClick={() => openCancel(record)}
+                        className="ui-btn"
+                        aria-label="Cancelar registro"
+                        title="Cancelar"
+                        style={{ ...iconButtonStyle, borderColor: colors.error, color: colors.error }}
+                      >
+                        <Trash2 size={14} strokeWidth={2} />
+                      </button>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -504,6 +630,65 @@ export function HistorialTab() {
           onTimeToChange={setTimeTo}
           onClear={clearTimeFilters}
           onClose={() => setShowFilters(false)}
+        />
+      )}
+
+      {editingRecord && (
+        <EditRecordModal
+          record={editingRecord}
+          onSaved={handleEditSaved}
+          onCancel={() => setEditingRecord(null)}
+        />
+      )}
+
+      {cancelingRecord && (
+        <ConfirmActionSheet
+          title="Cancelar registro"
+          description={`Vas a cancelar la visita de ${cancelingRecord.placa}. No se borra, pero deja de figurar en Historial.`}
+          confirmLabel="Cancelar registro"
+          busyLabel="Cancelando…"
+          destructive
+          busy={cancelBusy}
+          error={cancelError}
+          onConfirm={confirmCancel}
+          onCancel={closeCancel}
+          extraContent={
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+              <label style={{ fontSize: 12, fontWeight: 600, color: colors.textMuted }}>
+                Motivo (opcional)
+              </label>
+              <textarea
+                value={cancelReason}
+                onChange={(event) => setCancelReason(event.target.value)}
+                rows={3}
+                placeholder="Ej: se cargó dos veces por error"
+                style={{
+                  border: `1px solid ${colors.border}`,
+                  background: colors.bgInput,
+                  borderRadius: 10,
+                  padding: '11px 13px',
+                  font: 'inherit',
+                  fontSize: 13.5,
+                  color: colors.textPrimary,
+                  outline: 'none',
+                  resize: 'vertical',
+                }}
+              />
+            </div>
+          }
+        />
+      )}
+
+      {reopeningRecord && (
+        <ConfirmActionSheet
+          title="Reabrir salida"
+          description={`Esto va a borrar la salida registrada de ${reopeningRecord.placa} y el vehículo va a volver a figurar como "Dentro".`}
+          confirmLabel="Reabrir salida"
+          busyLabel="Reabriendo…"
+          busy={reopenBusy}
+          error={reopenError}
+          onConfirm={confirmReopen}
+          onCancel={closeReopen}
         />
       )}
     </div>

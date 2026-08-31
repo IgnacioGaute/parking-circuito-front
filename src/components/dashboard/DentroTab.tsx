@@ -1,34 +1,29 @@
 'use client';
 
-import { Bike, Car, Search, X } from 'lucide-react';
+import { Pencil, Search, Star, Trash2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { getFieldDefinitionsAction } from '@/actions/field-definitions.actions';
-import { getInsideAction, registerSalidaAction } from '@/actions/parking-records.actions';
+import {
+  cancelRecordAction,
+  getFrequentAction,
+  getInsideAction,
+  registerSalidaAction,
+} from '@/actions/parking-records.actions';
 import { formatDuration, formatTime, tipoColors, tipoLabel } from '@/lib/format';
 import { colors, fonts } from '@/styles/theme';
 import type { FieldDefinition, ParkingRecord } from '@/types';
-
-function VehicleIcon({ tipo, size = 18 }: { tipo: 'auto' | 'moto'; size?: number }) {
-  return tipo === 'auto' ? (
-    <Car size={size} strokeWidth={1.8} />
-  ) : (
-    <Bike size={size} strokeWidth={1.8} />
-  );
-}
-
-function formatExtraValue(value: unknown, field?: FieldDefinition): string {
-  if (value === undefined || value === null || value === '') return '—';
-  if (field?.type === 'boolean') return value === true ? 'Sí' : 'No';
-  return String(value);
-}
+import { ConfirmActionSheet } from './ConfirmActionSheet';
+import { EditRecordModal } from './EditRecordModal';
+import { formatExtraValue, VehicleIcon } from './record-display-utils';
 
 interface DentroTabProps {
   isDesktop: boolean;
   onCountChange: (count: number) => void;
+  onToast: (message: string) => void;
 }
 
-export function DentroTab({ isDesktop, onCountChange }: DentroTabProps) {
+export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps) {
   const [records, setRecords] = useState<ParkingRecord[]>([]);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
@@ -37,6 +32,12 @@ export function DentroTab({ isDesktop, onCountChange }: DentroTabProps) {
   const [confirmingRecord, setConfirmingRecord] = useState<ParkingRecord | null>(null);
   const [exitPhase, setExitPhase] = useState<'idle' | 'loading' | 'success' | 'closing'>('idle');
   const [exitError, setExitError] = useState<string | null>(null);
+  const [editingRecord, setEditingRecord] = useState<ParkingRecord | null>(null);
+  const [cancelingRecord, setCancelingRecord] = useState<ParkingRecord | null>(null);
+  const [cancelBusy, setCancelBusy] = useState(false);
+  const [cancelError, setCancelError] = useState<string | null>(null);
+  const [cancelReason, setCancelReason] = useState('');
+  const [frequentPlacas, setFrequentPlacas] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     let cancelled = false;
@@ -47,6 +48,13 @@ export function DentroTab({ isDesktop, onCountChange }: DentroTabProps) {
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
+    // A frequent plate gets edited from Frecuentes, not here — keeps
+    // corrections to a recognized regular in one place.
+    getFrequentAction()
+      .then((result) => {
+        if (!cancelled) setFrequentPlacas(new Set(result.map((p) => p.placa)));
+      })
+      .catch(() => undefined);
     // All fields, not just active ones: a record can carry data for a field
     // that was later deactivated, and it still needs a label to display it.
     getFieldDefinitionsAction()
@@ -106,6 +114,40 @@ export function DentroTab({ isDesktop, onCountChange }: DentroTabProps) {
     } catch {
       setExitError('No se pudo registrar la salida. Probá de nuevo.');
       setExitPhase('idle');
+    }
+  };
+
+  const handleEditSaved = (updated: ParkingRecord) => {
+    setRecords((current) => current.map((r) => (r.id === updated.id ? updated : r)));
+    setEditingRecord(null);
+    onToast('Registro actualizado');
+  };
+
+  const openCancel = (record: ParkingRecord) => {
+    setCancelingRecord(record);
+    setCancelReason('');
+    setCancelError(null);
+  };
+
+  const closeCancel = () => {
+    if (cancelBusy) return;
+    setCancelingRecord(null);
+    setCancelError(null);
+  };
+
+  const confirmCancel = async () => {
+    if (!cancelingRecord) return;
+    setCancelBusy(true);
+    setCancelError(null);
+    try {
+      await cancelRecordAction(cancelingRecord.id, { reason: cancelReason.trim() || undefined });
+      setRecords((current) => current.filter((r) => r.id !== cancelingRecord.id));
+      setCancelingRecord(null);
+      onToast('Registro cancelado');
+    } catch {
+      setCancelError('No se pudo cancelar el registro');
+    } finally {
+      setCancelBusy(false);
     }
   };
 
@@ -200,6 +242,7 @@ export function DentroTab({ isDesktop, onCountChange }: DentroTabProps) {
         {matches.map((record) => {
           const durationMs = now - new Date(record.entradaTime).getTime();
           const attention = durationMs > 60 * 60 * 1000;
+          const isFrequent = frequentPlacas.has(record.placa);
           return (
             <div
               key={record.id}
@@ -251,27 +294,136 @@ export function DentroTab({ isDesktop, onCountChange }: DentroTabProps) {
                   {formatDuration(durationMs)}
                 </span>
               </div>
-              <button
-                onClick={() => setConfirmingRecord(record)}
-                className="ui-btn ui-outline-btn"
-                style={{
-                  border: `1px solid ${colors.border}`,
-                  background: 'transparent',
-                  color: colors.textPrimary,
-                  cursor: 'pointer',
-                  padding: 11,
-                  borderRadius: 10,
-                  font: 'inherit',
-                  fontWeight: 600,
-                  fontSize: 13.5,
-                }}
-              >
-                Registrar salida
-              </button>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button
+                  onClick={() => setConfirmingRecord(record)}
+                  className="ui-btn ui-outline-btn"
+                  style={{
+                    flex: 1,
+                    border: `1px solid ${colors.border}`,
+                    background: 'transparent',
+                    color: colors.textPrimary,
+                    cursor: 'pointer',
+                    padding: 11,
+                    borderRadius: 10,
+                    font: 'inherit',
+                    fontWeight: 600,
+                    fontSize: 13.5,
+                  }}
+                >
+                  Registrar salida
+                </button>
+                {isFrequent ? (
+                  <span
+                    aria-label="Patente frecuente — editala desde Frecuentes"
+                    title="Patente frecuente — editala desde Frecuentes"
+                    style={{
+                      flexShrink: 0,
+                      width: 42,
+                      border: `1px solid ${colors.border}`,
+                      background: 'transparent',
+                      color: colors.textDim,
+                      borderRadius: 10,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Star size={15} strokeWidth={2} />
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => setEditingRecord(record)}
+                    className="ui-btn ui-outline-btn"
+                    aria-label="Editar registro"
+                    title="Editar"
+                    style={{
+                      flexShrink: 0,
+                      width: 42,
+                      border: `1px solid ${colors.border}`,
+                      background: 'transparent',
+                      color: colors.textMuted,
+                      cursor: 'pointer',
+                      borderRadius: 10,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Pencil size={15} strokeWidth={2} />
+                  </button>
+                )}
+                <button
+                  onClick={() => openCancel(record)}
+                  className="ui-btn"
+                  aria-label="Cancelar registro"
+                  title="Cancelar"
+                  style={{
+                    flexShrink: 0,
+                    width: 42,
+                    border: `1px solid ${colors.error}`,
+                    background: 'transparent',
+                    color: colors.error,
+                    cursor: 'pointer',
+                    borderRadius: 10,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Trash2 size={15} strokeWidth={2} />
+                </button>
+              </div>
             </div>
           );
         })}
       </div>
+
+      {editingRecord && (
+        <EditRecordModal
+          record={editingRecord}
+          onSaved={handleEditSaved}
+          onCancel={() => setEditingRecord(null)}
+        />
+      )}
+
+      {cancelingRecord && (
+        <ConfirmActionSheet
+          title="Cancelar registro"
+          description={`Vas a cancelar la entrada de ${cancelingRecord.placa}. No se borra, pero deja de figurar en Dentro, Historial y Frecuentes.`}
+          confirmLabel="Cancelar registro"
+          busyLabel="Cancelando…"
+          destructive
+          busy={cancelBusy}
+          error={cancelError}
+          onConfirm={confirmCancel}
+          onCancel={closeCancel}
+          extraContent={
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+              <label style={{ fontSize: 12, fontWeight: 600, color: colors.textMuted }}>
+                Motivo (opcional)
+              </label>
+              <textarea
+                value={cancelReason}
+                onChange={(event) => setCancelReason(event.target.value)}
+                rows={3}
+                placeholder="Ej: se cargó dos veces por error"
+                style={{
+                  border: `1px solid ${colors.border}`,
+                  background: colors.bgInput,
+                  borderRadius: 10,
+                  padding: '11px 13px',
+                  font: 'inherit',
+                  fontSize: 13.5,
+                  color: colors.textPrimary,
+                  outline: 'none',
+                  resize: 'vertical',
+                }}
+              />
+            </div>
+          }
+        />
+      )}
 
       {confirmingRecord && (
         <ExitConfirmModal

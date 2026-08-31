@@ -1,9 +1,11 @@
 import 'server-only';
 import type {
+  CancelRecordPayload,
   CreateEntradaPayload,
   FrequentPlate,
   HistoryFilters,
   ParkingRecord,
+  UpdateRecordPayload,
 } from '@/types';
 import { apiFetch } from './api-client';
 
@@ -50,6 +52,37 @@ export function registerSalidaRequest(
   token: string,
 ): Promise<ParkingRecord> {
   return apiFetch<ParkingRecord>(`/parking-records/${id}/exit`, {
+    method: 'PATCH',
+    token,
+  });
+}
+
+export function updateRecordRequest(
+  id: string,
+  payload: UpdateRecordPayload,
+  token: string,
+): Promise<ParkingRecord> {
+  return apiFetch<ParkingRecord>(`/parking-records/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+    token,
+  });
+}
+
+export function cancelRecordRequest(
+  id: string,
+  payload: CancelRecordPayload,
+  token: string,
+): Promise<ParkingRecord> {
+  return apiFetch<ParkingRecord>(`/parking-records/${id}/cancel`, {
+    method: 'PATCH',
+    body: JSON.stringify(payload),
+    token,
+  });
+}
+
+export function reopenRecordRequest(id: string, token: string): Promise<ParkingRecord> {
+  return apiFetch<ParkingRecord>(`/parking-records/${id}/reopen`, {
     method: 'PATCH',
     token,
   });

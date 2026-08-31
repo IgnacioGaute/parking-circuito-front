@@ -1,11 +1,11 @@
 'use client';
 
-import { Bike, Car, Search, Star } from 'lucide-react';
+import { Bike, Car, Check, Search, Star } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { getActiveFieldDefinitionsAction } from '@/actions/field-definitions.actions';
 import { createEntradaAction, getFrequentAction } from '@/actions/parking-records.actions';
-import { tipoLabel } from '@/lib/format';
+import { formatDate, formatTime, tipoLabel } from '@/lib/format';
 import { colors, fonts } from '@/styles/theme';
 import type { FieldDefinition, FrequentPlate, VehicleType } from '@/types';
 
@@ -63,6 +63,28 @@ function isEmptyValue(value: CustomValue | undefined): boolean {
   return value === undefined || value === null || value === '';
 }
 
+function formatExtraValue(value: unknown, field?: FieldDefinition): string {
+  if (value === undefined || value === null || value === '') return '—';
+  if (field?.type === 'boolean') return value === true ? 'Sí' : 'No';
+  return String(value);
+}
+
+function matchesFrequentQuery(plate: FrequentPlate, rawQuery: string): boolean {
+  const q = rawQuery.trim().toLowerCase();
+  if (!q) return false;
+  if (plate.placa.toLowerCase().includes(q)) return true;
+  const nombre = plate.extraFields?.nombre;
+  return typeof nombre === 'string' && nombre.toLowerCase().includes(q);
+}
+
+function VehicleIcon({ tipo, size = 15 }: { tipo: VehicleType; size?: number }) {
+  return tipo === 'auto' ? (
+    <Car size={size} strokeWidth={2} />
+  ) : (
+    <Bike size={size} strokeWidth={2} />
+  );
+}
+
 export function EntradaForm({ onRegistered }: EntradaFormProps) {
   const [placa, setPlaca] = useState('');
   const [tipo, setTipo] = useState<VehicleType | null>(null);
@@ -75,6 +97,8 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [frequentPlates, setFrequentPlates] = useState<FrequentPlate[]>([]);
   const [frequentQuery, setFrequentQuery] = useState('');
+  const [selectedFrequent, setSelectedFrequent] = useState<FrequentPlate | null>(null);
+  const [markFrequent, setMarkFrequent] = useState(false);
 
   useEffect(() => {
     getActiveFieldDefinitionsAction()
@@ -96,29 +120,31 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
   const frequentMatches = useMemo(
     () =>
       frequentQuery.trim()
-        ? frequentPlates
-            .filter((plate) => plate.placa.toLowerCase().includes(frequentQuery.trim().toLowerCase()))
-            .slice(0, 6)
+        ? frequentPlates.filter((plate) => matchesFrequentQuery(plate, frequentQuery)).slice(0, 5)
         : [],
     [frequentPlates, frequentQuery],
   );
 
-  // Loads the plate's last known data into the form so the operator only has
-  // to review and confirm with "Registrar entrada" — same one-tap-confirm
-  // pattern the rest of the app uses for anything that mutates state.
-  const applyFrequent = (plate: FrequentPlate) => {
-    setPlaca(plate.placa);
-    setTipo(plate.tipo);
-    const nextValues: Record<string, CustomValue> = {};
-    for (const field of customFields) {
-      const value = plate.extraFields?.[field.key];
-      if (value !== undefined && value !== null) {
-        nextValues[field.key] = value as CustomValue;
-      }
-    }
-    setCustomValues(nextValues);
-    setFrequentQuery('');
-  };
+  const selectedExtraEntries = useMemo(() => {
+    if (!selectedFrequent) return [];
+    const extraFields = selectedFrequent.extraFields ?? {};
+    return customFields
+      .map((field) => ({ field, value: extraFields[field.key] }))
+      .filter(({ value }) => value !== undefined && value !== null && value !== '');
+  }, [selectedFrequent, customFields]);
+
+  // A field required today might not have a value on an older record (e.g.
+  // DNI added after this plate's last visit) — catch that before letting
+  // the operator register with incomplete data.
+  const missingRequiredFields = useMemo(() => {
+    if (!selectedFrequent) return [];
+    return customFields.filter((field) => {
+      if (!field.required) return false;
+      const value = selectedFrequent.extraFields?.[field.key];
+      return value === undefined || value === null || value === '';
+    });
+  }, [selectedFrequent, customFields]);
+
   const busy = phase !== 'idle';
   const disabled =
     !placa.trim() ||
@@ -130,20 +156,24 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
     setCustomValues((current) => ({ ...current, [key]: value }));
   };
 
-  const handleSubmit = async () => {
-    if (disabled || !tipo) return;
+  // Shared by both entry points — the manual form and a one-tap register
+  // from a frequent plate's detail card — so they go through the exact same
+  // phases, success animation and error handling.
+  const submitEntrada = async (payload: {
+    placa: string;
+    tipo: VehicleType;
+    extraFields: Record<string, CustomValue>;
+    markedFrequent?: boolean;
+  }) => {
     setPhase('submitting');
     setError(null);
     try {
-      const extraFields: Record<string, CustomValue> = {};
-      for (const field of customFields) {
-        const value = customValues[field.key];
-        if (!isEmptyValue(value)) extraFields[field.key] = value;
-      }
       const record = await createEntradaAction({
-        placa: placa.trim(),
-        tipo,
-        extraFields: Object.keys(extraFields).length > 0 ? extraFields : undefined,
+        placa: payload.placa,
+        tipo: payload.tipo,
+        extraFields:
+          Object.keys(payload.extraFields).length > 0 ? payload.extraFields : undefined,
+        markedFrequent: payload.markedFrequent || undefined,
       });
       setSuccessInfo({ placa: record.placa, tipo: record.tipo });
       setPhase('success');
@@ -156,15 +186,46 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
           setPlaca('');
           setTipo(null);
           setCustomValues({});
+          setMarkFrequent(false);
           setPhase('idle');
           setSuccessInfo(null);
           onRegistered();
+          getFrequentAction()
+            .then(setFrequentPlates)
+            .catch(() => undefined);
         }, 800);
       }, 1200);
     } catch {
       setError('No se pudo registrar la entrada');
       setPhase('idle');
     }
+  };
+
+  const handleSubmit = () => {
+    if (disabled || !tipo) return;
+    const extraFields: Record<string, CustomValue> = {};
+    for (const field of customFields) {
+      const value = customValues[field.key];
+      if (!isEmptyValue(value)) extraFields[field.key] = value;
+    }
+    void submitEntrada({ placa: placa.trim(), tipo, extraFields, markedFrequent: markFrequent });
+  };
+
+  // No autofill: tapping "Registrar con estos datos" registers the entrada
+  // directly from the selected plate's own data — the manual fields below
+  // are never touched.
+  const registerFromFrequent = (plate: FrequentPlate) => {
+    if (busy || missingRequiredFields.length > 0) return;
+    const extraFields: Record<string, CustomValue> = {};
+    for (const field of customFields) {
+      const value = plate.extraFields?.[field.key];
+      if (value !== undefined && value !== null && value !== '') {
+        extraFields[field.key] = value as CustomValue;
+      }
+    }
+    setSelectedFrequent(null);
+    setFrequentQuery('');
+    void submitEntrada({ placa: plate.placa, tipo: plate.tipo, extraFields });
   };
 
   const renderPlaca = () => (
@@ -321,11 +382,43 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
       }}
     >
       {frequentPlates.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 7, position: 'relative' }}>
-          <label style={{ ...labelStyle, display: 'flex', alignItems: 'center', gap: 5 }}>
-            <Star size={12} strokeWidth={2.4} fill="currentColor" />
-            Buscar frecuente (opcional)
-          </label>
+        <div
+          style={{
+            background: colors.accentBgSofter,
+            border: `1px solid ${colors.accentBgBadge}`,
+            borderRadius: 14,
+            padding: 14,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 12,
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span
+              style={{
+                width: 30,
+                height: 30,
+                flexShrink: 0,
+                borderRadius: 9,
+                background: colors.accentBgSoft,
+                color: colors.accent,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Star size={15} strokeWidth={2} fill="currentColor" />
+            </span>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.3 }}>
+                ¿Es un vehículo frecuente?
+              </div>
+              <div style={{ fontSize: 12, color: colors.textMuted, lineHeight: 1.3 }}>
+                Buscá por placa o por nombre para ver sus datos.
+              </div>
+            </div>
+          </div>
+
           <div style={{ position: 'relative' }}>
             <Search
               size={16}
@@ -341,8 +434,11 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
             />
             <input
               value={frequentQuery}
-              onChange={(event) => setFrequentQuery(event.target.value)}
-              placeholder="Placa ya registrada antes…"
+              onChange={(event) => {
+                setFrequentQuery(event.target.value);
+                setSelectedFrequent(null);
+              }}
+              placeholder="Placa o nombre…"
               className="ui-input"
               style={{
                 width: '100%',
@@ -359,59 +455,235 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
             />
           </div>
 
-          {frequentQuery.trim() && (
-            <div
-              style={{
-                border: `1px solid ${colors.border}`,
-                background: colors.bgCard,
-                borderRadius: 10,
-                overflow: 'hidden',
-              }}
-            >
+          {frequentQuery.trim() && !selectedFrequent && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {frequentMatches.length === 0 ? (
-                <div style={{ padding: '12px 14px', fontSize: 13, color: colors.textDim }}>
-                  No se encontraron patentes frecuentes con esa placa.
+                <div style={{ padding: 14, textAlign: 'center', fontSize: 12.5, color: colors.textDim }}>
+                  No hay ningún frecuente con &quot;{frequentQuery.trim()}&quot;.
                 </div>
               ) : (
-                frequentMatches.map((plate) => (
-                  <button
-                    key={plate.placa}
-                    onClick={() => applyFrequent(plate)}
-                    className="ui-btn"
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: 10,
-                      border: 'none',
-                      borderBottom: `1px solid ${colors.border}`,
-                      background: 'transparent',
-                      cursor: 'pointer',
-                      padding: '10px 14px',
-                      font: 'inherit',
-                      textAlign: 'left',
-                    }}
-                  >
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      {plate.tipo === 'auto' ? (
-                        <Car size={15} strokeWidth={2} />
-                      ) : (
-                        <Bike size={15} strokeWidth={2} />
-                      )}
-                      <span style={{ fontFamily: fonts.mono, fontWeight: 700, fontSize: 14 }}>
-                        {plate.placa}
+                frequentMatches.map((plate) => {
+                  const nombre = plate.extraFields?.nombre;
+                  return (
+                    <button
+                      key={plate.placa}
+                      onClick={() => setSelectedFrequent(plate)}
+                      className="ui-btn"
+                      style={{
+                        width: '100%',
+                        textAlign: 'left',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: 10,
+                        border: `1px solid ${colors.border}`,
+                        background: colors.bgCard,
+                        borderRadius: 10,
+                        padding: '11px 13px',
+                        cursor: 'pointer',
+                        font: 'inherit',
+                      }}
+                    >
+                      <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                          <span style={{ color: colors.textDim, display: 'flex' }}>
+                            <VehicleIcon tipo={plate.tipo} />
+                          </span>
+                          <span style={{ fontFamily: fonts.mono, fontWeight: 700, fontSize: 14.5 }}>
+                            {plate.placa}
+                          </span>
+                          <span style={{ fontSize: 11.5, color: colors.textDim }}>
+                            {tipoLabel(plate.tipo)}
+                          </span>
+                        </div>
+                        <div
+                          style={{
+                            fontSize: 12,
+                            color: colors.textMuted,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {typeof nombre === 'string' && nombre ? `${nombre} · ` : ''}
+                          {formatDate(plate.lastEntradaTime)} · {formatTime(plate.lastEntradaTime)}
+                        </div>
+                      </div>
+                      <span
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 4,
+                          fontSize: 10.5,
+                          fontWeight: 700,
+                          padding: '3px 9px',
+                          borderRadius: 999,
+                          background: colors.accentBgSoft,
+                          color: colors.accent,
+                          whiteSpace: 'nowrap',
+                          flexShrink: 0,
+                        }}
+                      >
+                        <Star size={10} strokeWidth={2.2} fill="currentColor" />
+                        {plate.visitCount}
                       </span>
-                      <span style={{ fontSize: 12, color: colors.textDim }}>{tipoLabel(plate.tipo)}</span>
-                    </span>
-                    <span style={{ fontSize: 11, color: colors.textDim, whiteSpace: 'nowrap' }}>
-                      {plate.visitCount} visitas
-                    </span>
-                  </button>
-                ))
+                    </button>
+                  );
+                })
               )}
             </div>
           )}
+
+          {selectedFrequent && (
+            <div
+              style={{
+                background: colors.bgCard,
+                border: `1px solid ${colors.border}`,
+                borderRadius: 12,
+                padding: 16,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 14,
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+                  <span style={{ color: colors.textMuted, display: 'flex' }}>
+                    <VehicleIcon tipo={selectedFrequent.tipo} size={18} />
+                  </span>
+                  <span style={{ fontFamily: fonts.mono, fontWeight: 800, fontSize: 20, letterSpacing: '0.02em' }}>
+                    {selectedFrequent.placa}
+                  </span>
+                  <span style={{ fontSize: 12, color: colors.textDim }}>
+                    {tipoLabel(selectedFrequent.tipo)}
+                  </span>
+                </div>
+                <span
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 5,
+                    fontSize: 11,
+                    fontWeight: 700,
+                    padding: '4px 10px',
+                    borderRadius: 999,
+                    background: colors.accentBgSoft,
+                    color: colors.accent,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  <Star size={11} strokeWidth={2.2} fill="currentColor" />
+                  {selectedFrequent.visitCount} visitas
+                </span>
+              </div>
+
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 9,
+                  borderTop: `1px solid ${colors.border}`,
+                  paddingTop: 12,
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}>
+                  <span style={{ fontSize: 12.5, color: colors.textDim }}>Última vez</span>
+                  <span style={{ fontSize: 13, fontWeight: 600 }}>
+                    {formatDate(selectedFrequent.lastEntradaTime)} ·{' '}
+                    {formatTime(selectedFrequent.lastEntradaTime)}
+                  </span>
+                </div>
+                {selectedExtraEntries.map(({ field, value }) => (
+                  <div key={field.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}>
+                    <span style={{ fontSize: 12.5, color: colors.textDim }}>{field.label}</span>
+                    <span style={{ fontSize: 13, fontWeight: 600 }}>{formatExtraValue(value, field)}</span>
+                  </div>
+                ))}
+              </div>
+
+              {missingRequiredFields.length > 0 && (
+                <div style={{ fontSize: 12, color: colors.error, fontWeight: 600, lineHeight: 1.5 }}>
+                  Falta {missingRequiredFields.map((f) => f.label).join(', ')} — completalo con el
+                  formulario de abajo.
+                </div>
+              )}
+
+              <div style={{ display: 'flex', gap: 9 }}>
+                <button
+                  onClick={() => setSelectedFrequent(null)}
+                  disabled={busy}
+                  className="ui-btn"
+                  style={{
+                    flex: 1,
+                    border: `1px solid ${colors.border}`,
+                    background: 'transparent',
+                    color: colors.textMuted,
+                    borderRadius: 10,
+                    padding: 13,
+                    fontSize: 13.5,
+                    fontWeight: 700,
+                    cursor: busy ? 'default' : 'pointer',
+                    font: 'inherit',
+                    opacity: busy ? 0.6 : 1,
+                  }}
+                >
+                  ← Buscar otra
+                </button>
+                <button
+                  onClick={() => registerFromFrequent(selectedFrequent)}
+                  disabled={busy || missingRequiredFields.length > 0}
+                  className="ui-btn"
+                  style={{
+                    flex: 2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 7,
+                    border: 'none',
+                    background:
+                      busy || missingRequiredFields.length > 0
+                        ? colors.accentDisabledBg
+                        : colors.accent,
+                    color: colors.accentContrast,
+                    borderRadius: 10,
+                    padding: 13,
+                    fontSize: 13.5,
+                    fontWeight: 800,
+                    cursor: busy || missingRequiredFields.length > 0 ? 'default' : 'pointer',
+                    font: 'inherit',
+                    opacity: busy || missingRequiredFields.length > 0 ? 0.7 : 1,
+                  }}
+                >
+                  {phase === 'submitting' ? (
+                    'Registrando…'
+                  ) : (
+                    <>
+                      <Check size={15} strokeWidth={2.5} />
+                      Registrar con estos datos
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {frequentPlates.length > 0 && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ flex: 1, height: 1, background: colors.border }} />
+          <span
+            style={{
+              fontSize: 10.5,
+              fontWeight: 700,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              color: colors.textDim,
+            }}
+          >
+            o completá a mano
+          </span>
+          <div style={{ flex: 1, height: 1, background: colors.border }} />
         </div>
       )}
 
@@ -421,6 +693,55 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
         if (field.isSystem && field.key === 'tipo') return renderTipo();
         return renderCustom(field);
       })}
+
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 12,
+          border: `1px solid ${colors.border}`,
+          borderRadius: 12,
+          padding: '13px 14px',
+        }}
+      >
+        <button
+          onClick={() => setMarkFrequent((current) => !current)}
+          className="ui-btn"
+          aria-pressed={markFrequent}
+          aria-label="Marcar como frecuente"
+          style={{
+            flexShrink: 0,
+            width: 40,
+            height: 22,
+            borderRadius: 999,
+            border: 'none',
+            padding: 2,
+            cursor: 'pointer',
+            background: markFrequent ? colors.accent : colors.bgInputAlt,
+            display: 'flex',
+            justifyContent: markFrequent ? 'flex-end' : 'flex-start',
+          }}
+        >
+          <span
+            style={{
+              width: 18,
+              height: 18,
+              borderRadius: '50%',
+              background: '#fff',
+              display: 'block',
+            }}
+          />
+        </button>
+        <div style={{ minWidth: 0 }}>
+          <div style={{ fontSize: 13.5, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <Star size={13} strokeWidth={2.2} fill="currentColor" style={{ color: colors.accent }} />
+            Marcar como frecuente
+          </div>
+          <div style={{ fontSize: 12, color: colors.textMuted, marginTop: 2 }}>
+            Va a aparecer en &quot;Frecuentes&quot; aunque sea su primera vez.
+          </div>
+        </div>
+      </div>
 
       {error && (
         <div style={{ fontSize: 12.5, color: colors.error, fontWeight: 600 }}>{error}</div>
