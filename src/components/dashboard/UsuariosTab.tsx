@@ -21,7 +21,7 @@ export function UsuariosTab() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18, animation: 'fadeUp .3s both' }}>
       <div style={{ fontSize: 18, fontWeight: 700 }}>Registro de operadores</div>
-      <div data-tour="usuarios-list" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div data-tour="usuarios-list" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         {operators.map((op) => {
           const active = op.onDuty;
           return (

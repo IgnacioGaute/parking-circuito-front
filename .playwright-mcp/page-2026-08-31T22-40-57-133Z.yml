@@ -1,0 +1,53 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e29] [cursor=pointer]
+  - alert [ref=e62]
+  - generic [ref=e103]:
+    - banner [ref=e104]:
+      - generic [ref=e105]:
+        - generic [ref=e106]: Control de Estacionamiento
+        - generic [ref=e110]:
+          - generic [ref=e111]: 19:40:56
+          - button "Ver recorrido guiado" [ref=e116] [cursor=pointer]
+          - button "Cambiar a tema claro" [ref=e120] [cursor=pointer]
+      - generic [ref=e127]:
+        - generic [ref=e128]: Carlos Ruiz
+        - button "Cerrar turno" [ref=e131] [cursor=pointer]
+    - generic [ref=e135]:
+      - navigation [ref=e136]:
+        - generic [ref=e137]:
+          - button "Registrar" [ref=e138] [cursor=pointer]
+          - button "Dentro 2" [ref=e142] [cursor=pointer]:
+            - generic [ref=e148]: Dentro
+            - generic [ref=e149]: "2"
+          - button "Frecuentes" [ref=e150] [cursor=pointer]
+          - button "Historial" [ref=e155] [cursor=pointer]
+          - button "Usuarios" [ref=e159] [cursor=pointer]
+          - button "Admin" [ref=e167] [cursor=pointer]
+      - main [ref=e173]:
+        - generic [ref=e176]:
+          - generic [ref=e177]:
+            - generic [ref=e182]:
+              - generic [ref=e183]: ¿Es un vehículo frecuente?
+              - generic [ref=e184]: Buscá por placa o por nombre para ver sus datos.
+            - textbox "Placa o nombre…" [ref=e186]
+          - generic [ref=e187]: o completá a mano
+          - generic [ref=e191]:
+            - generic [ref=e192]: Nombre y apellido
+            - textbox [ref=e193]
+          - generic [ref=e194]:
+            - generic [ref=e195]: Placa
+            - textbox "ABC-123" [ref=e196]
+          - generic [ref=e197]:
+            - generic [ref=e198]: Tipo de vehículo
+            - generic [ref=e199]:
+              - button "Auto" [ref=e200] [cursor=pointer]
+              - button "Moto" [ref=e205] [cursor=pointer]
+          - generic [ref=e211]:
+            - generic [ref=e212]: DNI
+            - spinbutton [ref=e213]
+          - generic [ref=e214]:
+            - button "Marcar como frecuente" [ref=e215] [cursor=pointer]
+            - generic [ref=e217]:
+              - generic [ref=e218]: Marcar como frecuente
+              - generic [ref=e221]: Va a aparecer en "Frecuentes" aunque sea su primera vez.
+          - button "Registrar entrada" [disabled] [ref=e222]

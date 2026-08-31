@@ -22,7 +22,7 @@ const inputStyle: React.CSSProperties = {
   borderRadius: 10,
   padding: '11px 14px',
   font: 'inherit',
-  fontSize: 14,
+  fontSize: 16,
   color: colors.textPrimary,
   outline: 'none',
 };

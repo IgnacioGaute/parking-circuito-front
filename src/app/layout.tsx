@@ -28,6 +28,14 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: '#D9A441',
+  // Pinned viewport: this is a kiosk-style operator tool, not a document to
+  // pinch-zoom — combined with 16px+ form-control font sizes (the iOS
+  // Safari auto-zoom threshold) this keeps the layout from zooming at all,
+  // including when the keyboard opens over a form field.
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 // Runs before hydration so a stored "light" preference doesn't flash the

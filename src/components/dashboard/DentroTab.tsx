@@ -193,7 +193,7 @@ export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps)
               borderRadius: 12,
               padding: '12px 14px 12px 38px',
               font: 'inherit',
-              fontSize: 14,
+              fontSize: 16,
               outline: 'none',
               color: colors.textPrimary,
             }}
@@ -414,7 +414,7 @@ export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps)
                   borderRadius: 10,
                   padding: '11px 13px',
                   font: 'inherit',
-                  fontSize: 13.5,
+                  fontSize: 16,
                   color: colors.textPrimary,
                   outline: 'none',
                   resize: 'vertical',

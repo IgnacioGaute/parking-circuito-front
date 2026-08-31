@@ -138,7 +138,7 @@ export function FrecuentesTab({ onToast }: FrecuentesTabProps) {
               borderRadius: 12,
               padding: '12px 14px 12px 38px',
               font: 'inherit',
-              fontSize: 14,
+              fontSize: 16,
               outline: 'none',
               color: colors.textPrimary,
             }}
@@ -178,7 +178,7 @@ export function FrecuentesTab({ onToast }: FrecuentesTabProps) {
         </div>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         {matches.map((plate) => {
           const extraEntries = getExtraEntries(plate, customFields);
           const isExpanded = expandedPlaca === plate.placa;

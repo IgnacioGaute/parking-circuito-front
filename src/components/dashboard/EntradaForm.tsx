@@ -52,7 +52,7 @@ const customInputStyle: React.CSSProperties = {
   borderRadius: 10,
   padding: '14px 16px',
   font: 'inherit',
-  fontSize: 15,
+  fontSize: 16,
   color: colors.textPrimary,
   outline: 'none',
 };
@@ -448,7 +448,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
                 borderRadius: 10,
                 padding: '12px 14px 12px 38px',
                 font: 'inherit',
-                fontSize: 14,
+                fontSize: 16,
                 outline: 'none',
                 color: colors.textPrimary,
               }}

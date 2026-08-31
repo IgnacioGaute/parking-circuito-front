@@ -1,0 +1,155 @@
+- generic [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e29] [cursor=pointer]
+  - alert [ref=e62]
+  - generic [ref=e103]:
+    - banner [ref=e104]:
+      - generic [ref=e105]:
+        - generic [ref=e106]: Control de Estacionamiento
+        - generic [ref=e110]:
+          - generic [ref=e111]: 19:41:51
+          - button "Ver recorrido guiado" [ref=e116] [cursor=pointer]
+          - button "Cambiar a tema claro" [ref=e120] [cursor=pointer]
+      - generic [ref=e127]:
+        - generic [ref=e128]: Carlos Ruiz
+        - button "Cerrar turno" [ref=e131] [cursor=pointer]
+    - generic [ref=e135]:
+      - navigation [ref=e136]:
+        - generic [ref=e137]:
+          - button "Registrar" [ref=e138] [cursor=pointer]
+          - button "Dentro 2" [ref=e142] [cursor=pointer]:
+            - generic [ref=e148]: Dentro
+            - generic [ref=e223]: "2"
+          - button "Frecuentes" [ref=e150] [cursor=pointer]
+          - button "Historial" [active] [ref=e155] [cursor=pointer]
+          - button "Usuarios" [ref=e159] [cursor=pointer]
+          - button "Admin" [ref=e167] [cursor=pointer]
+      - main [ref=e173]:
+        - generic [ref=e276]:
+          - generic [ref=e277]: Historial
+          - generic [ref=e278]:
+            - textbox "Buscar por placa" [ref=e280]
+            - combobox [ref=e282] [cursor=pointer]:
+              - option "Todos los tipos" [selected]
+              - option "Auto"
+              - option "Moto"
+            - button "Filtrar por fecha y horario" [ref=e283] [cursor=pointer]
+          - generic [ref=e285]:
+            - generic [ref=e286]:
+              - generic [ref=e287]:
+                - generic [ref=e288]:
+                  - generic [ref=e289]: Hoy
+                  - generic [ref=e290]: 8 registros
+                - button "Descargar PDF del Hoy" [ref=e291] [cursor=pointer]: PDF
+              - generic [ref=e296]:
+                - generic [ref=e297]:
+                  - generic [ref=e298]: EDT005
+                  - generic [ref=e305]: Luis Medina → Carlos Ruiz
+                - generic [ref=e306]:
+                  - generic [ref=e307]: 18:16 – 18:29
+                  - generic [ref=e308]: 13m
+                - generic [ref=e309]:
+                  - generic [ref=e310]: "Nombre y apellido: Reopen Test"
+                  - generic [ref=e311]: "DNI: 55555555"
+                - generic [ref=e312]:
+                  - button "Editar registro" [ref=e313] [cursor=pointer]
+                  - button "Reabrir salida" [ref=e317] [cursor=pointer]
+                  - button "Cancelar registro" [ref=e321] [cursor=pointer]
+              - generic [ref=e325]:
+                - generic [ref=e326]:
+                  - generic [ref=e327]: EDT001B
+                  - generic [ref=e334]: Luis Medina → Carlos Ruiz
+                - generic [ref=e335]:
+                  - generic [ref=e336]: 18:16 – 18:18
+                  - generic [ref=e337]: 2m
+                - generic [ref=e338]:
+                  - generic [ref=e339]: "Nombre y apellido: Edit Test"
+                  - generic [ref=e340]: "DNI: 11111111"
+                - generic [ref=e341]:
+                  - button "Editar registro" [ref=e342] [cursor=pointer]
+                  - button "Reabrir salida" [ref=e346] [cursor=pointer]
+                  - button "Cancelar registro" [ref=e350] [cursor=pointer]
+              - generic [ref=e354]:
+                - generic [ref=e355]:
+                  - generic [ref=e356]: EDT006
+                  - generic [ref=e363]: Luis Medina → Carlos Ruiz
+                - generic [ref=e364]:
+                  - generic [ref=e365]: 18:16 – 18:18
+                  - generic [ref=e366]: 2m
+                - generic [ref=e367]:
+                  - generic [ref=e368]: "Nombre y apellido: Dup Test"
+                  - generic [ref=e369]: "DNI: 66666666"
+                - generic [ref=e370]:
+                  - button "Editar registro" [ref=e371] [cursor=pointer]
+                  - button "Reabrir salida" [ref=e375] [cursor=pointer]
+                  - button "Cancelar registro" [ref=e379] [cursor=pointer]
+              - generic [ref=e383]:
+                - generic [ref=e384]:
+                  - generic [ref=e385]: EDT006
+                  - generic [ref=e392]: Luis Medina
+                - generic [ref=e393]:
+                  - generic [ref=e394]: 18:16 – 18:16
+                  - generic [ref=e395]: 0m
+                - generic [ref=e396]:
+                  - generic [ref=e397]: "Nombre y apellido: Dup Test 2"
+                  - generic [ref=e398]: "DNI: 66666667"
+                - generic [ref=e399]:
+                  - button "Editar registro" [ref=e400] [cursor=pointer]
+                  - button "Reabrir salida" [ref=e404] [cursor=pointer]
+                  - button "Cancelar registro" [ref=e408] [cursor=pointer]
+              - generic [ref=e412]:
+                - generic [ref=e413]:
+                  - generic [ref=e414]: EDT003B
+                  - generic [ref=e421]: Luis Medina
+                - generic [ref=e422]:
+                  - generic [ref=e423]: 18:16 – 18:16
+                  - generic [ref=e424]: 0m
+                - generic [ref=e425]:
+                  - generic [ref=e426]: "Nombre y apellido: Close Test"
+                  - generic [ref=e427]: "DNI: 33333333"
+                - generic [ref=e428]:
+                  - button "Editar registro" [ref=e429] [cursor=pointer]
+                  - button "Reabrir salida" [ref=e433] [cursor=pointer]
+                  - button "Cancelar registro" [ref=e437] [cursor=pointer]
+              - generic [ref=e441]:
+                - generic [ref=e442]:
+                  - generic [ref=e443]: MARKME1
+                  - generic [ref=e450]: Carlos Ruiz
+                - generic [ref=e451]:
+                  - generic [ref=e452]: 17:59 – 17:59
+                  - generic [ref=e453]: 0m
+                - generic [ref=e454]:
+                  - generic [ref=e455]: "Nombre y apellido: Test Uno"
+                  - generic [ref=e456]: "DNI: 40555666"
+                - generic [ref=e457]:
+                  - button "Editar registro" [ref=e458] [cursor=pointer]
+                  - button "Reabrir salida" [ref=e462] [cursor=pointer]
+                  - button "Cancelar registro" [ref=e466] [cursor=pointer]
+              - generic [ref=e470]:
+                - generic [ref=e471]:
+                  - generic [ref=e472]: MARKME1
+                  - generic [ref=e479]: Carlos Ruiz
+                - generic [ref=e480]:
+                  - generic [ref=e481]: 17:58 – 17:58
+                  - generic [ref=e482]: 0m
+                - generic [ref=e483]:
+                  - generic [ref=e484]: "Nombre y apellido: Test Uno"
+                  - generic [ref=e485]: "DNI: 40555666"
+                - generic [ref=e486]:
+                  - button "Editar registro" [ref=e487] [cursor=pointer]
+                  - button "Reabrir salida" [ref=e491] [cursor=pointer]
+                  - button "Cancelar registro" [ref=e495] [cursor=pointer]
+              - generic [ref=e499]:
+                - generic [ref=e500]:
+                  - generic [ref=e501]: MARKME1
+                  - generic [ref=e508]: Carlos Ruiz
+                - generic [ref=e509]:
+                  - generic [ref=e510]: 17:47 – 17:47
+                  - generic [ref=e511]: 1m
+                - generic [ref=e512]:
+                  - generic [ref=e513]: "Nombre y apellido: Test Uno"
+                  - generic [ref=e514]: "DNI: 40555666"
+                - generic [ref=e515]:
+                  - button "Editar registro" [ref=e516] [cursor=pointer]
+                  - button "Reabrir salida" [ref=e520] [cursor=pointer]
+                  - button "Cancelar registro" [ref=e524] [cursor=pointer]
+            - button "Cargar 8 más (42 restantes)" [ref=e528] [cursor=pointer]

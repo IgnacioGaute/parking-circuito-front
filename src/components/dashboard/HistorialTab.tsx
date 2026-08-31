@@ -328,7 +328,7 @@ export function HistorialTab({ isAdmin, onToast }: HistorialTabProps) {
               borderRadius: 12,
               padding: '12px 14px 12px 38px',
               font: 'inherit',
-              fontSize: 14,
+              fontSize: 16,
               outline: 'none',
               color: colors.textPrimary,
             }}
@@ -347,7 +347,7 @@ export function HistorialTab({ isAdmin, onToast }: HistorialTabProps) {
               borderRadius: 12,
               padding: '12px 36px 12px 14px',
               font: 'inherit',
-              fontSize: 14,
+              fontSize: 16,
               fontWeight: 600,
               color: colors.textPrimary,
               cursor: 'pointer',
@@ -430,7 +430,7 @@ export function HistorialTab({ isAdmin, onToast }: HistorialTabProps) {
 
       <div data-tour="historial-lista" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         {groups.map(([key, groupRecords]) => (
-          <div key={key} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div key={key} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div
               style={{
                 position: 'sticky',
@@ -668,7 +668,7 @@ export function HistorialTab({ isAdmin, onToast }: HistorialTabProps) {
                   borderRadius: 10,
                   padding: '11px 13px',
                   font: 'inherit',
-                  fontSize: 13.5,
+                  fontSize: 16,
                   color: colors.textPrimary,
                   outline: 'none',
                   resize: 'vertical',
@@ -724,7 +724,7 @@ const dateTimeInputStyle: React.CSSProperties = {
   borderRadius: 10,
   padding: '11px 12px',
   font: 'inherit',
-  fontSize: 14,
+  fontSize: 16,
   color: colors.textPrimary,
   outline: 'none',
 };

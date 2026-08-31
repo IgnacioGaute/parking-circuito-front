@@ -33,7 +33,7 @@ const inputStyle: React.CSSProperties = {
   borderRadius: 10,
   padding: '13px 15px',
   font: 'inherit',
-  fontSize: 15,
+  fontSize: 16,
   color: colors.textPrimary,
   outline: 'none',
 };

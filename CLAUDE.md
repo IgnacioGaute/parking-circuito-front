@@ -89,10 +89,24 @@ Parking lot check-in/check-out system; UI and field names are in Spanish.
   boolean/select) collected at check-in and stored in `ParkingRecord.extraFields`
   — this is what `FieldDefinitionsAdminPanel` manages and what
   `EntradaForm`/`RegistrarTab` render dynamically.
+- **`FrequentPlate`**: a plate aggregated from repeat visits (backed by
+  `getFrequentAction`), shown in the "Frecuentes" tab with its own
+  `extraFields`/movement history, separate from the live `ParkingRecord` list.
 
 `src/components/dashboard/*` maps roughly 1:1 to the tabs in `NavTabs`
-(registrar/dentro/historial/usuarios/admin); `admin` tab components are
-gated on `Operator.role === 'admin'` and only mounted for admins.
+(`TabKey` in `NavTabs.tsx`: registrar/dentro/frecuentes/historial/usuarios/admin);
+`admin` tab components are gated on `Operator.role === 'admin'` and only
+mounted for admins. `HistorialTab` also exports history to PDF via
+`jspdf`/`jspdf-autotable`.
+
+### Onboarding tour
+
+`src/components/tour/TourOverlay.tsx` drives a guided walkthrough defined as
+a flat step list in `src/lib/tour-steps.ts` (`TOUR_STEPS`). Each step names a
+`TabKey` to switch to and a `target` CSS selector to highlight; components
+opt into being tour targets by adding a matching `data-tour="..."` attribute
+(see `RegistrarTab`/`DentroTab` for examples). Steps can be `adminOnly` or
+scope to an `adminSection`.
 
 ### Styling
 

@@ -21,7 +21,9 @@ const inputStyle: React.CSSProperties = {
   borderRadius: 10,
   padding: '11px 14px',
   font: 'inherit',
-  fontSize: 14,
+  // 16px is the iOS Safari threshold below which focusing the field
+  // triggers an auto-zoom — see AGENTS/CLAUDE.md's mobile no-zoom note.
+  fontSize: 16,
   color: colors.textPrimary,
   outline: 'none',
 };
