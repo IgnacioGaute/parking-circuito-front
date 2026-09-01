@@ -36,11 +36,11 @@ export function OperatorPicker({ onSelect }: OperatorPickerProps) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       <div
         style={{
-          fontSize: 11,
-          fontWeight: 700,
+          fontSize: 10.5,
+          fontWeight: 800,
           color: colors.textDim,
           textAlign: 'center',
-          letterSpacing: '0.06em',
+          letterSpacing: '0.08em',
           textTransform: 'uppercase',
         }}
       >
@@ -56,7 +56,7 @@ export function OperatorPicker({ onSelect }: OperatorPickerProps) {
         <div style={{ textAlign: 'center', color: colors.error, fontSize: 12.5 }}>{error}</div>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
         {operators.map((op) => (
           <button
             key={op.id}
@@ -65,21 +65,22 @@ export function OperatorPicker({ onSelect }: OperatorPickerProps) {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 12,
+              gap: 13,
               border: `1px solid ${colors.border}`,
-              background: colors.bgInput,
-              borderRadius: 12,
-              padding: '11px 14px',
+              background: colors.bgCard,
+              borderRadius: 14,
+              padding: '13px 15px',
               cursor: 'pointer',
               font: 'inherit',
               textAlign: 'left',
+              minHeight: 62,
             }}
           >
             <span
               style={{
-                width: 38,
-                height: 38,
-                borderRadius: 10,
+                width: 42,
+                height: 42,
+                borderRadius: 12,
                 background: colors.accentBgSoft,
                 color: colors.accent,
                 display: 'flex',
@@ -87,7 +88,7 @@ export function OperatorPicker({ onSelect }: OperatorPickerProps) {
                 justifyContent: 'center',
                 fontFamily: fonts.mono,
                 fontWeight: 700,
-                fontSize: 12.5,
+                fontSize: 13.5,
                 flexShrink: 0,
               }}
             >
@@ -98,27 +99,27 @@ export function OperatorPicker({ onSelect }: OperatorPickerProps) {
                 flex: 1,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 2,
+                gap: 3,
                 minWidth: 0,
               }}
             >
               <span
                 style={{
                   fontWeight: 700,
-                  fontSize: 14.5,
+                  fontSize: 15,
                   color: colors.textPrimary,
                   lineHeight: 1.2,
                 }}
               >
                 {op.name}
               </span>
-              <span style={{ fontSize: 11, fontWeight: 600, color: colors.textDim, lineHeight: 1 }}>
+              <span style={{ fontSize: 11.5, fontWeight: 600, color: colors.textDim, lineHeight: 1 }}>
                 {op.role === 'admin' ? 'Admin' : 'Operador'}
               </span>
             </span>
             <ChevronRight
-              size={15}
-              strokeWidth={2.2}
+              size={16}
+              strokeWidth={2.4}
               style={{ color: colors.textDimmer, flexShrink: 0 }}
             />
           </button>

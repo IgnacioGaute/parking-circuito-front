@@ -13,11 +13,11 @@ export function LoginBrand() {
     >
       <div
         style={{
-          width: 52,
-          height: 52,
-          borderRadius: 14,
+          width: 56,
+          height: 56,
+          borderRadius: 16,
           background: colors.accent,
-          boxShadow: `0 0 0 7px ${colors.accentBgSofter}, 0 10px 28px ${colors.accentBgSoft}`,
+          boxShadow: `0 0 0 8px ${colors.accentBgSofter}, 0 14px 34px ${colors.accentBgSoft}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -25,21 +25,21 @@ export function LoginBrand() {
       >
         <div
           style={{
-            width: 30,
-            height: 5.5,
+            width: 32,
+            height: 6,
             background: colors.accentContrast,
             transform: 'rotate(-24deg)',
             borderRadius: 3,
           }}
         />
       </div>
-      <div>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
         <div
           style={{
-            fontWeight: 700,
-            fontSize: 20,
+            fontWeight: 800,
+            fontSize: 21,
             lineHeight: 1.2,
-            letterSpacing: '-0.01em',
+            letterSpacing: '-0.02em',
           }}
         >
           Control de Estacionamiento
@@ -51,8 +51,7 @@ export function LoginBrand() {
             gap: 6,
             background: colors.greenBgSoft,
             borderRadius: 999,
-            padding: '4px 10px',
-            marginTop: 10,
+            padding: '6px 12px',
           }}
         >
           <span

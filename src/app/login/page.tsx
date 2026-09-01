@@ -46,47 +46,28 @@ export default function LoginPage() {
         style={{
           width: '100%',
           maxWidth: 400,
-          background: colors.bgCard,
-          border: `1px solid ${colors.border}`,
-          borderRadius: 16,
-          boxShadow: `0 20px 60px ${colors.shadow}`,
           position: 'relative',
           zIndex: 1,
           animation: 'fadeUpLg .45s both',
-          overflow: 'hidden',
+          padding: '74px 26px 44px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 30,
         }}
       >
-        <div
-          style={{
-            height: 4,
-            background: colors.accent,
-          }}
-        />
+        <LoginBrand />
 
-        <div
-          style={{
-            padding: '34px 32px 30px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 26,
-          }}
-        >
-          <LoginBrand />
+        {stage === 'operators' && <OperatorPicker onSelect={handleSelect} />}
 
-          {stage === 'operators' && <OperatorPicker onSelect={handleSelect} />}
+        {stage === 'pin' && selectedOperator && (
+          <PinPad
+            operator={selectedOperator}
+            onBack={() => setStage('operators')}
+            onSuccess={handleSuccess}
+          />
+        )}
 
-          {stage === 'pin' && selectedOperator && (
-            <PinPad
-              operator={selectedOperator}
-              onBack={() => setStage('operators')}
-              onSuccess={handleSuccess}
-            />
-          )}
-
-          {stage === 'success' && selectedOperator && (
-            <SuccessScreen operator={selectedOperator} />
-          )}
-        </div>
+        {stage === 'success' && selectedOperator && <SuccessScreen operator={selectedOperator} />}
       </div>
     </div>
   );

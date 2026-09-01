@@ -3,6 +3,7 @@
 import {
   Car,
   List,
+  MoreHorizontal,
   PanelLeftClose,
   PanelLeftOpen,
   Plus,
@@ -11,7 +12,9 @@ import {
   Users,
 } from 'lucide-react';
 import type { ComponentType } from 'react';
-import { colors } from '@/styles/theme';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { colors, fonts } from '@/styles/theme';
 
 export type TabKey = 'registrar' | 'dentro' | 'frecuentes' | 'historial' | 'usuarios' | 'admin';
 
@@ -41,6 +44,17 @@ export function NavTabs({
   collapsed,
   onToggleCollapsed,
 }: NavTabsProps) {
+  if (!isDesktop) {
+    return (
+      <MobileNavTabs
+        activeTab={activeTab}
+        insideCount={insideCount}
+        isAdmin={isAdmin}
+        onSelect={onSelect}
+      />
+    );
+  }
+
   const tabs: TabDef[] = [
     { key: 'registrar', label: 'Registrar', Icon: Plus, badge: null },
     { key: 'dentro', label: 'Dentro', Icon: Car, badge: insideCount || null },
@@ -52,9 +66,7 @@ export function NavTabs({
       : []),
   ];
 
-  // Collapse only ever applies on desktop — the mobile bottom bar always
-  // shows icon+label, there's nothing to collapse there.
-  const rail = isDesktop && collapsed;
+  const rail = collapsed;
 
   return (
     <nav
@@ -279,5 +291,281 @@ export function NavTabs({
         </button>
       )}
     </nav>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Mobile bottom bar — five pills (Registrar/Dentro/Frecuentes/Historial/Más),
+// only the active one expands and shows its label; Usuarios and Admin live in
+// the "Más" sheet instead of claiming a sixth column, which is what stopped
+// labels from clipping at 402px-wide phones. Kept separate from the desktop
+// sidebar render above since the two share no layout, only tokens.
+// ---------------------------------------------------------------------------
+
+interface MobileNavTabsProps {
+  activeTab: TabKey;
+  insideCount: number;
+  isAdmin: boolean;
+  onSelect: (tab: TabKey) => void;
+}
+
+interface MobilePillDef {
+  key: TabKey | 'more';
+  label: string;
+  Icon: ComponentType<{ size?: number; strokeWidth?: number }>;
+}
+
+const MOBILE_PILLS: MobilePillDef[] = [
+  { key: 'registrar', label: 'Registrar', Icon: Plus },
+  { key: 'dentro', label: 'Dentro', Icon: Car },
+  { key: 'frecuentes', label: 'Frecuentes', Icon: Star },
+  { key: 'historial', label: 'Historial', Icon: List },
+  { key: 'more', label: 'Más', Icon: MoreHorizontal },
+];
+
+function MobileNavTabs({ activeTab, insideCount, isAdmin, onSelect }: MobileNavTabsProps) {
+  const [moreOpen, setMoreOpen] = useState(false);
+  const inMore = activeTab === 'usuarios' || activeTab === 'admin';
+
+  useEffect(() => {
+    if (!moreOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMoreOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [moreOpen]);
+
+  const go = (tab: TabKey) => {
+    setMoreOpen(false);
+    onSelect(tab);
+  };
+
+  return (
+    <>
+      <nav
+        style={{
+          display: 'flex',
+          background: colors.bgHeader,
+          borderTop: `1px solid ${colors.border}`,
+          padding: '8px 8px',
+          paddingBottom: 'calc(8px + env(safe-area-inset-bottom))',
+          gap: 4,
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          zIndex: 15,
+        }}
+      >
+        {MOBILE_PILLS.map((pill) => {
+          const isMore = pill.key === 'more';
+          const active = isMore ? inMore : activeTab === pill.key;
+          const isDentro = pill.key === 'dentro';
+          const Icon = pill.Icon;
+          const flex = active ? 2.6 : isDentro ? 1.35 : 1;
+          const label = isMore
+            ? activeTab === 'admin'
+              ? 'Admin'
+              : activeTab === 'usuarios'
+                ? 'Usuarios'
+                : 'Más'
+            : pill.label;
+
+          return (
+            <button
+              key={pill.key}
+              onClick={() => {
+                if (pill.key === 'more') setMoreOpen(true);
+                else onSelect(pill.key);
+              }}
+              aria-label={label}
+              className="ui-btn ui-navtab"
+              style={{
+                flex,
+                minWidth: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 7,
+                border: 'none',
+                borderRadius: 14,
+                background: active ? colors.accentBgSoft : 'transparent',
+                color: active ? colors.accent : colors.textMuted,
+                cursor: 'pointer',
+                padding: '0 10px',
+                height: 52,
+                overflow: 'hidden',
+                position: 'relative',
+                font: 'inherit',
+                transition: 'flex .18s ease, background .15s, color .15s',
+              }}
+            >
+              <span style={{ display: 'flex', flexShrink: 0 }}>
+                <Icon size={21} strokeWidth={2} />
+              </span>
+              {active && (
+                <span
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 800,
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                  }}
+                >
+                  {label}
+                </span>
+              )}
+              {isDentro && (
+                <span
+                  style={{
+                    fontFamily: fonts.mono,
+                    fontSize: 11,
+                    fontWeight: 800,
+                    padding: '2px 7px',
+                    borderRadius: 999,
+                    background: activeTab === 'dentro' ? colors.accent : colors.bgInputAlt,
+                    color: activeTab === 'dentro' ? colors.accentContrast : colors.textMuted,
+                    flexShrink: 0,
+                  }}
+                >
+                  {insideCount}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </nav>
+
+      {moreOpen &&
+        createPortal(
+          <>
+            <div
+              onClick={() => setMoreOpen(false)}
+              style={{
+                position: 'fixed',
+                inset: 0,
+                zIndex: 699,
+                background: 'rgba(8,9,11,0.55)',
+                animation: 'backdropIn .2s ease-out both',
+              }}
+            />
+            <div
+              style={{
+                position: 'fixed',
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 700,
+                background: colors.bg,
+                borderRadius: '24px 24px 0 0',
+                boxShadow: `0 -20px 50px ${colors.shadow}`,
+                padding: '12px 18px calc(24px + env(safe-area-inset-bottom))',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 14,
+                animation: 'sheetUp .3s cubic-bezier(.16,1,.3,1) both',
+              }}
+            >
+              <span
+                style={{
+                  width: 36,
+                  height: 4,
+                  borderRadius: 999,
+                  background: colors.border,
+                  alignSelf: 'center',
+                }}
+              />
+              <div
+                style={{
+                  fontSize: 10.5,
+                  fontWeight: 800,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: colors.textDim,
+                  padding: '0 2px',
+                }}
+              >
+                Gestión
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+                <MoreSheetRow
+                  active={activeTab === 'usuarios'}
+                  Icon={Users}
+                  title="Usuarios"
+                  subtitle="Operadores del sistema y su turno"
+                  onClick={() => go('usuarios')}
+                />
+                {isAdmin && (
+                  <MoreSheetRow
+                    active={activeTab === 'admin'}
+                    Icon={Settings}
+                    title="Administración"
+                    subtitle="Campos del formulario y PIN de acceso"
+                    onClick={() => go('admin')}
+                  />
+                )}
+              </div>
+            </div>
+          </>,
+          document.body,
+        )}
+    </>
+  );
+}
+
+function MoreSheetRow({
+  active,
+  Icon,
+  title,
+  subtitle,
+  onClick,
+}: {
+  active: boolean;
+  Icon: ComponentType<{ size?: number; strokeWidth?: number }>;
+  title: string;
+  subtitle: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className="ui-btn"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 13,
+        border: `1px solid ${active ? colors.accentBgBadge : colors.border}`,
+        background: active ? colors.accentBgSofter : colors.bgCard,
+        borderRadius: 14,
+        padding: '14px 15px',
+        cursor: 'pointer',
+        textAlign: 'left',
+        minHeight: 62,
+        color: colors.textPrimary,
+        font: 'inherit',
+      }}
+    >
+      <span
+        style={{
+          width: 38,
+          height: 38,
+          borderRadius: 11,
+          background: colors.accentBgSoft,
+          color: colors.accent,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0,
+        }}
+      >
+        <Icon size={18} strokeWidth={1.9} />
+      </span>
+      <span style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <span style={{ fontSize: 15, fontWeight: 700 }}>{title}</span>
+        <span style={{ fontSize: 11.5, color: colors.textMuted }}>{subtitle}</span>
+      </span>
+    </button>
   );
 }

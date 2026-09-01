@@ -168,6 +168,8 @@ export default function DashboardPage() {
               operatorName={activeOperator?.name ?? '—'}
               isDesktop
               onStartTour={startTour}
+              activeTab={activeTab}
+              insideCount={insideCount}
             />
             <main
               style={{
@@ -183,7 +185,12 @@ export default function DashboardPage() {
         </div>
       ) : (
         <>
-          <Header operatorName={activeOperator?.name ?? '—'} onStartTour={startTour} />
+          <Header
+            operatorName={activeOperator?.name ?? '—'}
+            onStartTour={startTour}
+            activeTab={activeTab}
+            insideCount={insideCount}
+          />
           <div
             style={{
               display: 'flex',
