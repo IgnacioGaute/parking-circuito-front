@@ -6,14 +6,35 @@ import { useEffect, useState } from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { clearActiveOperator } from '@/lib/active-operator';
 import { colors, fonts } from '@/styles/theme';
+import type { TabKey } from './NavTabs';
 
 interface HeaderProps {
   operatorName: string;
   isDesktop?: boolean;
   onStartTour: () => void;
+  activeTab: TabKey;
+  insideCount: number;
 }
 
-export function Header({ operatorName, isDesktop = false, onStartTour }: HeaderProps) {
+// Mirrors the per-tab contextual title/subtitle from the mobile header in
+// the Claude Design mockup — the mobile header shows what screen you're on
+// instead of the static app name (which only appears on login).
+const TAB_COPY: Record<TabKey, [string, string]> = {
+  registrar: ['Registrar entrada', 'Cargá una placa o buscá un frecuente'],
+  dentro: ['Dentro', ''],
+  frecuentes: ['Frecuentes', 'Vehículos que vuelven seguido'],
+  historial: ['Historial', 'Movimientos registrados'],
+  usuarios: ['Usuarios', 'Operadores del sistema'],
+  admin: ['Administración', 'Operadores y campos del formulario'],
+};
+
+export function Header({
+  operatorName,
+  isDesktop = false,
+  onStartTour,
+  activeTab,
+  insideCount,
+}: HeaderProps) {
   const router = useRouter();
   const [now, setNow] = useState<Date | null>(null);
 
@@ -118,6 +139,37 @@ export function Header({ operatorName, isDesktop = false, onStartTour }: HeaderP
     </button>
   );
 
+  const mobileLogoutButton = (
+    <button
+      onClick={handleChange}
+      className="ui-btn ui-ghost"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        border: `1px solid ${colors.border}`,
+        background: 'transparent',
+        color: colors.textMuted,
+        borderRadius: 9,
+        padding: '6px 11px',
+        fontSize: 11.5,
+        fontWeight: 700,
+        cursor: 'pointer',
+        flexShrink: 0,
+        font: 'inherit',
+      }}
+    >
+      <LogOut size={13} strokeWidth={2.2} />
+      Cerrar turno
+    </button>
+  );
+
+  const [screenTitle, screenSubBase] = TAB_COPY[activeTab];
+  const screenSub =
+    activeTab === 'dentro'
+      ? `${insideCount} ${insideCount === 1 ? 'vehículo' : 'vehículos'} en el predio`
+      : screenSubBase;
+
   // Desktop: the brand mark lives in the sidebar now, so this is a slim
   // single-row utility bar instead of the mobile two-row layout.
   if (isDesktop) {
@@ -189,17 +241,34 @@ export function Header({ operatorName, isDesktop = false, onStartTour }: HeaderP
               }}
             />
           </div>
-          <div
-            style={{
-              fontWeight: 700,
-              fontSize: 15,
-              lineHeight: 1.15,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
-            }}
-          >
-            Control de Estacionamiento
+          <div style={{ minWidth: 0 }}>
+            <div
+              style={{
+                fontWeight: 800,
+                fontSize: 17,
+                lineHeight: 1.15,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {screenTitle}
+            </div>
+            {screenSub && (
+              <div
+                style={{
+                  fontSize: 11.5,
+                  color: colors.textMuted,
+                  lineHeight: 1.3,
+                  marginTop: 1,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {screenSub}
+              </div>
+            )}
           </div>
         </div>
 
@@ -207,8 +276,11 @@ export function Header({ operatorName, isDesktop = false, onStartTour }: HeaderP
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-        {operatorStatus}
-        {logoutButton}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+          {operatorStatus}
+          <span style={{ fontSize: 11.5, color: colors.textDim, flexShrink: 0 }}>· en turno</span>
+        </div>
+        {mobileLogoutButton}
       </div>
     </header>
   );

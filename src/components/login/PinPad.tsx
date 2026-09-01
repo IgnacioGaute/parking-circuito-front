@@ -89,15 +89,15 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
           cursor: 'pointer',
           font: 'inherit',
           fontSize: 12.5,
-          fontWeight: 600,
+          fontWeight: 700,
           display: 'flex',
           alignItems: 'center',
           gap: 6,
-          padding: '6px 10px',
-          borderRadius: 8,
+          padding: '8px 12px',
+          borderRadius: 9,
         }}
       >
-        <ArrowLeft size={13} strokeWidth={2.2} />
+        <ArrowLeft size={13} strokeWidth={2.4} />
         Cambiar turno
       </button>
 
@@ -111,9 +111,9 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
       >
         <span
           style={{
-            width: 40,
-            height: 40,
-            borderRadius: 11,
+            width: 42,
+            height: 42,
+            borderRadius: 12,
             background: colors.accentBgSoft,
             color: colors.accent,
             display: 'flex',
@@ -121,12 +121,12 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
             justifyContent: 'center',
             fontFamily: fonts.mono,
             fontWeight: 700,
-            fontSize: 13.5,
+            fontSize: 14,
           }}
         >
           {operator.initials}
         </span>
-        <span style={{ fontWeight: 700, fontSize: 18, letterSpacing: '-0.01em' }}>
+        <span style={{ fontWeight: 800, fontSize: 19, letterSpacing: '-0.02em' }}>
           {operator.name}
         </span>
       </div>
@@ -152,8 +152,8 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
               <div
                 key={i}
                 style={{
-                  width: 11,
-                  height: 11,
+                  width: 12,
+                  height: 12,
                   borderRadius: '50%',
                   background: filled ? colors.accent : 'transparent',
                   border: filled ? 'none' : `1.5px solid ${colors.borderDashed}`,
@@ -165,11 +165,13 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
           })}
         </div>
         {error ? (
-          <div style={{ fontSize: 12.5, color: colors.error, fontWeight: 600 }}>
+          <div style={{ fontSize: 12, color: colors.error, fontWeight: 600 }}>
             PIN incorrecto — intentá de nuevo
           </div>
         ) : (
-          <div style={{ fontSize: 11.5, color: colors.textDim }}>PIN de prueba: 1234</div>
+          <div style={{ fontSize: 12, color: colors.textDim, fontWeight: 600 }}>
+            PIN de prueba: 1234
+          </div>
         )}
       </div>
 
@@ -177,7 +179,7 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3,1fr)',
-          gap: 9,
+          gap: 10,
         }}
       >
         {KEYPAD_LAYOUT.map((label, index) => {
@@ -193,16 +195,17 @@ export function PinPad({ operator, onBack, onSuccess }: PinPadProps) {
                 border: `1px solid ${colors.border}`,
                 background: colors.bgInput,
                 color: colors.textPrimary,
-                borderRadius: 12,
-                padding: '17px 0',
+                borderRadius: 14,
+                padding: '18px 0',
                 fontFamily: fonts.mono,
-                fontSize: 20,
+                fontSize: 21,
                 fontWeight: 600,
                 cursor: isEmpty ? 'default' : 'pointer',
                 visibility: isEmpty ? 'hidden' : 'visible',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                minHeight: 58,
               }}
             >
               {isBack ? <Delete size={20} strokeWidth={2} /> : label}

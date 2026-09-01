@@ -369,18 +369,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
   };
 
   return (
-    <div
-      data-tour="registrar-form"
-      style={{
-        background: colors.bgCard,
-        border: `1px solid ${colors.border}`,
-        borderRadius: 14,
-        padding: 18,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 18,
-      }}
-    >
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {frequentPlates.length > 0 && (
         <div
           style={{
@@ -687,58 +676,71 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
         </div>
       )}
 
-      {fields.map((field) => {
-        if (field.key === 'foto') return null;
-        if (field.isSystem && field.key === 'placa') return renderPlaca();
-        if (field.isSystem && field.key === 'tipo') return renderTipo();
-        return renderCustom(field);
-      })}
-
       <div
+        data-tour="registrar-form"
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 12,
+          background: colors.bgCard,
           border: `1px solid ${colors.border}`,
-          borderRadius: 12,
-          padding: '13px 14px',
+          borderRadius: 14,
+          padding: 18,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 16,
         }}
       >
-        <button
-          onClick={() => setMarkFrequent((current) => !current)}
-          className="ui-btn"
-          aria-pressed={markFrequent}
-          aria-label="Marcar como frecuente"
+        {fields.map((field) => {
+          if (field.key === 'foto') return null;
+          if (field.isSystem && field.key === 'placa') return renderPlaca();
+          if (field.isSystem && field.key === 'tipo') return renderTipo();
+          return renderCustom(field);
+        })}
+
+        <div
           style={{
-            flexShrink: 0,
-            width: 40,
-            height: 22,
-            borderRadius: 999,
-            border: 'none',
-            padding: 2,
-            cursor: 'pointer',
-            background: markFrequent ? colors.accent : colors.bgInputAlt,
             display: 'flex',
-            justifyContent: markFrequent ? 'flex-end' : 'flex-start',
+            alignItems: 'center',
+            gap: 12,
+            border: `1px solid ${colors.border}`,
+            borderRadius: 12,
+            padding: '13px 14px',
           }}
         >
-          <span
+          <button
+            onClick={() => setMarkFrequent((current) => !current)}
+            className="ui-btn"
+            aria-pressed={markFrequent}
+            aria-label="Marcar como frecuente"
             style={{
-              width: 18,
-              height: 18,
-              borderRadius: '50%',
-              background: '#fff',
-              display: 'block',
+              flexShrink: 0,
+              width: 40,
+              height: 22,
+              borderRadius: 999,
+              border: 'none',
+              padding: 2,
+              cursor: 'pointer',
+              background: markFrequent ? colors.accent : colors.bgInputAlt,
+              display: 'flex',
+              justifyContent: markFrequent ? 'flex-end' : 'flex-start',
             }}
-          />
-        </button>
-        <div style={{ minWidth: 0 }}>
-          <div style={{ fontSize: 13.5, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
-            <Star size={13} strokeWidth={2.2} fill="currentColor" style={{ color: colors.accent }} />
-            Marcar como frecuente
-          </div>
-          <div style={{ fontSize: 12, color: colors.textMuted, marginTop: 2 }}>
-            Va a aparecer en &quot;Frecuentes&quot; aunque sea su primera vez.
+          >
+            <span
+              style={{
+                width: 18,
+                height: 18,
+                borderRadius: '50%',
+                background: '#fff',
+                display: 'block',
+              }}
+            />
+          </button>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: 13.5, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Star size={13} strokeWidth={2.2} fill="currentColor" style={{ color: colors.accent }} />
+              Marcar como frecuente
+            </div>
+            <div style={{ fontSize: 12, color: colors.textMuted, marginTop: 2 }}>
+              Va a aparecer en &quot;Frecuentes&quot; aunque sea su primera vez.
+            </div>
           </div>
         </div>
       </div>
