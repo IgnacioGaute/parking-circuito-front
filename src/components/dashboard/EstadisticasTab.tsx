@@ -1,27 +1,25 @@
 'use client';
 
 import gsap from 'gsap';
-import { CalendarClock, Car, Percent, Timer } from 'lucide-react';
+import { CalendarClock, Car, Timer } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { colors, fonts } from '@/styles/theme';
-import type { VehicleType } from '@/types';
+import { getOperatorsAction } from '@/actions/operators.actions';
+import { getHistoryAction, getInsideAction } from '@/actions/parking-records.actions';
+import { colors } from '@/styles/theme';
+import type { Operator, ParkingRecord, VehicleType } from '@/types';
 import {
   applyFilters,
-  applyScopeIncludingCancelled,
   averageStayMinutes,
   byDay,
   byHour,
   byOperator,
   byVehicleType,
-  cancellationRate,
   currentlyInside,
-  getMockParkingRecords,
-  MOCK_OPERATORS,
   presetRange,
   topFrequentPlates,
   type AnalyticsFilters,
   type RangePreset,
-} from '@/lib/analytics-mock';
+} from '@/lib/analytics';
 import { tipoLabel } from '@/lib/format';
 import { ChartCard } from './charts/ChartCard';
 import { formatMinutes, prefersReducedMotion } from './charts/chart-utils';
@@ -75,13 +73,35 @@ const dateInputStyle: React.CSSProperties = {
 };
 
 export function EstadisticasTab() {
+  const [records, setRecords] = useState<ParkingRecord[]>([]);
+  const [operators, setOperators] = useState<Operator[]>([]);
+  const [loading, setLoading] = useState(true);
+
   const [preset, setPreset] = useState<RangePreset>('30d');
   const [customFrom, setCustomFrom] = useState(() => presetRange('30d').from);
   const [customTo, setCustomTo] = useState(() => presetRange('30d').to);
   const [tipo, setTipo] = useState<VehicleType | 'todos'>('todos');
   const [operatorId, setOperatorId] = useState<string>('todos');
 
-  const records = useMemo(() => getMockParkingRecords(), []);
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([getHistoryAction({}), getInsideAction(), getOperatorsAction()])
+      .then(([history, inside, ops]) => {
+        if (cancelled) return;
+        // /history only returns visits that have already exited — a
+        // still-parked vehicle has to come from /inside separately, same
+        // fix as RegistrarTab's "Hoy" stat.
+        setRecords([...history, ...inside]);
+        setOperators(ops);
+      })
+      .catch(() => undefined)
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const range = preset === 'custom' ? { from: customFrom, to: customTo } : presetRange(preset);
   const filters: AnalyticsFilters = useMemo(
@@ -90,10 +110,6 @@ export function EstadisticasTab() {
   );
 
   const scoped = useMemo(() => applyFilters(records, filters), [records, filters]);
-  const scopedWithCancelled = useMemo(
-    () => applyScopeIncludingCancelled(records, filters),
-    [records, filters],
-  );
 
   const insideNow = useMemo(
     () => currentlyInside(tipo === 'todos' ? records : records.filter((r) => r.tipo === tipo)),
@@ -106,21 +122,20 @@ export function EstadisticasTab() {
   const operatorActivity = useMemo(() => byOperator(scoped), [scoped]);
   const topPlates = useMemo(() => topFrequentPlates(scoped, 8), [scoped]);
   const avgStay = useMemo(() => averageStayMinutes(scoped), [scoped]);
-  const cancelRate = useMemo(() => cancellationRate(scopedWithCancelled), [scopedWithCancelled]);
 
   const dayLabelEvery = dayBuckets.length <= 10 ? 1 : dayBuckets.length <= 31 ? 3 : dayBuckets.length <= 60 ? 7 : 10;
 
   const containerRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = containerRef.current;
-    if (!el || prefersReducedMotion()) return;
+    if (!el || loading || prefersReducedMotion()) return;
     const items = el.querySelectorAll<HTMLElement>('.stats-kpi, .stats-chart-card');
     gsap.fromTo(
       items,
       { opacity: 0, y: 16 },
       { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', stagger: 0.06 },
     );
-  }, []);
+  }, [loading]);
 
   return (
     <div ref={containerRef} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
@@ -147,7 +162,7 @@ export function EstadisticasTab() {
           <div style={{ position: 'relative' }}>
             <select value={operatorId} onChange={(e) => setOperatorId(e.target.value)} style={selectStyle}>
               <option value="todos">Todos los operadores</option>
-              {MOCK_OPERATORS.map((op) => (
+              {operators.map((op) => (
                 <option key={op.id} value={op.id}>
                   {op.name}
                 </option>
@@ -200,15 +215,6 @@ export function EstadisticasTab() {
         </div>
         <div className="stats-kpi">
           <StatTile label="Estadía promedio" value={avgStay} format={formatMinutes} Icon={Timer} hint="visitas cerradas en el rango" />
-        </div>
-        <div className="stats-kpi">
-          <StatTile
-            label="Tasa de cancelación"
-            value={Math.round(cancelRate * 1000)}
-            format={(n) => `${(n / 10).toFixed(1)}%`}
-            Icon={Percent}
-            hint="del total registrado"
-          />
         </div>
       </div>
 
@@ -310,10 +316,6 @@ export function EstadisticasTab() {
             monospaceLabels={false}
           />
         </ChartCard>
-      </div>
-
-      <div style={{ fontSize: 10.5, color: colors.textDim, fontFamily: fonts.mono }}>
-        Datos de ejemplo con fines demostrativos.
       </div>
     </div>
   );

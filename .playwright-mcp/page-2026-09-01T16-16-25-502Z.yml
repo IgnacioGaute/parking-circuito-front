@@ -1,0 +1,64 @@
+- generic [active] [ref=f1e1]:
+  - button "Open Next.js Dev Tools" [ref=f1e29] [cursor=pointer]
+  - alert [ref=f1e33]
+  - generic [ref=f1e103]:
+    - banner [ref=f1e104]:
+      - generic [ref=f1e105]:
+        - generic [ref=f1e106]: Control de Estacionamiento
+        - generic [ref=f1e110]:
+          - generic [ref=f1e111]: 13:16:24
+          - button "Ver recorrido guiado" [ref=f1e116] [cursor=pointer]
+          - button "Cambiar a tema claro" [ref=f1e120] [cursor=pointer]
+      - generic [ref=f1e127]:
+        - generic [ref=f1e128]: Carlos Ruiz
+        - button "Cerrar turno" [ref=f1e131] [cursor=pointer]
+    - generic [ref=f1e135]:
+      - navigation [ref=f1e136]:
+        - generic [ref=f1e137]:
+          - button "Registrar" [ref=f1e138] [cursor=pointer]
+          - button "Dentro 2" [ref=f1e142] [cursor=pointer]:
+            - generic [ref=f1e148]: Dentro
+            - generic [ref=f1e149]: "2"
+          - button "Frecuentes" [ref=f1e150] [cursor=pointer]
+          - button "Historial" [ref=f1e155] [cursor=pointer]
+          - button "Usuarios" [ref=f1e159] [cursor=pointer]
+          - button "Admin" [ref=f1e167] [cursor=pointer]
+      - main [ref=f1e173]:
+        - generic [ref=f1e175]:
+          - generic [ref=f1e176]:
+            - generic [ref=f1e177]:
+              - generic [ref=f1e178]: "2"
+              - generic [ref=f1e179]: DENTRO
+            - generic [ref=f1e180]:
+              - generic [ref=f1e181]: "0"
+              - generic [ref=f1e182]: HOY
+            - generic [ref=f1e183]:
+              - generic [ref=f1e184]: —
+              - generic [ref=f1e185]: PROMEDIO
+          - generic [ref=f1e186]:
+            - generic [ref=f1e187]:
+              - generic [ref=f1e192]:
+                - generic [ref=f1e193]: ¿Es un vehículo frecuente?
+                - generic [ref=f1e194]: Buscá por placa o por nombre para ver sus datos.
+              - textbox "Placa o nombre…" [ref=f1e196]
+            - generic [ref=f1e197]: o completá a mano
+            - generic [ref=f1e201]:
+              - generic [ref=f1e202]: Nombre y apellido
+              - textbox [ref=f1e203]
+            - generic [ref=f1e204]:
+              - generic [ref=f1e205]: Placa
+              - textbox "ABC-123" [ref=f1e206]
+            - generic [ref=f1e207]:
+              - generic [ref=f1e208]: Tipo de vehículo
+              - generic [ref=f1e209]:
+                - button "Auto" [ref=f1e210] [cursor=pointer]
+                - button "Moto" [ref=f1e215] [cursor=pointer]
+            - generic [ref=f1e221]:
+              - generic [ref=f1e222]: DNI
+              - spinbutton [ref=f1e223]
+            - generic [ref=f1e224]:
+              - button "Marcar como frecuente" [ref=f1e225] [cursor=pointer]
+              - generic [ref=f1e227]:
+                - generic [ref=f1e228]: Marcar como frecuente
+                - generic [ref=f1e231]: Va a aparecer en "Frecuentes" aunque sea su primera vez.
+            - button "Registrar entrada" [disabled] [ref=f1e232]

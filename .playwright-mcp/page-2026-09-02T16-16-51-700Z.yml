@@ -1,0 +1,64 @@
+- generic [active] [ref=f5e1]:
+  - generic [ref=f5e2]:
+    - banner [ref=f5e3]:
+      - generic [ref=f5e4]:
+        - generic [ref=f5e8]:
+          - generic [ref=f5e9]: Administración
+          - generic [ref=f5e10]: Operadores y campos del formulario
+        - generic [ref=f5e11]:
+          - generic [ref=f5e12]: 13:16:51
+          - button "Ver recorrido guiado" [ref=f5e17] [cursor=pointer]
+          - button "Cambiar a tema claro" [ref=f5e21] [cursor=pointer]
+      - generic [ref=f5e28]:
+        - generic [ref=f5e29]:
+          - generic [ref=f5e30]: Carlos Ruiz
+          - generic [ref=f5e33]: · en turno
+        - button "Cerrar turno" [ref=f5e34] [cursor=pointer]
+    - generic [ref=f5e38]:
+      - navigation [ref=f5e39]:
+        - button "Registrar" [ref=f5e40] [cursor=pointer]
+        - button "Dentro" [ref=f5e44] [cursor=pointer]:
+          - generic [ref=f5e50]: "2"
+        - button "Frecuentes" [ref=f5e51] [cursor=pointer]
+        - button "Historial" [ref=f5e55] [cursor=pointer]
+        - button "Admin" [ref=f5e323] [cursor=pointer]
+      - main [ref=f5e64]:
+        - generic [ref=f5e325]:
+          - generic [ref=f5e326]:
+            - button "Operadores" [ref=f5e327] [cursor=pointer]
+            - button "Campos de registro" [ref=f5e328] [cursor=pointer]
+            - button "Alertas" [ref=f5e329] [cursor=pointer]
+          - generic [ref=f5e330]:
+            - button "Crear operador" [ref=f5e331] [cursor=pointer]
+            - generic [ref=f5e333]: Operadores
+            - generic [ref=f5e334]:
+              - generic [ref=f5e335]:
+                - generic [ref=f5e336]: AT
+                - generic [ref=f5e337]:
+                  - generic [ref=f5e338]: Ana Torres
+                  - generic [ref=f5e339]: Operador
+                - button "Editar operador" [ref=f5e340] [cursor=pointer]
+                - button "Eliminar operador" [ref=f5e344] [cursor=pointer]
+              - generic [ref=f5e348]:
+                - generic [ref=f5e349]: CR
+                - generic [ref=f5e350]:
+                  - generic [ref=f5e351]: Carlos Ruiz (vos)
+                  - generic [ref=f5e352]: Administrador
+                - button "Editar operador" [ref=f5e353] [cursor=pointer]
+                - button "Eliminar operador" [ref=f5e357] [cursor=pointer]
+              - generic [ref=f5e361]:
+                - generic [ref=f5e362]: LM
+                - generic [ref=f5e363]:
+                  - generic [ref=f5e364]: Luis Medina
+                  - generic [ref=f5e365]: Operador
+                - button "Editar operador" [ref=f5e366] [cursor=pointer]
+                - button "Eliminar operador" [ref=f5e370] [cursor=pointer]
+              - generic [ref=f5e374]:
+                - generic [ref=f5e375]: I
+                - generic [ref=f5e376]:
+                  - generic [ref=f5e377]: ignacio
+                  - generic [ref=f5e378]: Administrador
+                - button "Editar operador" [ref=f5e379] [cursor=pointer]
+                - button "Eliminar operador" [ref=f5e383] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=f5e110] [cursor=pointer]
+  - alert [ref=f5e134]

@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { colors } from '@/styles/theme';
 import { FieldDefinitionsAdminPanel } from './FieldDefinitionsAdminPanel';
 import { OperatorsAdminPanel } from './OperatorsAdminPanel';
+import { SettingsAdminPanel } from './SettingsAdminPanel';
 
-type Section = 'operadores' | 'campos';
+type Section = 'operadores' | 'campos' | 'alertas';
 
 interface AdminTabProps {
   currentOperatorId: string | null;
@@ -62,13 +63,29 @@ export function AdminTab({ currentOperatorId, onToast, forcedSection }: AdminTab
         >
           Campos de registro
         </button>
+        <button
+          onClick={() => setSection('alertas')}
+          style={{
+            padding: '10px 20px',
+            border: 'none',
+            cursor: 'pointer',
+            font: 'inherit',
+            fontWeight: 600,
+            fontSize: 14,
+            background: 'transparent',
+            color: section === 'alertas' ? colors.accent : colors.textDim,
+            borderBottom: section === 'alertas' ? `2px solid ${colors.accent}` : '2px solid transparent',
+          }}
+        >
+          Alertas
+        </button>
       </div>
 
-      {section === 'operadores' ? (
+      {section === 'operadores' && (
         <OperatorsAdminPanel currentOperatorId={currentOperatorId} onToast={onToast} />
-      ) : (
-        <FieldDefinitionsAdminPanel onToast={onToast} />
       )}
+      {section === 'campos' && <FieldDefinitionsAdminPanel onToast={onToast} />}
+      {section === 'alertas' && <SettingsAdminPanel onToast={onToast} />}
     </div>
   );
 }

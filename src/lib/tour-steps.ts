@@ -40,7 +40,7 @@ export const TOUR_STEPS: TourStep[] = [
     target: '[data-tour="dentro-salida"]',
     title: 'Registrar salida',
     description:
-      'Cada tarjeta muestra hace cuánto entró el vehículo. Si pasó más de una hora se marca "Atención". Tocá "Registrar salida" para confirmar el egreso.',
+      'Cada tarjeta muestra hace cuánto entró el vehículo. Si pasó el tiempo límite configurado en Admin se marca "Atención". Tocá "Registrar salida" para confirmar el egreso.',
   },
   {
     id: 'historial-filtros',

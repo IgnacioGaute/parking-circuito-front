@@ -1,0 +1,65 @@
+- generic [ref=f2e1]:
+  - generic [ref=f2e2]:
+    - banner [ref=f2e3]:
+      - generic [ref=f2e4]:
+        - generic [ref=f2e5]: Control de Estacionamiento
+        - generic [ref=f2e9]:
+          - generic [ref=f2e10]: 13:19:31
+          - button "Ver recorrido guiado" [ref=f2e15] [cursor=pointer]
+          - button "Cambiar a tema claro" [ref=f2e19] [cursor=pointer]
+      - generic [ref=f2e26]:
+        - generic [ref=f2e27]: Carlos Ruiz
+        - button "Cerrar turno" [ref=f2e30] [cursor=pointer]
+    - generic [ref=f2e34]:
+      - navigation [ref=f2e35]:
+        - generic [ref=f2e36]:
+          - button "Registrar" [ref=f2e37] [cursor=pointer]
+          - button "Dentro 3" [active] [ref=f2e114] [cursor=pointer]:
+            - generic [ref=f2e47]: Dentro
+            - generic [ref=f2e143]: "3"
+          - button "Frecuentes" [ref=f2e48] [cursor=pointer]
+          - button "Historial" [ref=f2e53] [cursor=pointer]
+          - button "Usuarios" [ref=f2e57] [cursor=pointer]
+          - button "Admin" [ref=f2e116] [cursor=pointer]
+      - main [ref=f2e65]:
+        - generic [ref=f2e144]:
+          - generic [ref=f2e145]:
+            - generic [ref=f2e146]: Dentro
+            - generic [ref=f2e147]: 3 vehículos
+          - textbox "Buscar por placa" [ref=f2e149]
+          - generic [ref=f2e150]:
+            - generic [ref=f2e151]:
+              - generic [ref=f2e152]:
+                - generic [ref=f2e153]: TEST999
+                - generic [ref=f2e160]: OK
+              - generic [ref=f2e161]:
+                - generic [ref=f2e162]: Entró 13:17
+                - generic [ref=f2e163]: 2m
+              - generic [ref=f2e164]:
+                - button "Registrar salida" [ref=f2e165] [cursor=pointer]
+                - generic "Patente frecuente — editala desde Frecuentes" [ref=f2e166]
+                - button "Cancelar registro" [ref=f2e169] [cursor=pointer]
+            - generic [ref=f2e173]:
+              - generic [ref=f2e174]:
+                - generic [ref=f2e175]: AD920HV
+                - generic [ref=f2e182]: Atención
+              - generic [ref=f2e183]:
+                - generic [ref=f2e184]: Entró 18:00
+                - generic [ref=f2e185]: 19h 19m
+              - generic [ref=f2e186]:
+                - button "Registrar salida" [ref=f2e187] [cursor=pointer]
+                - generic "Patente frecuente — editala desde Frecuentes" [ref=f2e188]
+                - button "Cancelar registro" [ref=f2e191] [cursor=pointer]
+            - generic [ref=f2e195]:
+              - generic [ref=f2e196]:
+                - generic [ref=f2e197]: A232NTM
+                - generic [ref=f2e205]: Atención
+              - generic [ref=f2e206]:
+                - generic [ref=f2e207]: Entró 17:54
+                - generic [ref=f2e208]: 19h 25m
+              - generic [ref=f2e209]:
+                - button "Registrar salida" [ref=f2e210] [cursor=pointer]
+                - generic "Patente frecuente — editala desde Frecuentes" [ref=f2e211]
+                - button "Cancelar registro" [ref=f2e214] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=f2e110] [cursor=pointer]
+  - alert [ref=f2e142]
