@@ -9,6 +9,7 @@ import {
   getInsideAction,
 } from '@/actions/parking-records.actions';
 import { formatDate, formatDuration, formatTime, tipoLabel } from '@/lib/format';
+import { useStaggerReveal } from '@/lib/use-stagger-reveal';
 import { colors, fonts } from '@/styles/theme';
 import type { FieldDefinition, FrequentPlate, ParkingRecord } from '@/types';
 import { EditRecordModal, type EditableRecord } from './EditRecordModal';
@@ -100,6 +101,10 @@ export function FrecuentesTab({ onToast }: FrecuentesTabProps) {
     () => plates.filter((plate) => !query || plate.placa.toLowerCase().includes(query.toLowerCase())),
     [plates, query],
   );
+  const listRef = useStaggerReveal<HTMLDivElement>(
+    '.frecuente-card',
+    matches.map((p) => p.placa).join(','),
+  );
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18, animation: 'fadeUp .3s both' }}>
@@ -178,7 +183,7 @@ export function FrecuentesTab({ onToast }: FrecuentesTabProps) {
         </div>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div ref={listRef} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         {matches.map((plate) => {
           const extraEntries = getExtraEntries(plate, customFields);
           const isExpanded = expandedPlaca === plate.placa;
@@ -186,6 +191,7 @@ export function FrecuentesTab({ onToast }: FrecuentesTabProps) {
           return (
             <div
               key={plate.placa}
+              className="frecuente-card"
               style={{
                 background: colors.bgCard,
                 border: `1px solid ${colors.border}`,

@@ -1,10 +1,12 @@
 'use client';
 
+import gsap from 'gsap';
 import { CircleHelp, Clock, LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { clearActiveOperator } from '@/lib/active-operator';
+import { prefersReducedMotion } from '@/lib/motion';
 import { colors, fonts } from '@/styles/theme';
 import type { TabKey } from './NavTabs';
 
@@ -170,6 +172,25 @@ export function Header({
       ? `${insideCount} ${insideCount === 1 ? 'vehículo' : 'vehículos'} en el predio`
       : screenSubBase;
 
+  // Small "screen changed" cue on the mobile title block — skips its own
+  // first run since the header's outer fadeUp already covers first paint;
+  // this only plays when activeTab actually changes afterwards.
+  const titleRef = useRef<HTMLDivElement>(null);
+  const mountedRef = useRef(false);
+  useLayoutEffect(() => {
+    const el = titleRef.current;
+    if (!el) return;
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      return;
+    }
+    if (prefersReducedMotion()) return;
+    const tween = gsap.fromTo(el, { opacity: 0, y: -6 }, { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' });
+    return () => {
+      tween.kill();
+    };
+  }, [activeTab]);
+
   // Desktop: the brand mark lives in the sidebar now, so this is a slim
   // single-row utility bar instead of the mobile two-row layout.
   if (isDesktop) {
@@ -241,7 +262,7 @@ export function Header({
               }}
             />
           </div>
-          <div style={{ minWidth: 0 }}>
+          <div ref={titleRef} style={{ minWidth: 0 }}>
             <div
               style={{
                 fontWeight: 800,

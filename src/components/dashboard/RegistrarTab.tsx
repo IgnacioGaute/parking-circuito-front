@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { getHistoryAction, getInsideAction } from '@/actions/parking-records.actions';
 import { dateKey, formatDuration } from '@/lib/format';
+import { useStaggerReveal } from '@/lib/use-stagger-reveal';
 import { colors, fonts } from '@/styles/theme';
 import type { ParkingRecord } from '@/types';
 import { EntradaForm } from './EntradaForm';
@@ -49,13 +50,18 @@ export function RegistrarTab({ onEntradaRegistered }: RegistrarTabProps) {
     { label: 'Hoy', value: String(todayCount), accent: false },
     { label: 'Promedio', value: averageStay(insideRecords), accent: false },
   ];
+  const statsRef = useStaggerReveal<HTMLDivElement>(
+    '.registrar-stat',
+    `${insideRecords.length}|${todayCount}`,
+  );
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, animation: 'fadeUp .3s both' }}>
-      <div style={{ display: 'flex', gap: 9 }}>
+      <div ref={statsRef} style={{ display: 'flex', gap: 9 }}>
         {stats.map((stat) => (
           <div
             key={stat.label}
+            className="registrar-stat"
             style={{
               flex: 1,
               background: colors.bgCard,

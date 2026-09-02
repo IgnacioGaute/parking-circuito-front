@@ -29,6 +29,7 @@ import {
   timeKey,
   tipoLabel,
 } from '@/lib/format';
+import { useStaggerReveal } from '@/lib/use-stagger-reveal';
 import { colors, fonts } from '@/styles/theme';
 import type { FieldDefinition, ParkingRecord, VehicleType } from '@/types';
 import { ConfirmActionSheet } from './ConfirmActionSheet';
@@ -168,6 +169,10 @@ export function HistorialTab({ isAdmin, onToast }: HistorialTabProps) {
     }
     return [...map.entries()];
   }, [visibleRecords]);
+  const listRef = useStaggerReveal<HTMLDivElement>(
+    '.historial-record',
+    visibleRecords.map((r) => r.id).join(','),
+  );
 
   // Independent from `groups`/pagination: a day's PDF always includes every
   // record for that date under the current search/type filters, even if not
@@ -428,7 +433,7 @@ export function HistorialTab({ isAdmin, onToast }: HistorialTabProps) {
         </div>
       )}
 
-      <div data-tour="historial-lista" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      <div ref={listRef} data-tour="historial-lista" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         {groups.map(([key, groupRecords]) => (
           <div key={key} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div
@@ -482,6 +487,7 @@ export function HistorialTab({ isAdmin, onToast }: HistorialTabProps) {
               return (
                 <div
                   key={record.id}
+                  className="historial-record"
                   style={{
                     background: colors.bgCard,
                     border: `1px solid ${colors.border}`,

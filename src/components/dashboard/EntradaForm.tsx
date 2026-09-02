@@ -8,6 +8,7 @@ import { createEntradaAction, getFrequentAction } from '@/actions/parking-record
 import { formatDate, formatTime, tipoLabel } from '@/lib/format';
 import { colors, fonts } from '@/styles/theme';
 import type { FieldDefinition, FrequentPlate, VehicleType } from '@/types';
+import { SuccessOverlay } from './SuccessOverlay';
 
 interface EntradaFormProps {
   onRegistered: () => void;
@@ -772,71 +773,11 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
       {(phase === 'success' || phase === 'closing') &&
         successInfo &&
         createPortal(
-          <div
-            style={{
-              position: 'fixed',
-              inset: 0,
-              zIndex: 800,
-              overflow: 'hidden',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <div
-              style={{
-                position: 'absolute',
-                left: 0,
-                bottom: 0,
-                width: '100%',
-                background: `linear-gradient(180deg, ${colors.bgCard}, ${colors.bg})`,
-                animation:
-                  phase === 'closing'
-                    ? 'waveDrain .8s cubic-bezier(.65,0,.35,1) forwards'
-                    : 'waveFill .8s cubic-bezier(.65,0,.35,1) forwards',
-              }}
-            />
-            <div
-              style={{
-                position: 'relative',
-                zIndex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: 16,
-                animation: phase === 'closing' ? 'fadeOutFast .25s ease forwards' : 'none',
-              }}
-            >
-              <svg width="60" height="60" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="m5 13 4 4 10-10"
-                  stroke={colors.green}
-                  strokeWidth="2.8"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeDasharray="26"
-                  style={{ strokeDashoffset: 26, animation: 'dash .4s ease .5s forwards' }}
-                />
-              </svg>
-              <div
-                style={{
-                  opacity: 0,
-                  animation: 'textRise .4s ease .45s forwards',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 6,
-                }}
-              >
-                <div style={{ fontWeight: 700, fontSize: 20, color: colors.textPrimary }}>
-                  Entrada registrada
-                </div>
-                <div style={{ fontSize: 13, fontWeight: 600, color: colors.textMuted }}>
-                  {successInfo.placa} · {successInfo.tipo === 'auto' ? 'Auto' : 'Moto'}
-                </div>
-              </div>
-            </div>
-          </div>,
+          <SuccessOverlay
+            phase={phase}
+            title="Entrada registrada"
+            subtitle={`${successInfo.placa} · ${successInfo.tipo === 'auto' ? 'Auto' : 'Moto'}`}
+          />,
           document.body,
         )}
     </div>
