@@ -1,6 +1,6 @@
 'use client';
 
-import { Pencil, Search, Star, Trash2, X } from 'lucide-react';
+import { Pencil, Star, Trash2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { getFieldDefinitionsAction } from '@/actions/field-definitions.actions';
@@ -11,12 +11,15 @@ import {
   registerSalidaAction,
 } from '@/actions/parking-records.actions';
 import { getSettingsAction } from '@/actions/settings.actions';
+import { SearchField } from '@/components/ui/SearchField';
 import { formatDuration, formatTime, tipoColors, tipoLabel } from '@/lib/format';
+import { useStaggerReveal } from '@/lib/use-stagger-reveal';
 import { colors, fonts } from '@/styles/theme';
 import type { FieldDefinition, ParkingRecord } from '@/types';
 import { ConfirmActionSheet } from './ConfirmActionSheet';
 import { EditRecordModal } from './EditRecordModal';
 import { formatExtraValue, VehicleIcon } from './record-display-utils';
+import { SuccessOverlay } from './SuccessOverlay';
 
 interface DentroTabProps {
   isDesktop: boolean;
@@ -95,6 +98,7 @@ export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps)
   const matches = records.filter(
     (record) => !query || record.placa.toLowerCase().includes(query.toLowerCase()),
   );
+  const gridRef = useStaggerReveal<HTMLDivElement>('.dentro-card', matches.map((r) => r.id).join(','));
 
   const closeConfirm = () => {
     if (exitPhase !== 'idle') return;
@@ -176,37 +180,8 @@ export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps)
       </div>
 
       {records.length > 0 && (
-        <div data-tour="dentro-buscar" style={{ position: 'relative' }}>
-          <Search
-            size={16}
-            strokeWidth={2}
-            style={{
-              position: 'absolute',
-              left: 13,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              color: colors.textDim,
-              pointerEvents: 'none',
-            }}
-          />
-          <input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar por placa"
-            className="ui-input"
-            style={{
-              width: '100%',
-              boxSizing: 'border-box',
-              border: `1px solid ${colors.border}`,
-              background: colors.bgInput,
-              borderRadius: 12,
-              padding: '12px 14px 12px 38px',
-              font: 'inherit',
-              fontSize: 16,
-              outline: 'none',
-              color: colors.textPrimary,
-            }}
-          />
+        <div data-tour="dentro-buscar">
+          <SearchField value={query} onChange={setQuery} placeholder="Buscar por placa" />
         </div>
       )}
 
@@ -241,6 +216,7 @@ export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps)
       )}
 
       <div
+        ref={gridRef}
         data-tour="dentro-salida"
         style={{
           display: 'grid',
@@ -255,6 +231,7 @@ export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps)
           return (
             <div
               key={record.id}
+              className="dentro-card"
               style={{
                 background: colors.bgCard,
                 border: `1px solid ${colors.border}`,
@@ -723,71 +700,11 @@ function ExitConfirmModal({
       )}
 
       {(phase === 'success' || phase === 'closing') && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 800,
-            overflow: 'hidden',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <div
-            style={{
-              position: 'absolute',
-              left: 0,
-              bottom: 0,
-              width: '100%',
-              background: `linear-gradient(180deg, ${colors.bgCard}, ${colors.bg})`,
-              animation:
-                phase === 'closing'
-                  ? 'waveDrain .8s cubic-bezier(.65,0,.35,1) forwards'
-                  : 'waveFill .8s cubic-bezier(.65,0,.35,1) forwards',
-            }}
-          />
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 16,
-              animation: phase === 'closing' ? 'fadeOutFast .25s ease forwards' : 'none',
-            }}
-          >
-            <svg width="60" height="60" viewBox="0 0 24 24" fill="none">
-              <path
-                d="m5 13 4 4 10-10"
-                stroke={colors.green}
-                strokeWidth="2.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeDasharray="26"
-                style={{ strokeDashoffset: 26, animation: 'dash .4s ease .5s forwards' }}
-              />
-            </svg>
-            <div
-              style={{
-                opacity: 0,
-                animation: 'textRise .4s ease .45s forwards',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: 6,
-              }}
-            >
-              <div style={{ fontWeight: 700, fontSize: 20, color: colors.textPrimary }}>
-                Salida confirmada
-              </div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: colors.textMuted }}>
-                {record.placa} · {tipoLabel(record.tipo)}
-              </div>
-            </div>
-          </div>
-        </div>
+        <SuccessOverlay
+          phase={phase}
+          title="Salida confirmada"
+          subtitle={`${record.placa} · ${tipoLabel(record.tipo)}`}
+        />
       )}
     </>,
     document.body,

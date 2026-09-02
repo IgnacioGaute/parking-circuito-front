@@ -3,6 +3,7 @@
 import { ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { getOperatorsAction } from '@/actions/operators.actions';
+import { useStaggerReveal } from '@/lib/use-stagger-reveal';
 import { colors, fonts } from '@/styles/theme';
 import type { Operator } from '@/types';
 
@@ -14,6 +15,7 @@ export function OperatorPicker({ onSelect }: OperatorPickerProps) {
   const [operators, setOperators] = useState<Operator[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const listRef = useStaggerReveal<HTMLDivElement>('.operator-option', operators.map((o) => o.id).join(','));
 
   useEffect(() => {
     let cancelled = false;
@@ -56,12 +58,12 @@ export function OperatorPicker({ onSelect }: OperatorPickerProps) {
         <div style={{ textAlign: 'center', color: colors.error, fontSize: 12.5 }}>{error}</div>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+      <div ref={listRef} style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
         {operators.map((op) => (
           <button
             key={op.id}
             onClick={() => onSelect(op)}
-            className="ui-btn ui-operator-btn"
+            className="ui-btn ui-operator-btn operator-option"
             style={{
               display: 'flex',
               alignItems: 'center',

@@ -1,0 +1,51 @@
+- generic [active] [ref=f7e1]:
+  - generic [ref=f7e2]:
+    - banner [ref=f7e3]:
+      - generic [ref=f7e5]:
+        - generic [ref=f7e9]:
+          - generic [ref=f7e10]: Registrar entrada
+          - generic [ref=f7e11]: Cargá una placa o buscá un frecuente
+        - generic [ref=f7e12]:
+          - generic [ref=f7e13]: "--:--:--"
+          - button "Ver recorrido guiado" [ref=f7e18] [cursor=pointer]
+          - button "Cambiar a tema claro" [ref=f7e22] [cursor=pointer]
+      - generic [ref=f7e29]:
+        - generic [ref=f7e30]: —
+        - button "Cerrar turno" [ref=f7e33] [cursor=pointer]
+    - generic [ref=f7e37]:
+      - navigation [ref=f7e38]:
+        - button "Registrar" [ref=f7e39] [cursor=pointer]
+        - button "Dentro" [ref=f7e43] [cursor=pointer]:
+          - generic [ref=f7e49]: "0"
+        - button "Frecuentes" [ref=f7e50] [cursor=pointer]
+        - button "Historial" [ref=f7e54] [cursor=pointer]
+        - button "Más" [ref=f7e57] [cursor=pointer]
+      - main [ref=f7e63]:
+        - generic [ref=f7e65]:
+          - generic [ref=f7e66]:
+            - generic [ref=f7e67]:
+              - generic [ref=f7e68]: Dentro
+              - generic [ref=f7e75]: "0"
+            - generic [ref=f7e76]:
+              - generic [ref=f7e77]: Hoy
+              - generic [ref=f7e83]: "0"
+            - generic [ref=f7e84]:
+              - generic [ref=f7e85]: Promedio
+              - generic [ref=f7e91]: —
+          - generic [ref=f7e92]:
+            - generic [ref=f7e93]:
+              - generic [ref=f7e94]:
+                - generic [ref=f7e95]: Placa
+                - textbox "ABC-123" [ref=f7e96]
+              - generic [ref=f7e97]:
+                - generic [ref=f7e98]: Tipo de vehículo
+                - generic [ref=f7e99]:
+                  - button "Auto" [ref=f7e101] [cursor=pointer]
+                  - button "Moto" [ref=f7e106] [cursor=pointer]
+              - generic [ref=f7e112]:
+                - button "Marcar como frecuente" [ref=f7e113] [cursor=pointer]
+                - generic [ref=f7e115]:
+                  - generic [ref=f7e116]: Marcar como frecuente
+                  - generic [ref=f7e119]: Va a aparecer en "Frecuentes" aunque sea su primera vez.
+            - button "Registrar entrada" [disabled] [ref=f7e120]
+  - button "Open Next.js Dev Tools" [ref=f7e128] [cursor=pointer]

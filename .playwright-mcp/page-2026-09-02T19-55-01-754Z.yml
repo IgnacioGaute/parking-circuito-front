@@ -1,0 +1,64 @@
+- generic [ref=f12e1]:
+  - generic [ref=f12e2]:
+    - banner [ref=f12e3]:
+      - generic [ref=f12e5]:
+        - generic [ref=f12e9]:
+          - generic [ref=f12e10]: Registrar entrada
+          - generic [ref=f12e11]: Cargá una placa o buscá un frecuente
+        - generic [ref=f12e12]:
+          - generic [ref=f12e13]: 16:55:01
+          - button "Ver recorrido guiado" [ref=f12e18] [cursor=pointer]
+          - button "Cambiar a tema claro" [ref=f12e22] [cursor=pointer]
+      - generic [ref=f12e29]:
+        - generic [ref=f12e30]: Carlos Ruiz
+        - button "Cerrar turno" [ref=f12e33] [cursor=pointer]
+    - generic [ref=f12e37]:
+      - navigation [ref=f12e38]:
+        - button "Registrar" [ref=f12e39] [cursor=pointer]
+        - button "Dentro" [ref=f12e43] [cursor=pointer]:
+          - generic [ref=f12e49]: "2"
+        - button "Frecuentes" [ref=f12e50] [cursor=pointer]
+        - button "Historial" [ref=f12e54] [cursor=pointer]
+        - button "Más" [ref=f12e57] [cursor=pointer]
+      - main [ref=f12e63]:
+        - generic [ref=f12e65]:
+          - generic [ref=f12e66]:
+            - generic [ref=f12e67]:
+              - generic [ref=f12e68]: Dentro
+              - generic [ref=f12e75]: "2"
+            - generic [ref=f12e76]:
+              - generic [ref=f12e77]: Hoy
+              - generic [ref=f12e83]: "1"
+            - generic [ref=f12e84]:
+              - generic [ref=f12e85]: Promedio
+              - generic [ref=f12e91]: 1h 57m
+          - generic [ref=f12e92]:
+            - generic [ref=f12e132]:
+              - generic [ref=f12e137]:
+                - generic [ref=f12e138]: ¿Es un vehículo frecuente?
+                - generic [ref=f12e139]: Buscá por placa o por nombre para ver sus datos.
+              - textbox "Placa o nombre…" [ref=f12e141]
+            - generic [ref=f12e142]: o completá a mano
+            - generic [ref=f12e93]:
+              - generic [ref=f12e146]:
+                - generic [ref=f12e147]: Nombre y apellido
+                - textbox [ref=f12e148]
+              - generic [ref=f12e94]:
+                - generic [ref=f12e95]: Placa
+                - textbox "ABC-123" [ref=f12e96]: AD920HV
+              - generic [ref=f12e97]:
+                - generic [ref=f12e98]: Tipo de vehículo
+                - generic [ref=f12e99]:
+                  - button "Auto" [active] [ref=f12e101] [cursor=pointer]
+                  - button "Moto" [ref=f12e106] [cursor=pointer]
+              - generic [ref=f12e149]:
+                - generic [ref=f12e150]: DNI
+                - spinbutton [ref=f12e151]
+              - generic [ref=f12e112]:
+                - button "Marcar como frecuente" [ref=f12e113] [cursor=pointer]
+                - generic [ref=f12e115]:
+                  - generic [ref=f12e116]: Marcar como frecuente
+                  - generic [ref=f12e119]: Va a aparecer en "Frecuentes" aunque sea su primera vez.
+            - button "Registrar entrada" [disabled] [ref=f12e120]
+  - button "Open Next.js Dev Tools" [ref=f12e128] [cursor=pointer]
+  - alert [ref=f12e152]

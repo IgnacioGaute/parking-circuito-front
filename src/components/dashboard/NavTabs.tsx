@@ -1,5 +1,6 @@
 'use client';
 
+import gsap from 'gsap';
 import {
   BarChart3,
   Car,
@@ -13,8 +14,9 @@ import {
   Users,
 } from 'lucide-react';
 import type { ComponentType } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { prefersReducedMotion } from '@/lib/motion';
 import { colors, fonts } from '@/styles/theme';
 
 export type TabKey =
@@ -52,6 +54,33 @@ export function NavTabs({
   collapsed,
   onToggleCollapsed,
 }: NavTabsProps) {
+  // A sliding highlight pill reads as one tab handing off to the next,
+  // instead of one button's color cutting out while another's cuts in — so
+  // it's measured/animated here rather than left as each button's own
+  // inline active background. Hooks run unconditionally (desktop-only
+  // logic lives inside the effect) since MobileNavTabs renders below.
+  const listRef = useRef<HTMLDivElement>(null);
+  const pillRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const list = listRef.current;
+    const pill = pillRef.current;
+    if (!isDesktop || !list || !pill) return;
+    const activeEl = list.querySelector<HTMLElement>(`[data-tab-key="${activeTab}"]`);
+    if (!activeEl) {
+      gsap.set(pill, { opacity: 0 });
+      return;
+    }
+    const listRect = list.getBoundingClientRect();
+    const activeRect = activeEl.getBoundingClientRect();
+    const target = { opacity: 1, y: activeRect.top - listRect.top, height: activeRect.height };
+    if (prefersReducedMotion()) {
+      gsap.set(pill, target);
+    } else {
+      gsap.to(pill, { ...target, duration: 0.35, ease: 'power3.out' });
+    }
+  }, [activeTab, collapsed, isDesktop, isAdmin]);
+
   if (!isDesktop) {
     return (
       <MobileNavTabs
@@ -156,6 +185,7 @@ export function NavTabs({
       )}
 
       <div
+        ref={listRef}
         style={{
           display: 'flex',
           flexDirection: isDesktop ? 'column' : 'row',
@@ -166,14 +196,35 @@ export function NavTabs({
           flex: 1,
           minHeight: 0,
           gap: isDesktop ? 2 : 2,
+          position: 'relative',
         }}
       >
+        {isDesktop && (
+          <div
+            ref={pillRef}
+            aria-hidden
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: 0,
+              height: 0,
+              opacity: 0,
+              borderRadius: 9,
+              background: colors.accentBgSoft,
+              boxShadow: `inset 3px 0 0 ${colors.accent}`,
+              pointerEvents: 'none',
+              zIndex: 0,
+            }}
+          />
+        )}
         {tabs.map((tab) => {
           const active = activeTab === tab.key;
           const Icon = tab.Icon;
           return (
             <button
               key={tab.key}
+              data-tab-key={tab.key}
               onClick={() => onSelect(tab.key)}
               title={rail ? tab.label : undefined}
               className="ui-btn ui-navtab"
@@ -199,16 +250,15 @@ export function NavTabs({
                     : '2px solid transparent',
                 cursor: 'pointer',
                 padding: isDesktop ? (rail ? '10px 0' : '10px 12px') : '9px 4px 7px',
-                background: isDesktop && active
-                  ? colors.accentBgSoft
-                  : !isDesktop && active
-                    ? colors.accentBgSofter
-                    : 'transparent',
-                boxShadow: isDesktop && active ? `inset 3px 0 0 ${colors.accent}` : 'none',
+                // Desktop's highlight is the sliding pill behind the list
+                // (see pillRef) — an active-only background here would
+                // double up and flash ahead of the pill's own animation.
+                background: !isDesktop && active ? colors.accentBgSofter : 'transparent',
                 color: active ? colors.accent : colors.textMuted,
                 transition: 'color .15s, background .15s, box-shadow .15s',
                 font: 'inherit',
                 position: 'relative',
+                zIndex: 1,
               }}
             >
               <span style={{ display: 'flex', flexShrink: 0, position: 'relative' }}>
