@@ -40,7 +40,7 @@ export const TOUR_STEPS: TourStep[] = [
     target: '[data-tour="dentro-salida"]',
     title: 'Registrar salida',
     description:
-      'Cada tarjeta muestra hace cuánto entró el vehículo. Si pasó más de una hora se marca "Atención". Tocá "Registrar salida" para confirmar el egreso.',
+      'Cada tarjeta muestra hace cuánto entró el vehículo. Si pasó el tiempo límite configurado en Admin se marca "Atención". Tocá "Registrar salida" para confirmar el egreso.',
   },
   {
     id: 'historial-filtros',
@@ -57,6 +57,14 @@ export const TOUR_STEPS: TourStep[] = [
     title: 'Historial de registros',
     description:
       'Los registros se agrupan por día. Si hay muchos, tocá "Cargar más" para ir viendo el resto sin sobrecargar la pantalla.',
+  },
+  {
+    id: 'estadisticas',
+    tab: 'estadisticas',
+    target: '[data-tour="estadisticas-filtros"]',
+    title: 'Estadísticas',
+    description:
+      'Actividad, ocupación y tendencias del estacionamiento con gráficos animados. Filtrá por rango de fechas, tipo de vehículo u operador — todos los gráficos se actualizan juntos.',
   },
   {
     id: 'usuarios',

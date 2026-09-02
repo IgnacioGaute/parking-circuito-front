@@ -1,0 +1,81 @@
+- generic [ref=f5e1]:
+  - generic [ref=f5e2]:
+    - banner [ref=f5e3]:
+      - generic [ref=f5e4]:
+        - generic [ref=f5e8]:
+          - generic [ref=f5e9]: Registrar entrada
+          - generic [ref=f5e10]: Cargá una placa o buscá un frecuente
+        - generic [ref=f5e11]:
+          - generic [ref=f5e12]: 13:14:34
+          - button "Ver recorrido guiado" [ref=f5e17] [cursor=pointer]
+          - button "Cambiar a tema claro" [ref=f5e21] [cursor=pointer]
+      - generic [ref=f5e28]:
+        - generic [ref=f5e29]:
+          - generic [ref=f5e30]: Carlos Ruiz
+          - generic [ref=f5e33]: · en turno
+        - button "Cerrar turno" [ref=f5e34] [cursor=pointer]
+    - generic [ref=f5e38]:
+      - navigation [ref=f5e39]:
+        - button "Registrar" [ref=f5e40] [cursor=pointer]
+        - button "Dentro" [ref=f5e44] [cursor=pointer]:
+          - generic [ref=f5e50]: "2"
+        - button "Frecuentes" [ref=f5e51] [cursor=pointer]
+        - button "Historial" [ref=f5e55] [cursor=pointer]
+        - button "Más" [active] [ref=f5e58] [cursor=pointer]
+      - main [ref=f5e64]:
+        - generic [ref=f5e66]:
+          - generic [ref=f5e67]:
+            - generic [ref=f5e68]:
+              - generic [ref=f5e69]: "2"
+              - generic [ref=f5e70]: Dentro
+            - generic [ref=f5e71]:
+              - generic [ref=f5e72]: "0"
+              - generic [ref=f5e73]: Hoy
+            - generic [ref=f5e74]:
+              - generic [ref=f5e75]: 43h 16m
+              - generic [ref=f5e76]: Promedio
+          - generic [ref=f5e77]:
+            - generic [ref=f5e114]:
+              - generic [ref=f5e119]:
+                - generic [ref=f5e120]: ¿Es un vehículo frecuente?
+                - generic [ref=f5e121]: Buscá por placa o por nombre para ver sus datos.
+              - textbox "Placa o nombre…" [ref=f5e123]
+            - generic [ref=f5e124]: o completá a mano
+            - generic [ref=f5e78]:
+              - generic [ref=f5e128]:
+                - generic [ref=f5e129]: Nombre y apellido
+                - textbox [ref=f5e130]
+              - generic [ref=f5e79]:
+                - generic [ref=f5e80]: Placa
+                - textbox "ABC-123" [ref=f5e81]
+              - generic [ref=f5e82]:
+                - generic [ref=f5e83]: Tipo de vehículo
+                - generic [ref=f5e84]:
+                  - button "Auto" [ref=f5e85] [cursor=pointer]
+                  - button "Moto" [ref=f5e90] [cursor=pointer]
+              - generic [ref=f5e131]:
+                - generic [ref=f5e132]: DNI
+                - spinbutton [ref=f5e133]
+              - generic [ref=f5e96]:
+                - button "Marcar como frecuente" [ref=f5e97] [cursor=pointer]
+                - generic [ref=f5e99]:
+                  - generic [ref=f5e100]: Marcar como frecuente
+                  - generic [ref=f5e103]: Va a aparecer en "Frecuentes" aunque sea su primera vez.
+            - button "Registrar entrada" [disabled] [ref=f5e104]
+  - button "Open Next.js Dev Tools" [ref=f5e110] [cursor=pointer]
+  - alert [ref=f5e134]
+  - generic [ref=f5e136]:
+    - generic [ref=f5e138]: Gestión
+    - generic [ref=f5e139]:
+      - button "Estadísticas Actividad, ocupación y tendencias" [ref=f5e140] [cursor=pointer]:
+        - generic [ref=f5e144]:
+          - generic [ref=f5e145]: Estadísticas
+          - generic [ref=f5e146]: Actividad, ocupación y tendencias
+      - button "Usuarios Operadores del sistema y su turno" [ref=f5e147] [cursor=pointer]:
+        - generic [ref=f5e154]:
+          - generic [ref=f5e155]: Usuarios
+          - generic [ref=f5e156]: Operadores del sistema y su turno
+      - button "Administración Campos del formulario y PIN de acceso" [ref=f5e157] [cursor=pointer]:
+        - generic [ref=f5e162]:
+          - generic [ref=f5e163]: Administración
+          - generic [ref=f5e164]: Campos del formulario y PIN de acceso

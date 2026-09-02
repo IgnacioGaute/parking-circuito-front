@@ -1,0 +1,181 @@
+- generic [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e27] [cursor=pointer]
+  - alert [ref=e31]
+  - generic [ref=e110]:
+    - navigation [ref=e111]:
+      - generic [ref=e112]: Control de Estacionamiento
+      - generic [ref=e116]:
+        - button "Registrar" [ref=e117] [cursor=pointer]
+        - button "Dentro 2" [ref=e121] [cursor=pointer]:
+          - generic [ref=e127]: Dentro
+          - generic [ref=e128]: "2"
+        - button "Frecuentes" [ref=e129] [cursor=pointer]
+        - button "Historial" [ref=e134] [cursor=pointer]
+        - button "Estadísticas" [active] [ref=e138] [cursor=pointer]
+        - button "Usuarios" [ref=e143] [cursor=pointer]
+        - button "Admin" [ref=e151] [cursor=pointer]
+      - button "Contraer" [ref=e157] [cursor=pointer]
+    - generic [ref=e162]:
+      - banner [ref=e163]:
+        - generic [ref=e164]: Carlos Ruiz
+        - generic [ref=e167]:
+          - generic [ref=e168]:
+            - generic [ref=e169]: 12:38:37
+            - button "Ver recorrido guiado" [ref=e174] [cursor=pointer]
+            - button "Cambiar a tema claro" [ref=e178] [cursor=pointer]
+          - button "Cerrar turno" [ref=e185] [cursor=pointer]
+      - main [ref=e189]:
+        - generic [ref=e250]:
+          - generic [ref=e251]: Estadísticas
+          - generic [ref=e253]:
+            - button "Hoy" [ref=e254] [cursor=pointer]
+            - button "7 días" [ref=e255] [cursor=pointer]
+            - button "30 días" [ref=e256] [cursor=pointer]
+            - button "90 días" [ref=e257] [cursor=pointer]
+            - button "Personalizado" [ref=e258] [cursor=pointer]
+            - combobox [ref=e261] [cursor=pointer]:
+              - option "Todos los vehículos" [selected]
+              - option "Auto"
+              - option "Moto"
+            - combobox [ref=e263] [cursor=pointer]:
+              - option "Todos los operadores" [selected]
+              - option "Marcos Díaz"
+              - option "Rocío Fernández"
+              - option "Julián Torres"
+              - option "Sofía Ibarra"
+          - generic [ref=e264]:
+            - generic [ref=e266]:
+              - generic [ref=e267]: Tickets en el rango
+              - generic [ref=e274]: "0"
+              - generic [ref=e275]: últimos 30 días
+            - generic [ref=e277]:
+              - generic [ref=e278]: Dentro ahora mismo
+              - generic [ref=e285]: "0"
+              - generic [ref=e286]: en este momento
+            - generic [ref=e288]:
+              - generic [ref=e289]: Estadía promedio
+              - generic [ref=e295]: "0"
+              - generic [ref=e296]: visitas cerradas en el rango
+            - generic [ref=e298]:
+              - generic [ref=e299]: Tasa de cancelación
+              - generic [ref=e306]: "0"
+              - generic [ref=e307]: del total registrado
+          - generic [ref=e308]:
+            - generic [ref=e309]:
+              - generic [ref=e310]:
+                - generic [ref=e311]:
+                  - generic [ref=e312]: Tendencia diaria
+                  - generic [ref=e313]: Tickets registrados por día en el rango seleccionado
+                - button "Ver datos en tabla" [ref=e314] [cursor=pointer]: Tabla
+              - img "Tickets por día" [ref=e318]:
+                - generic [ref=e319]: "0"
+                - generic [ref=e321]: "25"
+                - generic [ref=e323]: "50"
+                - generic [ref=e325]: "75"
+                - generic [ref=e327]: "100"
+                - generic [ref=e329]: 04 ago
+                - generic [ref=e330]: 07 ago
+                - generic [ref=e331]: 10 ago
+                - generic [ref=e332]: 13 ago
+                - generic [ref=e333]: 16 ago
+                - generic [ref=e334]: 19 ago
+                - generic [ref=e335]: 22 ago
+                - generic [ref=e336]: 25 ago
+                - generic [ref=e337]: 28 ago
+                - generic [ref=e338]: 31 ago
+            - generic [ref=e344]:
+              - generic [ref=e345]:
+                - generic [ref=e346]:
+                  - generic [ref=e347]: Actividad por hora
+                  - generic [ref=e348]: Entradas y salidas agregadas por franja horaria
+                - button "Ver datos en tabla" [ref=e349] [cursor=pointer]: Tabla
+              - generic [ref=e352]:
+                - generic [ref=e353]:
+                  - generic [ref=e354]: Entradas
+                  - generic [ref=e357]: Salidas
+                - img "Actividad por hora del día" [ref=e360]:
+                  - generic [ref=e361]: "0"
+                  - generic [ref=e363]: "50"
+                  - generic [ref=e365]: "100"
+                  - generic [ref=e367]: "150"
+                  - generic [ref=e369]: "200"
+                  - generic [ref=e371]: 0h
+                  - generic [ref=e372]: 3h
+                  - generic [ref=e373]: 6h
+                  - generic [ref=e374]: 9h
+                  - generic [ref=e375]: 12h
+                  - generic [ref=e376]: 15h
+                  - generic [ref=e377]: 18h
+                  - generic [ref=e378]: 21h
+            - generic [ref=e386]:
+              - generic [ref=e387]:
+                - generic [ref=e388]:
+                  - generic [ref=e389]: Mezcla de vehículos
+                  - generic [ref=e390]: Auto vs. moto en el rango
+                - button "Ver datos en tabla" [ref=e391] [cursor=pointer]: Tabla
+              - generic [ref=e394]:
+                - generic [ref=e395]:
+                  - img "Mezcla de tipos de vehículo" [ref=e396]:
+                    - generic [ref=e398] [cursor=pointer]
+                    - generic [ref=e399] [cursor=pointer]
+                  - generic:
+                    - generic: "1446"
+                    - generic: tickets
+                - generic [ref=e400]:
+                  - generic [ref=e401]:
+                    - generic [ref=e403]: 72%
+                    - generic [ref=e404]: Auto
+                  - generic [ref=e405]:
+                    - generic [ref=e407]: 28%
+                    - generic [ref=e408]: Moto
+            - generic [ref=e409]:
+              - generic [ref=e410]:
+                - generic [ref=e411]:
+                  - generic [ref=e412]: Patentes más frecuentes
+                  - generic [ref=e413]: Placas con más de una visita en el rango
+                - button "Ver datos en tabla" [ref=e414] [cursor=pointer]: Tabla
+              - img "Patentes más frecuentes" [ref=e417]:
+                - generic [ref=e418]:
+                  - generic "LUN 554" [ref=e419]
+                  - generic [ref=e421]: 61 vis.
+                - generic [ref=e422]:
+                  - generic "JYK 128" [ref=e423]
+                  - generic [ref=e425]: 60 vis.
+                - generic [ref=e426]:
+                  - generic "LSK 919" [ref=e427]
+                  - generic [ref=e429]: 58 vis.
+                - generic [ref=e430]:
+                  - generic "NWX 860" [ref=e431]
+                  - generic [ref=e433]: 48 vis.
+                - generic [ref=e434]:
+                  - generic "MBZ 877" [ref=e435]
+                  - generic [ref=e437]: 44 vis.
+                - generic [ref=e438]:
+                  - generic "TXY 218" [ref=e439]
+                  - generic [ref=e441]: 43 vis.
+                - generic [ref=e442]:
+                  - generic "PFK 429" [ref=e443]
+                  - generic [ref=e445]: 42 vis.
+                - generic [ref=e446]:
+                  - generic "XKY 998" [ref=e447]
+                  - generic [ref=e449]: 38 vis.
+            - generic [ref=e450]:
+              - generic [ref=e451]:
+                - generic [ref=e452]:
+                  - generic [ref=e453]: Actividad por operador
+                  - generic [ref=e454]: Entradas registradas por cada operador
+                - button "Ver datos en tabla" [ref=e455] [cursor=pointer]: Tabla
+              - img "Actividad por operador" [ref=e458]:
+                - generic [ref=e459]:
+                  - generic "Julián Torres" [ref=e460]
+                  - generic [ref=e462]: "372"
+                - generic [ref=e463]:
+                  - generic "Rocío Fernández" [ref=e464]
+                  - generic [ref=e466]: "372"
+                - generic [ref=e467]:
+                  - generic "Marcos Díaz" [ref=e468]
+                  - generic [ref=e470]: "363"
+                - generic [ref=e471]:
+                  - generic "Sofía Ibarra" [ref=e472]
+                  - generic [ref=e474]: "339"
+          - generic [ref=e475]: Datos de ejemplo con fines demostrativos.

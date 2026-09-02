@@ -1,0 +1,41 @@
+- generic [ref=f5e1]:
+  - generic [ref=f5e2]:
+    - banner [ref=f5e3]:
+      - generic [ref=f5e4]:
+        - generic [ref=f5e8]:
+          - generic [ref=f5e9]: Administración
+          - generic [ref=f5e10]: Operadores y campos del formulario
+        - generic [ref=f5e11]:
+          - generic [ref=f5e12]: 13:15:06
+          - button "Ver recorrido guiado" [ref=f5e17] [cursor=pointer]
+          - button "Cambiar a tema claro" [ref=f5e21] [cursor=pointer]
+      - generic [ref=f5e28]:
+        - generic [ref=f5e29]:
+          - generic [ref=f5e30]: Carlos Ruiz
+          - generic [ref=f5e33]: · en turno
+        - button "Cerrar turno" [ref=f5e34] [cursor=pointer]
+    - generic [ref=f5e38]:
+      - navigation [ref=f5e39]:
+        - button "Registrar" [ref=f5e40] [cursor=pointer]
+        - button "Dentro" [ref=f5e44] [cursor=pointer]:
+          - generic [ref=f5e50]: "2"
+        - button "Frecuentes" [ref=f5e51] [cursor=pointer]
+        - button "Historial" [ref=f5e55] [cursor=pointer]
+        - button "Admin" [ref=f5e165] [cursor=pointer]
+      - main [ref=f5e64]:
+        - generic [ref=f5e167]:
+          - generic [ref=f5e168]:
+            - button "Operadores" [ref=f5e169] [cursor=pointer]
+            - button "Campos de registro" [ref=f5e170] [cursor=pointer]
+            - button "Alertas" [active] [ref=f5e171] [cursor=pointer]
+          - generic [ref=f5e229]:
+            - generic [ref=f5e230]:
+              - generic [ref=f5e231]: Alerta de tiempo dentro
+              - generic [ref=f5e232]: Un vehículo se marca "Atención" en la pestaña Dentro cuando lleva más de este tiempo sin registrar salida.
+            - generic [ref=f5e233]:
+              - generic [ref=f5e234]:
+                - generic [ref=f5e235]: Minutos dentro antes de la alerta
+                - spinbutton "Minutos dentro antes de la alerta" [ref=f5e236]: "60"
+              - button "Guardar" [ref=f5e237] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=f5e110] [cursor=pointer]
+  - alert [ref=f5e134]

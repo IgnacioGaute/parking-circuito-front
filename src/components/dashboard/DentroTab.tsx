@@ -10,6 +10,7 @@ import {
   getInsideAction,
   registerSalidaAction,
 } from '@/actions/parking-records.actions';
+import { getSettingsAction } from '@/actions/settings.actions';
 import { formatDuration, formatTime, tipoColors, tipoLabel } from '@/lib/format';
 import { colors, fonts } from '@/styles/theme';
 import type { FieldDefinition, ParkingRecord } from '@/types';
@@ -38,6 +39,9 @@ export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps)
   const [cancelError, setCancelError] = useState<string | null>(null);
   const [cancelReason, setCancelReason] = useState('');
   const [frequentPlacas, setFrequentPlacas] = useState<Set<string>>(new Set());
+  // 60 (1 hour) matches this app's previous hardcoded threshold — used while
+  // the real, admin-configured value is still loading.
+  const [alertThresholdMinutes, setAlertThresholdMinutes] = useState(60);
 
   useEffect(() => {
     let cancelled = false;
@@ -67,6 +71,11 @@ export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps)
             result.filter((f) => f.key !== 'placa' && f.key !== 'tipo' && f.key !== 'foto'),
           );
         }
+      })
+      .catch(() => undefined);
+    getSettingsAction()
+      .then((settings) => {
+        if (!cancelled) setAlertThresholdMinutes(settings.alertThresholdMinutes);
       })
       .catch(() => undefined);
     return () => {
@@ -241,7 +250,7 @@ export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps)
       >
         {matches.map((record) => {
           const durationMs = now - new Date(record.entradaTime).getTime();
-          const attention = durationMs > 60 * 60 * 1000;
+          const attention = durationMs > alertThresholdMinutes * 60_000;
           const isFrequent = frequentPlacas.has(record.placa);
           return (
             <div
