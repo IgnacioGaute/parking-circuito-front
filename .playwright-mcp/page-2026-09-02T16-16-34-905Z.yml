@@ -1,0 +1,70 @@
+- generic [ref=f5e1]:
+  - generic [ref=f5e2]:
+    - banner [ref=f5e3]:
+      - generic [ref=f5e4]:
+        - generic [ref=f5e8]:
+          - generic [ref=f5e9]: Dentro
+          - generic [ref=f5e10]: 2 vehículos en el predio
+        - generic [ref=f5e11]:
+          - generic [ref=f5e12]: 13:16:34
+          - button "Ver recorrido guiado" [ref=f5e17] [cursor=pointer]
+          - button "Cambiar a tema claro" [ref=f5e21] [cursor=pointer]
+      - generic [ref=f5e28]:
+        - generic [ref=f5e29]:
+          - generic [ref=f5e30]: Carlos Ruiz
+          - generic [ref=f5e33]: · en turno
+        - button "Cerrar turno" [ref=f5e34] [cursor=pointer]
+    - generic [ref=f5e38]:
+      - navigation [ref=f5e39]:
+        - button "Registrar" [ref=f5e40] [cursor=pointer]
+        - button "Dentro" [ref=f5e44] [cursor=pointer]:
+          - generic [ref=f5e50]: "2"
+        - button "Frecuentes" [ref=f5e51] [cursor=pointer]
+        - button "Historial" [ref=f5e55] [cursor=pointer]
+        - button "Más" [active] [ref=f5e239] [cursor=pointer]
+      - main [ref=f5e64]:
+        - generic [ref=f5e240]:
+          - generic [ref=f5e241]:
+            - generic [ref=f5e242]: Dentro
+            - generic [ref=f5e243]: 2 vehículos
+          - textbox "Buscar por placa" [ref=f5e245]
+          - generic [ref=f5e246]:
+            - generic [ref=f5e247]:
+              - generic [ref=f5e248]:
+                - generic [ref=f5e249]: AD920HV
+                - generic [ref=f5e256]: Atención
+              - generic [ref=f5e257]:
+                - generic [ref=f5e258]: Entró 18:00
+                - generic [ref=f5e259]: 43h 16m
+              - generic [ref=f5e260]:
+                - button "Registrar salida" [ref=f5e261] [cursor=pointer]
+                - generic "Patente frecuente — editala desde Frecuentes" [ref=f5e262]
+                - button "Cancelar registro" [ref=f5e265] [cursor=pointer]
+            - generic [ref=f5e269]:
+              - generic [ref=f5e270]:
+                - generic [ref=f5e271]: A232NTM
+                - generic [ref=f5e279]: Atención
+              - generic [ref=f5e280]:
+                - generic [ref=f5e281]: Entró 17:54
+                - generic [ref=f5e282]: 43h 22m
+              - generic [ref=f5e283]:
+                - button "Registrar salida" [ref=f5e284] [cursor=pointer]
+                - generic "Patente frecuente — editala desde Frecuentes" [ref=f5e285]
+                - button "Cancelar registro" [ref=f5e288] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=f5e110] [cursor=pointer]
+  - alert [ref=f5e134]
+  - generic [ref=f5e294]:
+    - generic [ref=f5e296]: Gestión
+    - generic [ref=f5e297]:
+      - button "Estadísticas Actividad, ocupación y tendencias" [ref=f5e298] [cursor=pointer]:
+        - generic [ref=f5e302]:
+          - generic [ref=f5e303]: Estadísticas
+          - generic [ref=f5e304]: Actividad, ocupación y tendencias
+      - button "Usuarios Operadores del sistema y su turno" [ref=f5e305] [cursor=pointer]:
+        - generic [ref=f5e312]:
+          - generic [ref=f5e313]: Usuarios
+          - generic [ref=f5e314]: Operadores del sistema y su turno
+      - button "Administración Campos del formulario y PIN de acceso" [ref=f5e315] [cursor=pointer]:
+        - generic [ref=f5e320]:
+          - generic [ref=f5e321]: Administración
+          - generic [ref=f5e322]: Campos del formulario y PIN de acceso

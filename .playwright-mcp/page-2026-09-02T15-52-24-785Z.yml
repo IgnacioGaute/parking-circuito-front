@@ -1,0 +1,129 @@
+- generic [ref=f4e1]:
+  - generic [ref=f4e2]:
+    - banner [ref=f4e467]:
+      - generic [ref=f4e468]:
+        - generic [ref=f4e472]:
+          - generic [ref=f4e473]: Estadísticas
+          - generic [ref=f4e474]: Actividad, ocupación y tendencias
+        - generic [ref=f4e475]:
+          - generic [ref=f4e476]: 12:52:23
+          - button "Ver recorrido guiado" [ref=f4e481] [cursor=pointer]
+          - button "Cambiar a tema claro" [ref=f4e485] [cursor=pointer]
+      - generic [ref=f4e492]:
+        - generic [ref=f4e493]:
+          - generic [ref=f4e494]: Carlos Ruiz
+          - generic [ref=f4e497]: · en turno
+        - button "Cerrar turno" [ref=f4e498] [cursor=pointer]
+    - generic [ref=f4e502]:
+      - navigation [ref=f4e503]:
+        - button "Registrar" [ref=f4e504] [cursor=pointer]
+        - button "Dentro" [ref=f4e507] [cursor=pointer]:
+          - generic [ref=f4e513]: "2"
+        - button "Frecuentes" [ref=f4e514] [cursor=pointer]
+        - button "Historial" [ref=f4e518] [cursor=pointer]
+        - button "Estadísticas" [ref=f4e521] [cursor=pointer]
+      - main [ref=f4e528]:
+        - generic [ref=f4e530]:
+          - generic [ref=f4e531]: Estadísticas
+          - generic [ref=f4e533]:
+            - button "Hoy" [active] [ref=f4e534] [cursor=pointer]
+            - button "7 días" [ref=f4e535] [cursor=pointer]
+            - button "30 días" [ref=f4e536] [cursor=pointer]
+            - button "90 días" [ref=f4e537] [cursor=pointer]
+            - button "Personalizado" [ref=f4e538] [cursor=pointer]
+            - combobox [ref=f4e541] [cursor=pointer]:
+              - option "Todos los vehículos" [selected]
+              - option "Auto"
+              - option "Moto"
+            - combobox [ref=f4e543] [cursor=pointer]:
+              - option "Todos los operadores" [selected]
+              - option "Ana Torres"
+              - option "Carlos Ruiz"
+              - option "Luis Medina"
+              - option "ignacio"
+          - generic [ref=f4e544]:
+            - generic [ref=f4e546]:
+              - generic [ref=f4e547]: Tickets en el rango
+              - generic [ref=f4e554]: "20"
+              - generic [ref=f4e555]: hoy
+            - generic [ref=f4e557]:
+              - generic [ref=f4e558]: Dentro ahora mismo
+              - generic [ref=f4e565]: "2"
+              - generic [ref=f4e566]: en este momento
+            - generic [ref=f4e568]:
+              - generic [ref=f4e569]: Estadía promedio
+              - generic [ref=f4e575]: 35h 50m
+              - generic [ref=f4e576]: visitas cerradas en el rango
+          - generic [ref=f4e577]:
+            - generic [ref=f4e578]:
+              - generic [ref=f4e579]:
+                - generic [ref=f4e580]:
+                  - generic [ref=f4e581]: Tendencia diaria
+                  - generic [ref=f4e582]: Tickets registrados por día en el rango seleccionado
+                - button "Ver datos en tabla" [ref=f4e583] [cursor=pointer]: Tabla
+              - img "Tickets por día" [ref=f4e587]:
+                - generic [ref=f4e588]: "0"
+                - generic [ref=f4e742]: "1"
+                - generic [ref=f4e744]: "1"
+                - generic [ref=f4e746]: "2"
+                - generic [ref=f4e590]: "2"
+                - generic [ref=f4e748]: 02 sept
+                - generic [ref=f4e608]: "0"
+            - generic [ref=f4e613]:
+              - generic [ref=f4e614]:
+                - generic [ref=f4e615]:
+                  - generic [ref=f4e616]: Actividad por hora
+                  - generic [ref=f4e617]: Entradas y salidas agregadas por franja horaria
+                - button "Ver datos en tabla" [ref=f4e618] [cursor=pointer]: Tabla
+              - generic [ref=f4e621]:
+                - generic [ref=f4e622]:
+                  - generic [ref=f4e623]: Entradas
+                  - generic [ref=f4e626]: Salidas
+                - img "Actividad por hora del día" [ref=f4e629]:
+                  - generic [ref=f4e630]: "0"
+                  - generic [ref=f4e750]: "1"
+                  - generic [ref=f4e752]: "1"
+                  - generic [ref=f4e754]: "2"
+                  - generic [ref=f4e756]: "2"
+                  - generic [ref=f4e640]: 0h
+                  - generic [ref=f4e641]: 3h
+                  - generic [ref=f4e642]: 6h
+                  - generic [ref=f4e643]: 9h
+                  - generic [ref=f4e644]: 12h
+                  - generic [ref=f4e645]: 15h
+                  - generic [ref=f4e646]: 18h
+                  - generic [ref=f4e647]: 21h
+            - generic [ref=f4e655]:
+              - generic [ref=f4e656]:
+                - generic [ref=f4e657]:
+                  - generic [ref=f4e658]:
+                    - generic [ref=f4e659]: Mezcla de vehículos
+                    - generic [ref=f4e660]: Auto vs. moto en el rango
+                  - button "Ver datos en tabla" [ref=f4e661] [cursor=pointer]: Tabla
+                - generic [ref=f4e664]:
+                  - generic [ref=f4e665]:
+                    - img "Mezcla de tipos de vehículo" [ref=f4e666]:
+                      - generic [ref=f4e668] [cursor=pointer]
+                      - generic [ref=f4e669] [cursor=pointer]
+                    - generic:
+                      - generic: "1"
+                      - generic: tickets
+                  - generic [ref=f4e670]:
+                    - generic [ref=f4e671]:
+                      - generic [ref=f4e673]: 0%
+                      - generic [ref=f4e674]: Auto
+                    - generic [ref=f4e675]:
+                      - generic [ref=f4e677]: 0%
+                      - generic [ref=f4e678]: Moto
+              - generic [ref=f4e679]:
+                - generic [ref=f4e681]:
+                  - generic [ref=f4e682]: Patentes más frecuentes
+                  - generic [ref=f4e683]: Placas con más de una visita en el rango
+                - generic [ref=f4e758]: Sin patentes recurrentes en este rango.
+            - generic [ref=f4e713]:
+              - generic [ref=f4e715]:
+                - generic [ref=f4e716]: Actividad por operador
+                - generic [ref=f4e717]: Entradas registradas por cada operador
+              - generic [ref=f4e759]: Sin registros en este rango.
+  - button "Open Next.js Dev Tools" [ref=f4e110] [cursor=pointer]
+  - alert [ref=f4e254]

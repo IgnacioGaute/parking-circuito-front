@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { getInsideAction } from '@/actions/parking-records.actions';
 import { AdminTab } from '@/components/admin/AdminTab';
 import { DentroTab } from '@/components/dashboard/DentroTab';
+import { EstadisticasTab } from '@/components/dashboard/EstadisticasTab';
 import { FrecuentesTab } from '@/components/dashboard/FrecuentesTab';
 import { Header } from '@/components/dashboard/Header';
 import { HistorialTab } from '@/components/dashboard/HistorialTab';
@@ -130,6 +131,7 @@ export default function DashboardPage() {
       )}
       {activeTab === 'frecuentes' && <FrecuentesTab onToast={showToast} />}
       {activeTab === 'historial' && <HistorialTab isAdmin={isAdmin} onToast={showToast} />}
+      {activeTab === 'estadisticas' && <EstadisticasTab />}
       {activeTab === 'usuarios' && <UsuariosTab />}
       {activeTab === 'admin' && isAdmin && (
         <AdminTab
