@@ -4,7 +4,11 @@ import { ArrowLeft, Bike, Calendar, Car, Check, Star } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { getActiveFieldDefinitionsAction } from '@/actions/field-definitions.actions';
-import { createEntradaAction, getFrequentAction } from '@/actions/parking-records.actions';
+import {
+  createEntradaAction,
+  getFrequentAction,
+  getInsideAction,
+} from '@/actions/parking-records.actions';
 import { SearchField } from '@/components/ui/SearchField';
 import { formatDate, formatTime, tipoColors, tipoLabel } from '@/lib/format';
 import { useStaggerReveal } from '@/lib/use-stagger-reveal';
@@ -93,11 +97,13 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
   const [tipo, setTipo] = useState<VehicleType | null>(null);
   const [customValues, setCustomValues] = useState<Record<string, CustomValue>>({});
   const [fields, setFields] = useState<FieldDefinition[]>(DEFAULT_FIELDS);
-  const [phase, setPhase] = useState<'idle' | 'submitting' | 'success' | 'closing'>('idle');
+  const [phase, setPhase] = useState<'idle' | 'submitting' | 'success' | 'closing' | 'error' | 'error-closing'>(
+    'idle',
+  );
   const [successInfo, setSuccessInfo] = useState<{ placa: string; tipo: VehicleType } | null>(
     null,
   );
-  const [error, setError] = useState<string | null>(null);
+  const [errorInfo, setErrorInfo] = useState<{ message: string; detail?: string } | null>(null);
   const [frequentPlates, setFrequentPlates] = useState<FrequentPlate[]>([]);
   const [frequentQuery, setFrequentQuery] = useState('');
   const [selectedFrequent, setSelectedFrequent] = useState<FrequentPlate | null>(null);
@@ -173,7 +179,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
     markedFrequent?: boolean;
   }) => {
     setPhase('submitting');
-    setError(null);
+    setErrorInfo(null);
     try {
       const record = await createEntradaAction({
         placa: payload.placa,
@@ -202,9 +208,41 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
             .catch(() => undefined);
         }, 800);
       }, 1200);
-    } catch {
-      setError('No se pudo registrar la entrada');
-      setPhase('idle');
+    } catch (err) {
+      // Server Actions forward a thrown Error's .message to the client —
+      // the backend already returns specific, Spanish, user-facing text for
+      // every known validation case (e.g. "La patente XXX ya tiene una
+      // entrada registrada sin salida"), so surface it instead of a generic
+      // catch-all string.
+      const message = err instanceof Error && err.message ? err.message : 'No se pudo registrar la entrada';
+
+      // When the conflict is "this plate is already inside", tell the
+      // operator since when — best-effort: if the lookup fails or finds
+      // nothing (a different kind of error), the overlay still shows fine
+      // without a detail line.
+      let detail: string | undefined;
+      try {
+        const placaUpper = payload.placa.trim().toUpperCase();
+        const existing = (await getInsideAction(placaUpper)).find((r) => r.placa === placaUpper);
+        if (existing) {
+          detail = `Entró ${formatDate(existing.entradaTime)} · ${formatTime(existing.entradaTime)}`;
+        }
+      } catch {
+        // ignore — detail is just a nice-to-have
+      }
+
+      setErrorInfo({ message, detail });
+      setPhase('error');
+      // Same hold-then-drain choreography as the success overlay, just
+      // without resetting the form — the operator still needs to fix or
+      // retry whatever they typed.
+      setTimeout(() => {
+        setPhase('error-closing');
+        setTimeout(() => {
+          setPhase('idle');
+          setErrorInfo(null);
+        }, 800);
+      }, 2200);
     }
   };
 
@@ -843,10 +881,6 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
         </div>
       </div>
 
-      {error && (
-        <div style={{ fontSize: 12.5, color: colors.error, fontWeight: 600 }}>{error}</div>
-      )}
-
       <button
         onClick={handleSubmit}
         disabled={disabled}
@@ -886,6 +920,19 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
             phase={phase}
             title="Entrada registrada"
             subtitle={`${successInfo.placa} · ${successInfo.tipo === 'auto' ? 'Auto' : 'Moto'}`}
+          />,
+          document.body,
+        )}
+
+      {(phase === 'error' || phase === 'error-closing') &&
+        errorInfo &&
+        createPortal(
+          <SuccessOverlay
+            phase={phase === 'error' ? 'success' : 'closing'}
+            variant="error"
+            title="No se pudo registrar"
+            subtitle={errorInfo.message}
+            detail={errorInfo.detail}
           />,
           document.body,
         )}

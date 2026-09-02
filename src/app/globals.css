@@ -38,6 +38,7 @@ body {
   --c-green: #34d399;
   --c-green-bg-soft: rgba(52, 211, 153, 0.14);
   --c-error: #f0616e;
+  --c-error-bg-soft: rgba(240, 97, 110, 0.14);
   --c-grid-dot: rgba(255, 255, 255, 0.05);
   --c-halo: rgba(217, 164, 65, 0.16);
   --c-shadow: rgba(0, 0, 0, 0.45);
@@ -67,6 +68,7 @@ body {
   --c-green: #0f9d75;
   --c-green-bg-soft: rgba(15, 157, 117, 0.12);
   --c-error: #dc3545;
+  --c-error-bg-soft: rgba(220, 53, 69, 0.12);
   --c-grid-dot: rgba(10, 10, 15, 0.1);
   /* Uses the dark theme's brighter accent hue, not the muted light-theme
      accent — a decorative glow doesn't need text-contrast tuning, and the

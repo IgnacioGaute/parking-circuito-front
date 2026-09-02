@@ -25,6 +25,7 @@ export const colors = {
   green: 'var(--c-green)',
   greenBgSoft: 'var(--c-green-bg-soft)',
   error: 'var(--c-error)',
+  errorBgSoft: 'var(--c-error-bg-soft)',
   shadow: 'var(--c-shadow)',
 } as const;
 
