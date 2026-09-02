@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronDown, Pencil, Search, Star } from 'lucide-react';
+import { ChevronDown, Pencil, Star } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { getFieldDefinitionsAction } from '@/actions/field-definitions.actions';
 import {
@@ -8,6 +8,7 @@ import {
   getHistoryAction,
   getInsideAction,
 } from '@/actions/parking-records.actions';
+import { SearchField } from '@/components/ui/SearchField';
 import { formatDate, formatDuration, formatTime, tipoLabel } from '@/lib/format';
 import { useStaggerReveal } from '@/lib/use-stagger-reveal';
 import { colors, fonts } from '@/styles/theme';
@@ -118,37 +119,7 @@ export function FrecuentesTab({ onToast }: FrecuentesTabProps) {
       </div>
 
       {plates.length > 0 && (
-        <div style={{ position: 'relative' }}>
-          <Search
-            size={16}
-            strokeWidth={2}
-            style={{
-              position: 'absolute',
-              left: 13,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              color: colors.textDim,
-              pointerEvents: 'none',
-            }}
-          />
-          <input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar por placa"
-            style={{
-              width: '100%',
-              boxSizing: 'border-box',
-              border: `1px solid ${colors.border}`,
-              background: colors.bgInput,
-              borderRadius: 12,
-              padding: '12px 14px 12px 38px',
-              font: 'inherit',
-              fontSize: 16,
-              outline: 'none',
-              color: colors.textPrimary,
-            }}
-          />
-        </div>
+        <SearchField value={query} onChange={setQuery} placeholder="Buscar por placa" />
       )}
 
       {!loading && plates.length === 0 && (

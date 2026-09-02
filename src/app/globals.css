@@ -95,6 +95,17 @@ select {
   font-family: inherit;
 }
 
+@keyframes tourPing {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.12);
+    opacity: 0;
+  }
+}
+
 @keyframes pulseDot {
   0%,
   100% {

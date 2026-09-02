@@ -1,5 +1,7 @@
 'use client';
 
+import { Car, CalendarCheck, Timer } from 'lucide-react';
+import type { ComponentType } from 'react';
 import { useEffect, useState } from 'react';
 import { getHistoryAction, getInsideAction } from '@/actions/parking-records.actions';
 import { dateKey, formatDuration } from '@/lib/format';
@@ -45,10 +47,10 @@ export function RegistrarTab({ onEntradaRegistered }: RegistrarTabProps) {
     onEntradaRegistered();
   };
 
-  const stats: Array<{ label: string; value: string; accent: boolean }> = [
-    { label: 'Dentro', value: String(insideRecords.length), accent: true },
-    { label: 'Hoy', value: String(todayCount), accent: false },
-    { label: 'Promedio', value: averageStay(insideRecords), accent: false },
+  const stats: Array<{ label: string; value: string; accent: boolean; Icon: ComponentType<{ size?: number; strokeWidth?: number }> }> = [
+    { label: 'Dentro', value: String(insideRecords.length), accent: true, Icon: Car },
+    { label: 'Hoy', value: String(todayCount), accent: false, Icon: CalendarCheck },
+    { label: 'Promedio', value: averageStay(insideRecords), accent: false, Icon: Timer },
   ];
   const statsRef = useStaggerReveal<HTMLDivElement>(
     '.registrar-stat',
@@ -64,15 +66,60 @@ export function RegistrarTab({ onEntradaRegistered }: RegistrarTabProps) {
             className="registrar-stat"
             style={{
               flex: 1,
+              position: 'relative',
+              overflow: 'hidden',
               background: colors.bgCard,
               border: `1px solid ${colors.border}`,
-              borderRadius: 14,
-              padding: '12px 13px',
+              borderRadius: 15,
+              padding: '13px 14px',
               display: 'flex',
               flexDirection: 'column',
-              gap: 3,
+              gap: 10,
             }}
           >
+            {stat.accent && (
+              <div
+                aria-hidden
+                style={{
+                  position: 'absolute',
+                  top: -18,
+                  right: -18,
+                  width: 60,
+                  height: 60,
+                  borderRadius: '50%',
+                  background: colors.accentBgSofter,
+                  pointerEvents: 'none',
+                }}
+              />
+            )}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
+              <span
+                style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase',
+                  color: colors.textDim,
+                }}
+              >
+                {stat.label}
+              </span>
+              <span
+                style={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: 7,
+                  background: stat.accent ? colors.accentBgSoft : colors.bgInputAlt,
+                  color: stat.accent ? colors.accent : colors.textMuted,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <stat.Icon size={12} strokeWidth={2.4} />
+              </span>
+            </div>
             <div
               style={{
                 fontFamily: fonts.mono,
@@ -80,20 +127,10 @@ export function RegistrarTab({ onEntradaRegistered }: RegistrarTabProps) {
                 fontWeight: 700,
                 lineHeight: 1,
                 color: stat.accent ? colors.accent : colors.textPrimary,
+                position: 'relative',
               }}
             >
               {stat.value}
-            </div>
-            <div
-              style={{
-                fontSize: 10.5,
-                fontWeight: 700,
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase',
-                color: colors.textDim,
-              }}
-            >
-              {stat.label}
             </div>
           </div>
         ))}

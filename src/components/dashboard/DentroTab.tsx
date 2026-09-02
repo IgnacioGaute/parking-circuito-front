@@ -1,6 +1,6 @@
 'use client';
 
-import { Pencil, Search, Star, Trash2, X } from 'lucide-react';
+import { Pencil, Star, Trash2, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { getFieldDefinitionsAction } from '@/actions/field-definitions.actions';
@@ -10,6 +10,7 @@ import {
   getInsideAction,
   registerSalidaAction,
 } from '@/actions/parking-records.actions';
+import { SearchField } from '@/components/ui/SearchField';
 import { formatDuration, formatTime, tipoColors, tipoLabel } from '@/lib/format';
 import { useStaggerReveal } from '@/lib/use-stagger-reveal';
 import { colors, fonts } from '@/styles/theme';
@@ -170,37 +171,8 @@ export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps)
       </div>
 
       {records.length > 0 && (
-        <div data-tour="dentro-buscar" style={{ position: 'relative' }}>
-          <Search
-            size={16}
-            strokeWidth={2}
-            style={{
-              position: 'absolute',
-              left: 13,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              color: colors.textDim,
-              pointerEvents: 'none',
-            }}
-          />
-          <input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar por placa"
-            className="ui-input"
-            style={{
-              width: '100%',
-              boxSizing: 'border-box',
-              border: `1px solid ${colors.border}`,
-              background: colors.bgInput,
-              borderRadius: 12,
-              padding: '12px 14px 12px 38px',
-              font: 'inherit',
-              fontSize: 16,
-              outline: 'none',
-              color: colors.textPrimary,
-            }}
-          />
+        <div data-tour="dentro-buscar">
+          <SearchField value={query} onChange={setQuery} placeholder="Buscar por placa" />
         </div>
       )}
 

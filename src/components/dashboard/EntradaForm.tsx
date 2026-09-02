@@ -1,11 +1,13 @@
 'use client';
 
-import { Bike, Car, Check, Search, Star } from 'lucide-react';
+import { ArrowLeft, Bike, Calendar, Car, Check, Star } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { getActiveFieldDefinitionsAction } from '@/actions/field-definitions.actions';
 import { createEntradaAction, getFrequentAction } from '@/actions/parking-records.actions';
-import { formatDate, formatTime, tipoLabel } from '@/lib/format';
+import { SearchField } from '@/components/ui/SearchField';
+import { formatDate, formatTime, tipoColors, tipoLabel } from '@/lib/format';
+import { useStaggerReveal } from '@/lib/use-stagger-reveal';
 import { colors, fonts } from '@/styles/theme';
 import type { FieldDefinition, FrequentPlate, VehicleType } from '@/types';
 import { SuccessOverlay } from './SuccessOverlay';
@@ -50,7 +52,7 @@ const labelStyle: React.CSSProperties = {
 const customInputStyle: React.CSSProperties = {
   border: `1px solid ${colors.border}`,
   background: colors.bgInput,
-  borderRadius: 10,
+  borderRadius: 12,
   padding: '14px 16px',
   font: 'inherit',
   fontSize: 16,
@@ -124,6 +126,10 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
         ? frequentPlates.filter((plate) => matchesFrequentQuery(plate, frequentQuery)).slice(0, 5)
         : [],
     [frequentPlates, frequentQuery],
+  );
+  const matchesRef = useStaggerReveal<HTMLDivElement>(
+    '.frequent-match',
+    frequentMatches.map((p) => p.placa).join(','),
   );
 
   const selectedExtraEntries = useMemo(() => {
@@ -253,27 +259,58 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
     </div>
   );
 
+  // A sliding highlight (transform, not a background swap) behind whichever
+  // option is picked — the highlight travels between the two slots instead
+  // of one button's tint cutting out while the other's cuts in. Since it's
+  // always an even 2-way split, the position is just "which half" — no
+  // measuring needed, unlike NavTabs' variable-width sidebar pill.
   const renderTipo = () => (
     <div key="tipo" style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
       <label style={labelStyle}>Tipo de vehículo</label>
-      <div style={{ display: 'flex', border: `1px solid ${colors.border}`, borderRadius: 12, overflow: 'hidden' }}>
+      <div
+        style={{
+          position: 'relative',
+          display: 'flex',
+          border: `1px solid ${colors.border}`,
+          background: colors.bgInput,
+          borderRadius: 13,
+          padding: 3,
+        }}
+      >
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            top: 3,
+            bottom: 3,
+            left: 3,
+            width: 'calc(50% - 3px)',
+            borderRadius: 10,
+            background: colors.accentBgSoft,
+            boxShadow: tipo ? `inset 0 0 0 1px rgba(217,164,65,0.35)` : 'none',
+            opacity: tipo ? 1 : 0,
+            transform: tipo === 'moto' ? 'translateX(100%)' : 'translateX(0)',
+            transition: 'transform .25s cubic-bezier(.4,0,.2,1), opacity .2s ease',
+          }}
+        />
         <button
           onClick={() => setTipo('auto')}
-          className={tipo === 'auto' ? undefined : 'ui-btn ui-tipo-btn'}
+          className="ui-btn"
           style={{
+            position: 'relative',
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
             gap: 8,
             border: 'none',
-            background: tipo === 'auto' ? colors.accentBgSoft : 'transparent',
+            background: 'transparent',
             color: tipo === 'auto' ? colors.accent : colors.textMuted,
-            padding: '12px 0',
+            padding: '11px 0',
             fontSize: 14,
             fontWeight: 700,
             cursor: 'pointer',
             display: 'flex',
-            transition: 'background 0.12s ease, color 0.12s ease',
+            transition: 'color 0.15s ease',
           }}
         >
           <Car size={17} strokeWidth={2} />
@@ -281,22 +318,22 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
         </button>
         <button
           onClick={() => setTipo('moto')}
-          className={tipo === 'moto' ? undefined : 'ui-btn ui-tipo-btn'}
+          className="ui-btn"
           style={{
+            position: 'relative',
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
             gap: 8,
             border: 'none',
-            borderLeft: `1px solid ${colors.border}`,
-            background: tipo === 'moto' ? colors.accentBgSoft : 'transparent',
+            background: 'transparent',
             color: tipo === 'moto' ? colors.accent : colors.textMuted,
-            padding: '12px 0',
+            padding: '11px 0',
             fontSize: 14,
             fontWeight: 700,
             cursor: 'pointer',
             display: 'flex',
-            transition: 'background 0.12s ease, color 0.12s ease',
+            transition: 'color 0.15s ease',
           }}
         >
           <Bike size={17} strokeWidth={2} />
@@ -318,6 +355,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
           <select
             value={typeof value === 'string' ? value : ''}
             onChange={(event) => setCustomValue(field.key, event.target.value)}
+            className="ui-input"
             style={{ ...customInputStyle, cursor: 'pointer' }}
           >
             <option value="">Seleccioná una opción</option>
@@ -355,6 +393,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
                 event.target.value === '' ? '' : Number(event.target.value),
               )
             }
+            className="ui-input"
             style={customInputStyle}
           />
         ) : (
@@ -362,6 +401,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
             type="text"
             value={typeof value === 'string' ? value : ''}
             onChange={(event) => setCustomValue(field.key, event.target.value)}
+            className="ui-input"
             style={customInputStyle}
           />
         )}
@@ -374,33 +414,49 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
       {frequentPlates.length > 0 && (
         <div
           style={{
+            position: 'relative',
+            overflow: 'hidden',
             background: colors.accentBgSofter,
             border: `1px solid ${colors.accentBgBadge}`,
-            borderRadius: 14,
-            padding: 14,
+            borderRadius: 16,
+            padding: 16,
             display: 'flex',
             flexDirection: 'column',
-            gap: 12,
+            gap: 13,
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              top: -30,
+              right: -30,
+              width: 100,
+              height: 100,
+              borderRadius: '50%',
+              background: colors.accentBgSoft,
+              pointerEvents: 'none',
+            }}
+          />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 11, position: 'relative' }}>
             <span
               style={{
-                width: 30,
-                height: 30,
+                width: 34,
+                height: 34,
                 flexShrink: 0,
-                borderRadius: 9,
+                borderRadius: 10,
                 background: colors.accentBgSoft,
                 color: colors.accent,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                boxShadow: '0 2px 8px -2px rgba(217,164,65,0.4)',
               }}
             >
-              <Star size={15} strokeWidth={2} fill="currentColor" />
+              <Star size={16} strokeWidth={2} fill="currentColor" />
             </span>
             <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.3 }}>
+              <div style={{ fontSize: 14.5, fontWeight: 700, lineHeight: 1.3 }}>
                 ¿Es un vehículo frecuente?
               </div>
               <div style={{ fontSize: 12, color: colors.textMuted, lineHeight: 1.3 }}>
@@ -409,44 +465,17 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
             </div>
           </div>
 
-          <div style={{ position: 'relative' }}>
-            <Search
-              size={16}
-              strokeWidth={2}
-              style={{
-                position: 'absolute',
-                left: 13,
-                top: '50%',
-                transform: 'translateY(-50%)',
-                color: colors.textDim,
-                pointerEvents: 'none',
-              }}
-            />
-            <input
-              value={frequentQuery}
-              onChange={(event) => {
-                setFrequentQuery(event.target.value);
-                setSelectedFrequent(null);
-              }}
-              placeholder="Placa o nombre…"
-              className="ui-input"
-              style={{
-                width: '100%',
-                boxSizing: 'border-box',
-                border: `1px solid ${colors.border}`,
-                background: colors.bgInput,
-                borderRadius: 10,
-                padding: '12px 14px 12px 38px',
-                font: 'inherit',
-                fontSize: 16,
-                outline: 'none',
-                color: colors.textPrimary,
-              }}
-            />
-          </div>
+          <SearchField
+            value={frequentQuery}
+            onChange={(value) => {
+              setFrequentQuery(value);
+              setSelectedFrequent(null);
+            }}
+            placeholder="Placa o nombre…"
+          />
 
           {frequentQuery.trim() && !selectedFrequent && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div ref={matchesRef} style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
               {frequentMatches.length === 0 ? (
                 <div style={{ padding: 14, textAlign: 'center', fontSize: 12.5, color: colors.textDim }}>
                   No hay ningún frecuente con &quot;{frequentQuery.trim()}&quot;.
@@ -458,27 +487,38 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
                     <button
                       key={plate.placa}
                       onClick={() => setSelectedFrequent(plate)}
-                      className="ui-btn"
+                      className="ui-btn frequent-match"
                       style={{
                         width: '100%',
                         textAlign: 'left',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: 10,
+                        gap: 11,
                         border: `1px solid ${colors.border}`,
                         background: colors.bgCard,
-                        borderRadius: 10,
+                        borderRadius: 12,
                         padding: '11px 13px',
                         cursor: 'pointer',
                         font: 'inherit',
                       }}
                     >
-                      <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3 }}>
+                      <span
+                        style={{
+                          width: 34,
+                          height: 34,
+                          flexShrink: 0,
+                          borderRadius: 10,
+                          background: colors.bgInputAlt,
+                          color: colors.textMuted,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <VehicleIcon tipo={plate.tipo} size={16} />
+                      </span>
+                      <div style={{ minWidth: 0, flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                          <span style={{ color: colors.textDim, display: 'flex' }}>
-                            <VehicleIcon tipo={plate.tipo} />
-                          </span>
                           <span style={{ fontFamily: fonts.mono, fontWeight: 700, fontSize: 14.5 }}>
                             {plate.placa}
                           </span>
@@ -529,24 +569,45 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
               style={{
                 background: colors.bgCard,
                 border: `1px solid ${colors.border}`,
-                borderRadius: 12,
-                padding: 16,
+                borderRadius: 14,
+                overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 14,
+                animation: 'fadeUp .25s both',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-                  <span style={{ color: colors.textMuted, display: 'flex' }}>
-                    <VehicleIcon tipo={selectedFrequent.tipo} size={18} />
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 10,
+                  padding: '14px 16px',
+                  background: colors.bgInputAlt,
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+                  <span
+                    style={{
+                      width: 40,
+                      height: 40,
+                      flexShrink: 0,
+                      borderRadius: 11,
+                      background: tipoColors().bg,
+                      color: tipoColors().color,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <VehicleIcon tipo={selectedFrequent.tipo} size={19} />
                   </span>
-                  <span style={{ fontFamily: fonts.mono, fontWeight: 800, fontSize: 20, letterSpacing: '0.02em' }}>
-                    {selectedFrequent.placa}
-                  </span>
-                  <span style={{ fontSize: 12, color: colors.textDim }}>
-                    {tipoLabel(selectedFrequent.tipo)}
-                  </span>
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontFamily: fonts.mono, fontWeight: 800, fontSize: 19, letterSpacing: '0.02em', lineHeight: 1.2 }}>
+                      {selectedFrequent.placa}
+                    </div>
+                    <div style={{ fontSize: 11.5, color: colors.textDim }}>{tipoLabel(selectedFrequent.tipo)}</div>
+                  </div>
                 </div>
                 <span
                   style={{
@@ -555,11 +616,12 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
                     gap: 5,
                     fontSize: 11,
                     fontWeight: 700,
-                    padding: '4px 10px',
+                    padding: '5px 11px',
                     borderRadius: 999,
                     background: colors.accentBgSoft,
                     color: colors.accent,
                     whiteSpace: 'nowrap',
+                    flexShrink: 0,
                   }}
                 >
                   <Star size={11} strokeWidth={2.2} fill="currentColor" />
@@ -567,92 +629,120 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
                 </span>
               </div>
 
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 9,
-                  borderTop: `1px solid ${colors.border}`,
-                  paddingTop: 12,
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}>
-                  <span style={{ fontSize: 12.5, color: colors.textDim }}>Última vez</span>
+              <div style={{ display: 'flex', flexDirection: 'column', padding: '4px 16px' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: 10,
+                    padding: '10px 0',
+                    borderBottom: `1px dashed ${colors.border}`,
+                  }}
+                >
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 12.5, color: colors.textDim }}>
+                    <Calendar size={13} strokeWidth={2} />
+                    Última vez
+                  </span>
                   <span style={{ fontSize: 13, fontWeight: 600 }}>
                     {formatDate(selectedFrequent.lastEntradaTime)} ·{' '}
                     {formatTime(selectedFrequent.lastEntradaTime)}
                   </span>
                 </div>
-                {selectedExtraEntries.map(({ field, value }) => (
-                  <div key={field.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 10 }}>
+                {selectedExtraEntries.map(({ field, value }, i) => (
+                  <div
+                    key={field.id}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      gap: 10,
+                      padding: '10px 0',
+                      borderBottom:
+                        i === selectedExtraEntries.length - 1 ? 'none' : `1px dashed ${colors.border}`,
+                    }}
+                  >
                     <span style={{ fontSize: 12.5, color: colors.textDim }}>{field.label}</span>
-                    <span style={{ fontSize: 13, fontWeight: 600 }}>{formatExtraValue(value, field)}</span>
+                    <span style={{ fontSize: 13, fontWeight: 600, textAlign: 'right' }}>
+                      {formatExtraValue(value, field)}
+                    </span>
                   </div>
                 ))}
               </div>
 
-              {missingRequiredFields.length > 0 && (
-                <div style={{ fontSize: 12, color: colors.error, fontWeight: 600, lineHeight: 1.5 }}>
-                  Falta {missingRequiredFields.map((f) => f.label).join(', ')} — completalo con el
-                  formulario de abajo.
-                </div>
-              )}
+              <div style={{ padding: '10px 16px 16px', display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {missingRequiredFields.length > 0 && (
+                  <div style={{ fontSize: 12, color: colors.error, fontWeight: 600, lineHeight: 1.5 }}>
+                    Falta {missingRequiredFields.map((f) => f.label).join(', ')} — completalo con el
+                    formulario de abajo.
+                  </div>
+                )}
 
-              <div style={{ display: 'flex', gap: 9 }}>
-                <button
-                  onClick={() => setSelectedFrequent(null)}
-                  disabled={busy}
-                  className="ui-btn"
-                  style={{
-                    flex: 1,
-                    border: `1px solid ${colors.border}`,
-                    background: 'transparent',
-                    color: colors.textMuted,
-                    borderRadius: 10,
-                    padding: 13,
-                    fontSize: 13.5,
-                    fontWeight: 700,
-                    cursor: busy ? 'default' : 'pointer',
-                    font: 'inherit',
-                    opacity: busy ? 0.6 : 1,
-                  }}
-                >
-                  ← Buscar otra
-                </button>
-                <button
-                  onClick={() => registerFromFrequent(selectedFrequent)}
-                  disabled={busy || missingRequiredFields.length > 0}
-                  className="ui-btn"
-                  style={{
-                    flex: 2,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: 7,
-                    border: 'none',
-                    background:
-                      busy || missingRequiredFields.length > 0
-                        ? colors.accentDisabledBg
-                        : colors.accent,
-                    color: colors.accentContrast,
-                    borderRadius: 10,
-                    padding: 13,
-                    fontSize: 13.5,
-                    fontWeight: 800,
-                    cursor: busy || missingRequiredFields.length > 0 ? 'default' : 'pointer',
-                    font: 'inherit',
-                    opacity: busy || missingRequiredFields.length > 0 ? 0.7 : 1,
-                  }}
-                >
-                  {phase === 'submitting' ? (
-                    'Registrando…'
-                  ) : (
-                    <>
-                      <Check size={15} strokeWidth={2.5} />
-                      Registrar con estos datos
-                    </>
-                  )}
-                </button>
+                <div style={{ display: 'flex', gap: 9 }}>
+                  <button
+                    onClick={() => setSelectedFrequent(null)}
+                    disabled={busy}
+                    className="ui-btn"
+                    style={{
+                      flex: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 5,
+                      border: `1px solid ${colors.border}`,
+                      background: 'transparent',
+                      color: colors.textMuted,
+                      borderRadius: 11,
+                      padding: '13px 6px',
+                      fontSize: 12.5,
+                      fontWeight: 700,
+                      whiteSpace: 'nowrap',
+                      cursor: busy ? 'default' : 'pointer',
+                      font: 'inherit',
+                      opacity: busy ? 0.6 : 1,
+                    }}
+                  >
+                    <ArrowLeft size={13} strokeWidth={2.3} />
+                    Buscar otra
+                  </button>
+                  <button
+                    onClick={() => registerFromFrequent(selectedFrequent)}
+                    disabled={busy || missingRequiredFields.length > 0}
+                    className={busy || missingRequiredFields.length > 0 ? 'ui-btn' : 'ui-btn ui-cta'}
+                    style={{
+                      flex: 2,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 7,
+                      border: 'none',
+                      background:
+                        busy || missingRequiredFields.length > 0
+                          ? colors.accentDisabledBg
+                          : colors.accent,
+                      color: colors.accentContrast,
+                      borderRadius: 11,
+                      padding: 13,
+                      fontSize: 13.5,
+                      fontWeight: 800,
+                      cursor: busy || missingRequiredFields.length > 0 ? 'default' : 'pointer',
+                      font: 'inherit',
+                      opacity: busy || missingRequiredFields.length > 0 ? 0.7 : 1,
+                      boxShadow:
+                        busy || missingRequiredFields.length > 0
+                          ? 'none'
+                          : '0 4px 14px -3px rgba(217,164,65,0.5)',
+                    }}
+                  >
+                    {phase === 'submitting' ? (
+                      'Registrando…'
+                    ) : (
+                      <>
+                        <Check size={15} strokeWidth={2.5} />
+                        Registrar con estos datos
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -682,11 +772,11 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
         style={{
           background: colors.bgCard,
           border: `1px solid ${colors.border}`,
-          borderRadius: 14,
+          borderRadius: 16,
           padding: 18,
           display: 'flex',
           flexDirection: 'column',
-          gap: 16,
+          gap: 17,
         }}
       >
         {fields.map((field) => {
@@ -701,9 +791,11 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
             display: 'flex',
             alignItems: 'center',
             gap: 12,
-            border: `1px solid ${colors.border}`,
-            borderRadius: 12,
+            border: `1px solid ${markFrequent ? 'rgba(217,164,65,0.35)' : colors.border}`,
+            background: markFrequent ? colors.accentBgSofter : 'transparent',
+            borderRadius: 13,
             padding: '13px 14px',
+            transition: 'background .15s ease, border-color .15s ease',
           }}
         >
           <button
@@ -712,25 +804,30 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
             aria-pressed={markFrequent}
             aria-label="Marcar como frecuente"
             style={{
+              position: 'relative',
               flexShrink: 0,
               width: 40,
-              height: 22,
+              height: 23,
               borderRadius: 999,
               border: 'none',
-              padding: 2,
+              padding: 0,
               cursor: 'pointer',
               background: markFrequent ? colors.accent : colors.bgInputAlt,
-              display: 'flex',
-              justifyContent: markFrequent ? 'flex-end' : 'flex-start',
+              transition: 'background .18s ease',
             }}
           >
             <span
               style={{
+                position: 'absolute',
+                top: 2.5,
+                left: 2.5,
                 width: 18,
                 height: 18,
                 borderRadius: '50%',
                 background: '#fff',
-                display: 'block',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                transform: markFrequent ? 'translateX(17px)' : 'translateX(0)',
+                transition: 'transform .22s cubic-bezier(.4,0,.2,1)',
               }}
             />
           </button>
@@ -755,19 +852,31 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
         disabled={disabled}
         className={disabled ? undefined : 'ui-btn ui-cta'}
         style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 8,
           border: 'none',
           cursor: disabled ? 'default' : 'pointer',
-          padding: 15,
-          borderRadius: 12,
+          padding: 16,
+          borderRadius: 13,
           font: 'inherit',
           fontWeight: 700,
           fontSize: 15,
           background: disabled ? colors.accentDisabledBg : colors.accent,
           color: colors.accentContrast,
           opacity: disabled ? 0.6 : 1,
+          boxShadow: disabled ? 'none' : '0 6px 18px -4px rgba(217,164,65,0.55)',
         }}
       >
-        {phase === 'submitting' ? 'Registrando…' : 'Registrar entrada'}
+        {phase === 'submitting' ? (
+          'Registrando…'
+        ) : (
+          <>
+            <Check size={17} strokeWidth={2.5} />
+            Registrar entrada
+          </>
+        )}
       </button>
 
       {(phase === 'success' || phase === 'closing') &&

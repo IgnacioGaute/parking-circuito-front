@@ -1,7 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import gsap from 'gsap';
+import { ArrowLeft, ArrowRight, Check, X } from 'lucide-react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { prefersReducedMotion } from '@/lib/motion';
 import type { TourStep } from '@/lib/tour-steps';
 import { colors, fonts } from '@/styles/theme';
 
@@ -94,6 +97,29 @@ export function TourOverlay({ steps, stepIndex, onNext, onBack, onClose }: TourO
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
+  // Content crossfade on step change — title/description/dots used to just
+  // swap text instantly inside the same card shell. Skips its own first
+  // run (the card's own fadeUp entrance already covers first paint).
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const mountedRef = useRef(false);
+  useLayoutEffect(() => {
+    const el = bodyRef.current;
+    if (!el) return;
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      return;
+    }
+    if (prefersReducedMotion()) return;
+    const tween = gsap.fromTo(
+      el,
+      { opacity: 0, y: 8 },
+      { opacity: 1, y: 0, duration: 0.28, ease: 'power2.out' },
+    );
+    return () => {
+      tween.kill();
+    };
+  }, [stepIndex]);
+
   const isFirst = stepIndex === 0;
   const isLast = stepIndex === steps.length - 1;
 
@@ -127,74 +153,120 @@ export function TourOverlay({ steps, stepIndex, onNext, onBack, onClose }: TourO
         maxWidth: 'calc(100vw - 32px)',
         background: colors.bgCard,
         border: `1px solid ${colors.border}`,
-        borderRadius: 14,
+        borderRadius: 16,
         padding: 18,
         display: 'flex',
         flexDirection: 'column',
-        gap: 12,
-        boxShadow: `0 12px 32px ${colors.shadow}`,
-        animation: 'fadeUp .2s ease both',
+        gap: 14,
+        boxShadow: `0 16px 40px ${colors.shadow}`,
+        animation: 'fadeUp .25s ease both',
         pointerEvents: 'auto',
       }}
     >
-      <div style={{ fontFamily: fonts.mono, fontSize: 11.5, color: colors.textDim }}>
-        {stepIndex + 1} / {steps.length}
-      </div>
-      <div style={{ fontWeight: 700, fontSize: 16 }}>{step.title}</div>
-      <div style={{ fontSize: 13.5, color: colors.textMuted, lineHeight: 1.5 }}>
-        {step.description}
-      </div>
-      <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+          {steps.map((s, i) => (
+            <span
+              key={s.id}
+              aria-hidden
+              style={{
+                height: 5,
+                width: i === stepIndex ? 16 : 5,
+                borderRadius: 999,
+                background: i === stepIndex ? colors.accent : colors.border,
+                transition: 'width .2s ease, background-color .2s ease',
+              }}
+            />
+          ))}
+          <span style={{ fontFamily: fonts.mono, fontSize: 10.5, color: colors.textDim, marginLeft: 4 }}>
+            {stepIndex + 1}/{steps.length}
+          </span>
+        </div>
         <button
           onClick={onClose}
+          aria-label="Salir del recorrido"
+          title="Salir"
+          className="ui-btn ui-ghost"
           style={{
+            width: 28,
+            height: 28,
+            flexShrink: 0,
             border: `1px solid ${colors.border}`,
+            borderRadius: 8,
             background: 'transparent',
             color: colors.textMuted,
             cursor: 'pointer',
-            padding: '9px 14px',
-            borderRadius: 10,
-            font: 'inherit',
-            fontWeight: 600,
-            fontSize: 13,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
-          Salir
+          <X size={14} strokeWidth={2.2} />
         </button>
-        <div style={{ flex: 1 }} />
+      </div>
+
+      <div ref={bodyRef} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div style={{ fontWeight: 700, fontSize: 16 }}>{step.title}</div>
+        <div style={{ fontSize: 13.5, color: colors.textMuted, lineHeight: 1.5 }}>
+          {step.description}
+        </div>
+      </div>
+
+      <div style={{ display: 'flex', gap: 8 }}>
         {!isFirst && (
           <button
             onClick={onBack}
+            className="ui-btn"
             style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
               border: `1px solid ${colors.border}`,
               background: 'transparent',
               color: colors.textPrimary,
               cursor: 'pointer',
-              padding: '9px 14px',
-              borderRadius: 10,
+              padding: '10px 14px',
+              borderRadius: 11,
               font: 'inherit',
               fontWeight: 600,
               fontSize: 13,
             }}
           >
+            <ArrowLeft size={14} strokeWidth={2.3} />
             Atrás
           </button>
         )}
+        <div style={{ flex: 1 }} />
         <button
           onClick={isLast ? onClose : onNext}
+          className="ui-btn ui-cta"
           style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 7,
             border: 'none',
             background: colors.accent,
             color: colors.accentContrast,
             cursor: 'pointer',
-            padding: '9px 16px',
-            borderRadius: 10,
+            padding: '10px 16px',
+            borderRadius: 11,
             font: 'inherit',
             fontWeight: 700,
             fontSize: 13,
+            boxShadow: '0 4px 12px -3px rgba(217,164,65,0.5)',
           }}
         >
-          {isLast ? 'Finalizar' : 'Siguiente'}
+          {isLast ? (
+            <>
+              <Check size={14} strokeWidth={2.5} />
+              Finalizar
+            </>
+          ) : (
+            <>
+              Siguiente
+              <ArrowRight size={14} strokeWidth={2.3} />
+            </>
+          )}
         </button>
       </div>
     </div>
@@ -209,27 +281,48 @@ export function TourOverlay({ steps, stepIndex, onNext, onBack, onClose }: TourO
           inset: 0,
           zIndex: 900,
           background: rect ? 'transparent' : 'rgba(8,9,11,0.72)',
+          transition: 'background-color .25s ease',
         }}
       />
       {rect && (
-        <div
-          style={{
-            position: 'fixed',
-            top: rect.top - PAD,
-            left: rect.left - PAD,
-            width: rect.width + PAD * 2,
-            height: rect.height + PAD * 2,
-            borderRadius: 14,
-            boxShadow: `0 0 0 3px ${colors.accent}, 0 0 0 9999px rgba(8,9,11,0.72)`,
-            pointerEvents: 'none',
-            zIndex: 900,
-            transition: 'top .2s ease, left .2s ease, width .2s ease, height .2s ease',
-          }}
-        />
+        <>
+          <div
+            aria-hidden
+            style={{
+              position: 'fixed',
+              top: rect.top - PAD,
+              left: rect.left - PAD,
+              width: rect.width + PAD * 2,
+              height: rect.height + PAD * 2,
+              borderRadius: 14,
+              border: `2px solid ${colors.accent}`,
+              pointerEvents: 'none',
+              zIndex: 900,
+              opacity: 0.9,
+              animation: prefersReducedMotion() ? 'none' : 'tourPing 1.8s ease-out infinite',
+            }}
+          />
+          <div
+            style={{
+              position: 'fixed',
+              top: rect.top - PAD,
+              left: rect.left - PAD,
+              width: rect.width + PAD * 2,
+              height: rect.height + PAD * 2,
+              borderRadius: 14,
+              boxShadow: `0 0 0 3px ${colors.accent}, 0 0 0 9999px rgba(8,9,11,0.72)`,
+              pointerEvents: 'none',
+              zIndex: 900,
+              transition: 'top .2s ease, left .2s ease, width .2s ease, height .2s ease',
+            }}
+          />
+        </>
       )}
 
       {cardOffset ? (
-        <div style={{ position: 'fixed', zIndex: 901, ...cardOffset }}>{card}</div>
+        <div style={{ position: 'fixed', zIndex: 901, ...cardOffset, transition: 'top .2s ease, bottom .2s ease, left .2s ease' }}>
+          {card}
+        </div>
       ) : (
         <div
           style={{

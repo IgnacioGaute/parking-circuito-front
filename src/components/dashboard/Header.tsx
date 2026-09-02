@@ -80,13 +80,25 @@ export function Header({
   );
 
   const clockAndTheme = (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: colors.textMuted }}>
-        <Clock size={14} strokeWidth={2} />
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          color: colors.textMuted,
+          background: colors.bgInputAlt,
+          border: `1px solid ${colors.border}`,
+          borderRadius: 999,
+          padding: '6px 11px 6px 9px',
+        }}
+      >
+        <Clock size={13} strokeWidth={2} />
         <span
           style={{
             fontFamily: fonts.mono,
-            fontSize: 12.5,
+            fontSize: 12,
+            fontWeight: 600,
             fontVariantNumeric: 'tabular-nums',
           }}
         >
@@ -101,7 +113,18 @@ export function Header({
   );
 
   const operatorStatus = (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 7,
+        minWidth: 0,
+        background: colors.greenBgSoft,
+        border: `1px solid ${colors.border}`,
+        borderRadius: 999,
+        padding: '5px 11px 5px 9px',
+      }}
+    >
       <span
         style={{
           width: 7,
@@ -112,7 +135,17 @@ export function Header({
           animation: 'pulseDot 2s ease-in-out infinite',
         }}
       />
-      <span style={{ fontSize: 13, fontWeight: 600, color: colors.textPrimary, flexShrink: 0 }}>
+      <span
+        style={{
+          fontSize: 12.5,
+          fontWeight: 700,
+          color: colors.textPrimary,
+          flexShrink: 1,
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+        }}
+      >
         {operatorName}
       </span>
     </div>
@@ -152,8 +185,8 @@ export function Header({
         border: `1px solid ${colors.border}`,
         background: 'transparent',
         color: colors.textMuted,
-        borderRadius: 9,
-        padding: '6px 11px',
+        borderRadius: 999,
+        padding: '6px 12px',
         fontSize: 11.5,
         fontWeight: 700,
         cursor: 'pointer',
@@ -190,6 +223,28 @@ export function Header({
       tween.kill();
     };
   }, [activeTab]);
+
+  // First-paint choreography, mobile only: the header itself already fades
+  // up (CSS), but the brand mark gets its own little entrance on top of
+  // that — a spring pop instead of just riding the flat fade — and the
+  // status/clock row settles in a beat after it. Runs once on mount.
+  const iconRef = useRef<HTMLDivElement>(null);
+  const statusRowRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    if (isDesktop || prefersReducedMotion()) return;
+    const icon = iconRef.current;
+    const statusRow = statusRowRef.current;
+    if (!icon) return;
+    gsap.set(icon, { scale: 0.4, rotate: -18, opacity: 0 });
+    if (statusRow) gsap.set(statusRow, { opacity: 0, y: 6 });
+    const tl = gsap.timeline({ delay: 0.15 });
+    tl.to(icon, { scale: 1, rotate: 0, opacity: 1, duration: 0.55, ease: 'back.out(1.5)' }, 0);
+    if (statusRow) tl.to(statusRow, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, 0.3);
+    return () => {
+      tl.kill();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Desktop: the brand mark lives in the sidebar now, so this is a slim
   // single-row utility bar instead of the mobile two-row layout.
@@ -230,23 +285,47 @@ export function Header({
         background: colors.bgHeader,
         backdropFilter: 'blur(10px)',
         WebkitBackdropFilter: 'blur(10px)',
-        borderBottom: `1px solid ${colors.border}`,
         padding: '16px 20px 13px',
         display: 'flex',
         flexDirection: 'column',
-        gap: 11,
+        gap: 12,
         animation: 'fadeUp .45s both',
+        overflow: 'hidden',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 9, minWidth: 0 }}>
+      <div
+        aria-hidden
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(140px 90px at 14% -10%, var(--c-halo), transparent)',
+          pointerEvents: 'none',
+        }}
+      />
+      <div
+        aria-hidden
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 2,
+          background: `linear-gradient(90deg, ${colors.accent}, transparent 65%)`,
+          opacity: 0.5,
+        }}
+      />
+
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, position: 'relative' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
           <div
+            ref={iconRef}
             style={{
-              width: 26,
-              height: 26,
+              width: 30,
+              height: 30,
               flexShrink: 0,
-              borderRadius: 7,
+              borderRadius: 9,
               background: colors.accent,
+              boxShadow: '0 4px 14px -3px rgba(217,164,65,0.5)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -254,7 +333,7 @@ export function Header({
           >
             <div
               style={{
-                width: 15,
+                width: 16,
                 height: 3.5,
                 background: colors.accentContrast,
                 transform: 'rotate(-24deg)',
@@ -266,7 +345,7 @@ export function Header({
             <div
               style={{
                 fontWeight: 800,
-                fontSize: 17,
+                fontSize: 17.5,
                 lineHeight: 1.15,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -296,11 +375,11 @@ export function Header({
         {clockAndTheme}
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
-          {operatorStatus}
-          <span style={{ fontSize: 11.5, color: colors.textDim, flexShrink: 0 }}>· en turno</span>
-        </div>
+      <div
+        ref={statusRowRef}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, position: 'relative' }}
+      >
+        {operatorStatus}
         {mobileLogoutButton}
       </div>
     </header>

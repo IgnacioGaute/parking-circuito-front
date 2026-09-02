@@ -1,10 +1,10 @@
 'use client';
 
 import {
-  ChevronDown,
+  Calendar,
+  Clock as ClockIcon,
   FileDown,
   Pencil,
-  Search,
   SlidersHorizontal,
   Trash2,
   Undo2,
@@ -20,6 +20,8 @@ import {
   getHistoryAction,
   reopenRecordAction,
 } from '@/actions/parking-records.actions';
+import { SearchField } from '@/components/ui/SearchField';
+import { SelectField } from '@/components/ui/SelectField';
 import { readActiveOperator } from '@/lib/active-operator';
 import {
   dateKey,
@@ -308,84 +310,34 @@ export function HistorialTab({ isAdmin, onToast }: HistorialTabProps) {
       <div style={{ fontSize: 18, fontWeight: 700 }}>Historial</div>
 
       <div data-tour="historial-filtros" style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-        <div style={{ position: 'relative', flex: 2, minWidth: 160 }}>
-          <Search
-            size={16}
-            strokeWidth={2}
-            style={{
-              position: 'absolute',
-              left: 13,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              color: colors.textDim,
-              pointerEvents: 'none',
-            }}
-          />
-          <input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar por placa"
-            style={{
-              width: '100%',
-              boxSizing: 'border-box',
-              border: `1px solid ${colors.border}`,
-              background: colors.bgInput,
-              borderRadius: 12,
-              padding: '12px 14px 12px 38px',
-              font: 'inherit',
-              fontSize: 16,
-              outline: 'none',
-              color: colors.textPrimary,
-            }}
-          />
+        <div style={{ flex: 2, minWidth: 160 }}>
+          <SearchField value={query} onChange={setQuery} placeholder="Buscar por placa" />
         </div>
-        <div style={{ position: 'relative', flex: 1, minWidth: 150 }}>
-          <select
+        <div style={{ flex: 1, minWidth: 150 }}>
+          <SelectField
             value={tipoFilter}
-            onChange={(event) => setTipoFilter(event.target.value as VehicleType | 'todos')}
-            style={{
-              width: '100%',
-              boxSizing: 'border-box',
-              appearance: 'none',
-              border: `1px solid ${colors.border}`,
-              background: colors.bgInput,
-              borderRadius: 12,
-              padding: '12px 36px 12px 14px',
-              font: 'inherit',
-              fontSize: 16,
-              fontWeight: 600,
-              color: colors.textPrimary,
-              cursor: 'pointer',
-            }}
-          >
-            <option value="todos">Todos los tipos</option>
-            <option value="auto">Auto</option>
-            <option value="moto">Moto</option>
-          </select>
-          <ChevronDown
-            size={16}
-            strokeWidth={2}
-            style={{
-              position: 'absolute',
-              right: 12,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              color: colors.textMuted,
-              pointerEvents: 'none',
-            }}
+            onChange={(value) => setTipoFilter(value as VehicleType | 'todos')}
+            ariaLabel="Filtrar por tipo de vehículo"
+            active={tipoFilter !== 'todos'}
+            options={[
+              { value: 'todos', label: 'Todos' },
+              { value: 'auto', label: 'Auto' },
+              { value: 'moto', label: 'Moto' },
+            ]}
           />
         </div>
         <button
           onClick={() => setShowFilters(true)}
+          className="ui-btn"
           style={{
             position: 'relative',
             flexShrink: 0,
-            width: 46,
-            border: `1px solid ${activeTimeFilters > 0 ? colors.accent : colors.border}`,
-            background: colors.bgInput,
+            width: 48,
+            border: `1px solid ${activeTimeFilters > 0 ? 'rgba(217,164,65,0.45)' : colors.border}`,
+            background: activeTimeFilters > 0 ? colors.accentBgSofter : colors.bgInput,
             color: activeTimeFilters > 0 ? colors.accent : colors.textPrimary,
             cursor: 'pointer',
-            borderRadius: 12,
+            borderRadius: 13,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -727,13 +679,34 @@ const dateTimeInputStyle: React.CSSProperties = {
   boxSizing: 'border-box',
   border: `1px solid ${colors.border}`,
   background: colors.bgInput,
-  borderRadius: 10,
-  padding: '11px 12px',
+  borderRadius: 11,
+  padding: '12px 13px',
   font: 'inherit',
   fontSize: 16,
   color: colors.textPrimary,
   outline: 'none',
 };
+
+const sectionHeadingStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 7,
+  fontSize: 13,
+  fontWeight: 700,
+  color: colors.textPrimary,
+  marginBottom: 10,
+};
+
+function daysAgoKey(days: number): string {
+  return dateKey(new Date(Date.now() - days * 86_400_000));
+}
+
+const DATE_PRESETS: { label: string; from: () => string; to: () => string }[] = [
+  { label: 'Hoy', from: () => daysAgoKey(0), to: () => daysAgoKey(0) },
+  { label: 'Ayer', from: () => daysAgoKey(1), to: () => daysAgoKey(1) },
+  { label: '7 días', from: () => daysAgoKey(6), to: () => daysAgoKey(0) },
+  { label: '30 días', from: () => daysAgoKey(29), to: () => daysAgoKey(0) },
+];
 
 function DateTimeFiltersSheet({
   dateFrom,
@@ -773,6 +746,7 @@ function DateTimeFiltersSheet({
           left: 0,
           right: 0,
           bottom: 0,
+          maxHeight: '85vh',
           zIndex: 700,
           background: colors.bg,
           borderRadius: '24px 24px 0 0',
@@ -821,13 +795,45 @@ function DateTimeFiltersSheet({
         <div
           style={{
             padding: '4px 20px 20px',
+            overflowY: 'auto',
             display: 'flex',
             flexDirection: 'column',
-            gap: 18,
+            gap: 20,
           }}
         >
           <div>
-            <div style={{ ...fieldLabelStyle, marginBottom: 8 }}>Rango de fechas</div>
+            <div style={sectionHeadingStyle}>
+              <Calendar size={15} strokeWidth={2} style={{ color: colors.accent }} />
+              Rango de fechas
+            </div>
+            <div style={{ display: 'flex', gap: 7, flexWrap: 'wrap', marginBottom: 12 }}>
+              {DATE_PRESETS.map((preset) => {
+                const active = dateFrom === preset.from() && dateTo === preset.to();
+                return (
+                  <button
+                    key={preset.label}
+                    onClick={() => {
+                      onDateFromChange(preset.from());
+                      onDateToChange(preset.to());
+                    }}
+                    className="ui-btn"
+                    style={{
+                      border: `1px solid ${active ? 'rgba(217,164,65,0.45)' : colors.border}`,
+                      background: active ? colors.accentBgSoft : colors.bgInputAlt,
+                      color: active ? colors.accent : colors.textMuted,
+                      cursor: 'pointer',
+                      padding: '7px 13px',
+                      borderRadius: 999,
+                      font: 'inherit',
+                      fontWeight: 700,
+                      fontSize: 12.5,
+                    }}
+                  >
+                    {preset.label}
+                  </button>
+                );
+              })}
+            </div>
             <div style={{ display: 'flex', gap: 10 }}>
               <div style={{ flex: 1 }}>
                 <label style={fieldLabelStyle} htmlFor="historial-fecha-desde">
@@ -839,6 +845,7 @@ function DateTimeFiltersSheet({
                   value={dateFrom}
                   max={dateTo || undefined}
                   onChange={(event) => onDateFromChange(event.target.value)}
+                  className="ui-input"
                   style={dateTimeInputStyle}
                 />
               </div>
@@ -852,6 +859,7 @@ function DateTimeFiltersSheet({
                   value={dateTo}
                   min={dateFrom || undefined}
                   onChange={(event) => onDateToChange(event.target.value)}
+                  className="ui-input"
                   style={dateTimeInputStyle}
                 />
               </div>
@@ -859,7 +867,10 @@ function DateTimeFiltersSheet({
           </div>
 
           <div>
-            <div style={{ ...fieldLabelStyle, marginBottom: 8 }}>Horario (opcional)</div>
+            <div style={sectionHeadingStyle}>
+              <ClockIcon size={15} strokeWidth={2} style={{ color: colors.accent }} />
+              Horario <span style={{ color: colors.textDim, fontWeight: 600 }}>(opcional)</span>
+            </div>
             <div style={{ display: 'flex', gap: 10 }}>
               <div style={{ flex: 1 }}>
                 <label style={fieldLabelStyle} htmlFor="historial-hora-desde">
@@ -870,6 +881,7 @@ function DateTimeFiltersSheet({
                   type="time"
                   value={timeFrom}
                   onChange={(event) => onTimeFromChange(event.target.value)}
+                  className="ui-input"
                   style={dateTimeInputStyle}
                 />
               </div>
@@ -882,11 +894,12 @@ function DateTimeFiltersSheet({
                   type="time"
                   value={timeTo}
                   onChange={(event) => onTimeToChange(event.target.value)}
+                  className="ui-input"
                   style={dateTimeInputStyle}
                 />
               </div>
             </div>
-            <div style={{ fontSize: 11.5, color: colors.textDim, marginTop: 8 }}>
+            <div style={{ fontSize: 11.5, color: colors.textDim, marginTop: 9, lineHeight: 1.5 }}>
               Filtra por la hora del día, sin importar la fecha. Si &quot;Desde&quot; es mayor
               que &quot;Hasta&quot;, se interpreta como un rango que cruza la medianoche.
             </div>
