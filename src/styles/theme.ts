@@ -27,6 +27,8 @@ export const colors = {
   error: 'var(--c-error)',
   errorBgSoft: 'var(--c-error-bg-soft)',
   shadow: 'var(--c-shadow)',
+  errorRingStart: 'var(--c-error-ring-start)',
+  errorRingEnd: 'var(--c-error-ring-end)',
 } as const;
 
 export const fonts = {

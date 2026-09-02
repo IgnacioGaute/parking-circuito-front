@@ -1,29 +1,32 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import gsap from 'gsap';
+import { Bell, Check } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { getSettingsAction, updateSettingsAction } from '@/actions/settings.actions';
+import { formatDuration } from '@/lib/format';
+import { prefersReducedMotion } from '@/lib/motion';
 import { colors } from '@/styles/theme';
 
 interface SettingsAdminPanelProps {
   onToast: (message: string) => void;
 }
 
-const inputStyle: React.CSSProperties = {
-  border: `1px solid ${colors.border}`,
-  background: colors.bgInput,
-  borderRadius: 10,
-  padding: '11px 14px',
-  font: 'inherit',
-  fontSize: 16,
-  color: colors.textPrimary,
-  outline: 'none',
-};
+const MIN_MINUTES = 1;
+const MAX_MINUTES = 1440;
+
+// Common thresholds an operator would actually pick, so setting this up is
+// usually one tap instead of typing a number.
+const PRESETS = [15, 30, 60, 90, 120, 180];
 
 export function SettingsAdminPanel({ onToast }: SettingsAdminPanelProps) {
   const [loading, setLoading] = useState(true);
   const [minutes, setMinutes] = useState('60');
   const [saving, setSaving] = useState(false);
+  const [justSaved, setJustSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const saveBtnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     getSettingsAction()
@@ -35,16 +38,35 @@ export function SettingsAdminPanel({ onToast }: SettingsAdminPanelProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (loading || prefersReducedMotion() || !cardRef.current) return;
+    gsap.fromTo(
+      cardRef.current,
+      { opacity: 0, y: 12 },
+      { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' },
+    );
+  }, [loading]);
+
   const parsed = Number(minutes);
-  const valid = Number.isInteger(parsed) && parsed >= 1 && parsed <= 1440;
+  const valid = Number.isInteger(parsed) && parsed >= MIN_MINUTES && parsed <= MAX_MINUTES;
 
   const handleSave = async () => {
     if (!valid) return;
     setSaving(true);
     setError(null);
+    setJustSaved(false);
     try {
       await updateSettingsAction({ alertThresholdMinutes: parsed });
       onToast('Configuración guardada');
+      setJustSaved(true);
+      if (!prefersReducedMotion() && saveBtnRef.current) {
+        gsap.fromTo(
+          saveBtnRef.current,
+          { scale: 1 },
+          { keyframes: { scale: [1.05, 1] }, duration: 0.4, ease: 'back.out(2)' },
+        );
+      }
+      setTimeout(() => setJustSaved(false), 1800);
     } catch {
       setError('No se pudo guardar la configuración');
     } finally {
@@ -54,11 +76,28 @@ export function SettingsAdminPanel({ onToast }: SettingsAdminPanelProps) {
 
   return (
     <div data-tour="admin-alertas" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-      <div>
-        <div style={{ fontSize: 16, fontWeight: 700 }}>Alerta de tiempo dentro</div>
-        <div style={{ fontSize: 12.5, color: colors.textDim, marginTop: 4 }}>
-          Un vehículo se marca &quot;Atención&quot; en la pestaña Dentro cuando lleva más
-          de este tiempo sin registrar salida.
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <span
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 11,
+            background: colors.errorBgSoft,
+            color: colors.error,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+          }}
+        >
+          <Bell size={19} strokeWidth={2} />
+        </span>
+        <div>
+          <div style={{ fontSize: 16, fontWeight: 700 }}>Alerta de tiempo dentro</div>
+          <div style={{ fontSize: 12.5, color: colors.textDim, marginTop: 2 }}>
+            Un vehículo se marca &quot;Atención&quot; en la pestaña Dentro cuando lleva más de
+            este tiempo sin registrar salida.
+          </div>
         </div>
       </div>
 
@@ -66,56 +105,144 @@ export function SettingsAdminPanel({ onToast }: SettingsAdminPanelProps) {
         <div style={{ color: colors.textDim, fontSize: 13 }}>Cargando…</div>
       ) : (
         <div
+          ref={cardRef}
           style={{
             background: colors.bgCard,
             border: `1px solid ${colors.border}`,
-            borderRadius: 14,
-            padding: 18,
+            borderRadius: 16,
+            padding: 20,
             display: 'flex',
-            gap: 10,
-            flexWrap: 'wrap',
-            alignItems: 'center',
+            flexDirection: 'column',
+            gap: 18,
           }}
         >
-          <label style={{ display: 'flex', flexDirection: 'column', gap: 7, flex: 1, minWidth: 160 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
             <span style={{ fontSize: 12, fontWeight: 600, color: colors.textMuted }}>
-              Minutos dentro antes de la alerta
+              Presets rápidos
             </span>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {PRESETS.map((preset) => {
+                const active = parsed === preset;
+                return (
+                  <button
+                    key={preset}
+                    type="button"
+                    onClick={() => setMinutes(String(preset))}
+                    className="ui-btn"
+                    style={{
+                      border: `1px solid ${active ? colors.accent : colors.border}`,
+                      background: active ? colors.accentBgSoft : 'transparent',
+                      color: active ? colors.accentText : colors.textMuted,
+                      cursor: 'pointer',
+                      padding: '7px 14px',
+                      borderRadius: 999,
+                      font: 'inherit',
+                      fontWeight: 700,
+                      fontSize: 12.5,
+                    }}
+                  >
+                    {formatDuration(preset * 60_000)}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 8 }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: colors.textMuted }}>
+                Minutos dentro antes de la alerta
+              </span>
+              <input
+                type="number"
+                min={MIN_MINUTES}
+                max={MAX_MINUTES}
+                value={minutes}
+                onChange={(event) => setMinutes(event.target.value)}
+                style={{
+                  width: 84,
+                  border: `1px solid ${colors.border}`,
+                  background: colors.bgInput,
+                  borderRadius: 10,
+                  padding: '8px 10px',
+                  font: 'inherit',
+                  fontSize: 15,
+                  fontWeight: 700,
+                  color: colors.textPrimary,
+                  outline: 'none',
+                  textAlign: 'center',
+                }}
+                className="ui-input"
+              />
+            </div>
             <input
-              type="number"
-              min={1}
-              max={1440}
-              value={minutes}
+              type="range"
+              min={MIN_MINUTES}
+              max={240}
+              value={Number.isFinite(parsed) ? Math.min(parsed, 240) : MIN_MINUTES}
               onChange={(event) => setMinutes(event.target.value)}
-              style={inputStyle}
+              style={{ width: '100%', accentColor: colors.accent }}
             />
-          </label>
-          <button
-            onClick={handleSave}
-            disabled={saving || !valid}
+          </div>
+
+          <div
             style={{
-              border: 'none',
-              background: !valid ? colors.accentDisabledBg : colors.accent,
-              color: colors.accentContrast,
-              cursor: valid ? 'pointer' : 'default',
-              padding: '11px 20px',
-              borderRadius: 10,
-              font: 'inherit',
-              fontWeight: 700,
-              fontSize: 14,
-              opacity: saving ? 0.7 : 1,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 10,
+              background: colors.accentBgSofter,
+              border: `1px dashed ${colors.borderDashed}`,
+              borderRadius: 12,
+              padding: '11px 14px',
+              fontSize: 12.5,
+              color: colors.textMuted,
             }}
           >
-            {saving ? 'Guardando…' : 'Guardar'}
-          </button>
-          {!valid && (
-            <div style={{ width: '100%', color: colors.error, fontSize: 12.5 }}>
-              Ingresá un número entero entre 1 y 1440 minutos.
-            </div>
-          )}
-          {error && (
-            <div style={{ width: '100%', color: colors.error, fontSize: 12.5 }}>{error}</div>
-          )}
+            {valid ? (
+              <span>
+                Ejemplo: un vehículo que entra a las <b style={{ color: colors.textPrimary }}>14:00</b>{' '}
+                se marca &quot;Atención&quot; a las{' '}
+                <b style={{ color: colors.textPrimary }}>
+                  {new Date(new Date(2000, 0, 1, 14, 0).getTime() + parsed * 60_000).toLocaleTimeString(
+                    'es',
+                    { hour: '2-digit', minute: '2-digit' },
+                  )}
+                </b>{' '}
+                ({formatDuration(parsed * 60_000)} después).
+              </span>
+            ) : (
+              <span>Ingresá un número entero entre {MIN_MINUTES} y {MAX_MINUTES} minutos.</span>
+            )}
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button
+              ref={saveBtnRef}
+              type="button"
+              onClick={handleSave}
+              disabled={saving || !valid}
+              className="ui-btn ui-cta"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                border: 'none',
+                background: !valid ? colors.accentDisabledBg : justSaved ? colors.green : colors.accent,
+                color: colors.accentContrast,
+                cursor: valid ? 'pointer' : 'default',
+                padding: '11px 20px',
+                borderRadius: 10,
+                font: 'inherit',
+                fontWeight: 700,
+                fontSize: 14,
+                opacity: saving ? 0.7 : 1,
+              }}
+            >
+              {justSaved && <Check size={16} strokeWidth={2.5} />}
+              {saving ? 'Guardando…' : justSaved ? 'Guardado' : 'Guardar'}
+            </button>
+            {error && <div style={{ color: colors.error, fontSize: 12.5 }}>{error}</div>}
+          </div>
         </div>
       )}
     </div>
