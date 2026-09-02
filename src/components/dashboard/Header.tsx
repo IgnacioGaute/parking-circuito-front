@@ -24,6 +24,7 @@ const TAB_COPY: Record<TabKey, [string, string]> = {
   dentro: ['Dentro', ''],
   frecuentes: ['Frecuentes', 'Vehículos que vuelven seguido'],
   historial: ['Historial', 'Movimientos registrados'],
+  estadisticas: ['Estadísticas', 'Actividad, ocupación y tendencias'],
   usuarios: ['Usuarios', 'Operadores del sistema'],
   admin: ['Administración', 'Operadores y campos del formulario'],
 };

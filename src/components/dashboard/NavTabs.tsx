@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  BarChart3,
   Car,
   List,
   MoreHorizontal,
@@ -16,7 +17,14 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { colors, fonts } from '@/styles/theme';
 
-export type TabKey = 'registrar' | 'dentro' | 'frecuentes' | 'historial' | 'usuarios' | 'admin';
+export type TabKey =
+  | 'registrar'
+  | 'dentro'
+  | 'frecuentes'
+  | 'historial'
+  | 'estadisticas'
+  | 'usuarios'
+  | 'admin';
 
 interface TabDef {
   key: TabKey;
@@ -60,6 +68,7 @@ export function NavTabs({
     { key: 'dentro', label: 'Dentro', Icon: Car, badge: insideCount || null },
     { key: 'frecuentes', label: 'Frecuentes', Icon: Star, badge: null },
     { key: 'historial', label: 'Historial', Icon: List, badge: null },
+    { key: 'estadisticas', label: 'Estadísticas', Icon: BarChart3, badge: null },
     { key: 'usuarios', label: 'Usuarios', Icon: Users, badge: null },
     ...(isAdmin
       ? [{ key: 'admin' as const, label: 'Admin', Icon: Settings, badge: null }]
@@ -325,7 +334,7 @@ const MOBILE_PILLS: MobilePillDef[] = [
 
 function MobileNavTabs({ activeTab, insideCount, isAdmin, onSelect }: MobileNavTabsProps) {
   const [moreOpen, setMoreOpen] = useState(false);
-  const inMore = activeTab === 'usuarios' || activeTab === 'admin';
+  const inMore = activeTab === 'estadisticas' || activeTab === 'usuarios' || activeTab === 'admin';
 
   useEffect(() => {
     if (!moreOpen) return;
@@ -369,7 +378,9 @@ function MobileNavTabs({ activeTab, insideCount, isAdmin, onSelect }: MobileNavT
               ? 'Admin'
               : activeTab === 'usuarios'
                 ? 'Usuarios'
-                : 'Más'
+                : activeTab === 'estadisticas'
+                  ? 'Estadísticas'
+                  : 'Más'
             : pill.label;
 
           return (
@@ -490,6 +501,13 @@ function MobileNavTabs({ activeTab, insideCount, isAdmin, onSelect }: MobileNavT
                 Gestión
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+                <MoreSheetRow
+                  active={activeTab === 'estadisticas'}
+                  Icon={BarChart3}
+                  title="Estadísticas"
+                  subtitle="Actividad, ocupación y tendencias"
+                  onClick={() => go('estadisticas')}
+                />
                 <MoreSheetRow
                   active={activeTab === 'usuarios'}
                   Icon={Users}

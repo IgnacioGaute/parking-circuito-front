@@ -59,6 +59,14 @@ export const TOUR_STEPS: TourStep[] = [
       'Los registros se agrupan por día. Si hay muchos, tocá "Cargar más" para ir viendo el resto sin sobrecargar la pantalla.',
   },
   {
+    id: 'estadisticas',
+    tab: 'estadisticas',
+    target: '[data-tour="estadisticas-filtros"]',
+    title: 'Estadísticas',
+    description:
+      'Actividad, ocupación y tendencias del estacionamiento con gráficos animados. Filtrá por rango de fechas, tipo de vehículo u operador — todos los gráficos se actualizan juntos.',
+  },
+  {
     id: 'usuarios',
     tab: 'usuarios',
     target: '[data-tour="usuarios-list"]',
