@@ -185,8 +185,11 @@ export function EstadisticasTab() {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-          gap: 12,
+          // min(Npx, 100%) instead of a bare px floor — otherwise a floor
+          // wider than the viewport (this is a full-bleed mobile screen,
+          // no sidebar) forces the grid itself past the viewport edge.
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(150px, 100%), 1fr))',
+          gap: 10,
         }}
       >
         <div className="stats-kpi">
@@ -209,17 +212,19 @@ export function EstadisticasTab() {
         </div>
       </div>
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-          gap: 16,
-        }}
-      >
+      {/*
+        Full-width charts sit as plain block-level cards rather than
+        grid-column-span items: on an auto-fit grid, a spanning item forces
+        a second track into existence even when the container is only wide
+        enough for one (mobile, but also a narrower desktop sidebar width) —
+        the forced track gets silently clipped by the page's overflow-x:
+        clip instead of wrapping. Only the two similarly-sized cards below
+        (donut + ranked list) share an auto-fit row, where nothing spans.
+      */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
         <ChartCard
           title="Tendencia diaria"
           subtitle="Tickets registrados por día en el rango seleccionado"
-          span={2}
           tableHeaders={['Fecha', 'Tickets']}
           tableRows={dayBuckets.map((d) => [d.label, d.total])}
         >
@@ -234,7 +239,6 @@ export function EstadisticasTab() {
         <ChartCard
           title="Actividad por hora"
           subtitle="Entradas y salidas agregadas por franja horaria"
-          span={2}
           tableHeaders={['Hora', 'Entradas', 'Salidas']}
           tableRows={hourBuckets.map((h) => [`${h.hour}h`, h.entradas, h.salidas])}
         >
@@ -249,46 +253,53 @@ export function EstadisticasTab() {
           />
         </ChartCard>
 
-        <ChartCard
-          title="Mezcla de vehículos"
-          subtitle="Auto vs. moto en el rango"
-          tableHeaders={['Tipo', 'Tickets', '%']}
-          tableRows={vehicleMix.map((m) => [
-            tipoLabel(m.tipo),
-            m.count,
-            `${scoped.length ? Math.round((m.count / scoped.length) * 100) : 0}%`,
-          ])}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
+            gap: 16,
+          }}
         >
-          <DonutChart
-            ariaLabel="Mezcla de tipos de vehículo"
-            centerLabel="tickets"
-            slices={vehicleMix.map((m) => ({
-              key: m.tipo,
-              label: tipoLabel(m.tipo),
-              value: m.count,
-              color: m.tipo === 'auto' ? colors.accent : colors.green,
-            }))}
-          />
-        </ChartCard>
+          <ChartCard
+            title="Mezcla de vehículos"
+            subtitle="Auto vs. moto en el rango"
+            tableHeaders={['Tipo', 'Tickets', '%']}
+            tableRows={vehicleMix.map((m) => [
+              tipoLabel(m.tipo),
+              m.count,
+              `${scoped.length ? Math.round((m.count / scoped.length) * 100) : 0}%`,
+            ])}
+          >
+            <DonutChart
+              ariaLabel="Mezcla de tipos de vehículo"
+              centerLabel="tickets"
+              slices={vehicleMix.map((m) => ({
+                key: m.tipo,
+                label: tipoLabel(m.tipo),
+                value: m.count,
+                color: m.tipo === 'auto' ? colors.accent : colors.green,
+              }))}
+            />
+          </ChartCard>
 
-        <ChartCard
-          title="Patentes más frecuentes"
-          subtitle="Placas con más de una visita en el rango"
-          tableHeaders={['Patente', 'Visitas']}
-          tableRows={topPlates.map((p) => [p.placa, p.visits])}
-        >
-          <RankedBarChart
-            ariaLabel="Patentes más frecuentes"
-            rows={topPlates.map((p) => ({ key: p.placa, label: p.placa, value: p.visits }))}
-            valueFormat={(n) => `${n} vis.`}
-            emptyMessage="Sin patentes recurrentes en este rango."
-          />
-        </ChartCard>
+          <ChartCard
+            title="Patentes más frecuentes"
+            subtitle="Placas con más de una visita en el rango"
+            tableHeaders={['Patente', 'Visitas']}
+            tableRows={topPlates.map((p) => [p.placa, p.visits])}
+          >
+            <RankedBarChart
+              ariaLabel="Patentes más frecuentes"
+              rows={topPlates.map((p) => ({ key: p.placa, label: p.placa, value: p.visits }))}
+              valueFormat={(n) => `${n} vis.`}
+              emptyMessage="Sin patentes recurrentes en este rango."
+            />
+          </ChartCard>
+        </div>
 
         <ChartCard
           title="Actividad por operador"
           subtitle="Entradas registradas por cada operador"
-          span={2}
           tableHeaders={['Operador', 'Tickets registrados']}
           tableRows={operatorActivity.map((o) => [o.operator.name, o.count])}
         >

@@ -23,7 +23,7 @@ interface MultiLineChartProps {
   ariaLabel: string;
 }
 
-const VW = 720;
+const DEFAULT_VW = 640;
 const PAD = { top: 14, right: 14, bottom: 26, left: 34 };
 
 function niceCeil(value: number): number {
@@ -48,7 +48,26 @@ export function MultiLineChart({
   labelEvery = 1,
   ariaLabel,
 }: MultiLineChartProps) {
-  const plotWidth = VW - PAD.left - PAD.right;
+  // The viewBox width tracks the actual rendered pixel width (measured via
+  // ResizeObserver) instead of a fixed abstract unit count — with a fixed
+  // viewBox, 1 SVG unit stops equalling 1 CSS px on any container narrower
+  // than the design width, and every <text> element shrinks along with it
+  // (illegible axis labels on a ~320px mobile card). Matching the two keeps
+  // font sizes literal regardless of how narrow the card is.
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const [vw, setVw] = useState(DEFAULT_VW);
+  useLayoutEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver((entries) => {
+      const width = entries[0]?.contentRect.width;
+      if (width && width > 0) setVw(Math.round(width));
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const plotWidth = vw - PAD.left - PAD.right;
   const plotHeight = height - PAD.top - PAD.bottom;
 
   const maxValue = useMemo(() => {
@@ -66,13 +85,13 @@ export function MultiLineChart({
         d: s.values.map((v, i) => `${i === 0 ? 'M' : 'L'} ${xAt(i)} ${yAt(v)}`).join(' '),
       })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [series, categories.length, maxValue],
+    [series, categories.length, maxValue, vw],
   );
 
   const pathRefs = useRef<Record<string, SVGPathElement | null>>({});
   const dotRefs = useRef<Record<string, SVGCircleElement | null>>({});
   const areaRefs = useRef<Record<string, SVGPathElement | null>>({});
-  const dataSignature = `${categories.join(',')}|${series.map((s) => `${s.key}:${s.values.join(',')}`).join('|')}`;
+  const dataSignature = `${vw}|${categories.join(',')}|${series.map((s) => `${s.key}:${s.values.join(',')}`).join('|')}`;
 
   useLayoutEffect(() => {
     const reduced = prefersReducedMotion();
@@ -112,7 +131,7 @@ export function MultiLineChart({
     const svg = svgRef.current;
     if (!svg || categories.length === 0) return;
     const rect = svg.getBoundingClientRect();
-    const relX = ((event.clientX - rect.left) / rect.width) * VW;
+    const relX = ((event.clientX - rect.left) / rect.width) * vw;
     const clamped = Math.min(Math.max(relX, PAD.left), PAD.left + plotWidth);
     const idx = Math.round(((clamped - PAD.left) / plotWidth) * (categories.length - 1));
     setHoverIndex(Math.min(Math.max(idx, 0), categories.length - 1));
@@ -126,7 +145,7 @@ export function MultiLineChart({
       : series.map((s) => ({ label: s.label, value: valueFormat(s.values[hoverIndex] ?? 0), color: s.color }));
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div ref={wrapperRef} style={{ position: 'relative' }}>
       {series.length > 1 && (
         <div style={{ display: 'flex', gap: 14, marginBottom: 10, flexWrap: 'wrap' }}>
           {series.map((s) => (
@@ -139,7 +158,7 @@ export function MultiLineChart({
       )}
       <svg
         ref={svgRef}
-        viewBox={`0 0 ${VW} ${height}`}
+        viewBox={`0 0 ${vw} ${height}`}
         style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}
         role="img"
         aria-label={ariaLabel}
@@ -150,7 +169,7 @@ export function MultiLineChart({
             <g key={tick + i}>
               <line
                 x1={PAD.left}
-                x2={VW - PAD.right}
+                x2={vw - PAD.right}
                 y1={y}
                 y2={y}
                 stroke={colors.border}
@@ -256,7 +275,7 @@ export function MultiLineChart({
 
       {hoverIndex !== null && (
         <ChartTooltip
-          x={(xAt(hoverIndex) / VW) * 100}
+          x={(xAt(hoverIndex) / vw) * 100}
           y={(yAt(Math.max(...series.map((s) => s.values[hoverIndex] ?? 0))) / height) * 100}
           title={categories[hoverIndex]}
           rows={tooltipRows}

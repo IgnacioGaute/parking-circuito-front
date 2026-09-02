@@ -7,7 +7,6 @@ import { colors, fonts } from '@/styles/theme';
 interface ChartCardProps {
   title: string;
   subtitle?: string;
-  span?: 1 | 2;
   children: ReactNode;
   tableHeaders?: string[];
   tableRows?: (string | number)[][];
@@ -15,14 +14,13 @@ interface ChartCardProps {
 
 // Card chrome shared by every chart, plus the plain-table view dataviz
 // requires as the non-visual fallback for every value a chart shows.
-export function ChartCard({ title, subtitle, span = 1, children, tableHeaders, tableRows }: ChartCardProps) {
+export function ChartCard({ title, subtitle, children, tableHeaders, tableRows }: ChartCardProps) {
   const [showTable, setShowTable] = useState(false);
   const hasTable = !!tableHeaders && !!tableRows && tableRows.length > 0;
 
   return (
     <div
       style={{
-        gridColumn: span === 2 ? 'span 2' : 'span 1',
         background: colors.bgCard,
         border: `1px solid ${colors.border}`,
         borderRadius: 16,
