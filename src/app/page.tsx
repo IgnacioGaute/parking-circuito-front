@@ -27,6 +27,7 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<TabKey>('registrar');
   const [activeOperator, setActiveOperator] = useState<Operator | null>(null);
   const [insideCount, setInsideCount] = useState(0);
+  const [overdueCount, setOverdueCount] = useState(0);
   const [tourStep, setTourStep] = useState<number | null>(null);
   const [tourAdminSection, setTourAdminSection] = useState<'operadores' | 'campos' | undefined>(
     undefined,
@@ -100,6 +101,7 @@ export default function DashboardPage() {
       isDesktop={isDesktop}
       activeTab={activeTab}
       insideCount={insideCount}
+      overdueCount={overdueCount}
       isAdmin={isAdmin}
       onSelect={setActiveTab}
       collapsed={sidebarCollapsed}
@@ -124,6 +126,7 @@ export default function DashboardPage() {
         <DentroTab
           isDesktop={isDesktop}
           onCountChange={setInsideCount}
+          onOverdueChange={setOverdueCount}
           onToast={showToast}
         />
       )}

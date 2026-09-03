@@ -1,7 +1,8 @@
 'use client';
 
-import { Pencil, Star, Trash2, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import gsap from 'gsap';
+import { AlertTriangle, Pencil, Star, Trash2, X } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { getFieldDefinitionsAction } from '@/actions/field-definitions.actions';
 import {
@@ -13,6 +14,7 @@ import {
 import { getSettingsAction } from '@/actions/settings.actions';
 import { SearchField } from '@/components/ui/SearchField';
 import { formatDuration, formatTime, tipoColors, tipoLabel } from '@/lib/format';
+import { prefersReducedMotion } from '@/lib/motion';
 import { useStaggerReveal } from '@/lib/use-stagger-reveal';
 import { colors, fonts } from '@/styles/theme';
 import type { FieldDefinition, ParkingRecord } from '@/types';
@@ -24,10 +26,11 @@ import { SuccessOverlay } from './SuccessOverlay';
 interface DentroTabProps {
   isDesktop: boolean;
   onCountChange: (count: number) => void;
+  onOverdueChange: (count: number) => void;
   onToast: (message: string) => void;
 }
 
-export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps) {
+export function DentroTab({ isDesktop, onCountChange, onOverdueChange, onToast }: DentroTabProps) {
   const [records, setRecords] = useState<ParkingRecord[]>([]);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
@@ -95,10 +98,44 @@ export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps)
     return () => clearInterval(interval);
   }, []);
 
-  const matches = records.filter(
-    (record) => !query || record.placa.toLowerCase().includes(query.toLowerCase()),
-  );
+  const isOverdue = (record: ParkingRecord) =>
+    now - new Date(record.entradaTime).getTime() > alertThresholdMinutes * 60_000;
+
+  const overdueCount = records.filter(isOverdue).length;
+
+  const matches = records
+    .filter((record) => !query || record.placa.toLowerCase().includes(query.toLowerCase()))
+    // Stable sort: overdue vehicles float to the top so the alert is
+    // visible without scrolling, without reshuffling everything else.
+    .sort((a, b) => Number(isOverdue(b)) - Number(isOverdue(a)));
   const gridRef = useStaggerReveal<HTMLDivElement>('.dentro-card', matches.map((r) => r.id).join(','));
+
+  useEffect(() => {
+    onOverdueChange(overdueCount);
+  }, [overdueCount, onOverdueChange]);
+
+  // Newly-crossed cards get a one-time attention flash (a felt "it just
+  // happened" beat) on top of the badge/card's own continuous pulse —
+  // tracked so a vehicle only flashes the moment it crosses the threshold,
+  // never again on every 30s tick while it stays overdue.
+  const flaggedRef = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    const container = gridRef.current;
+    if (!container) return;
+    for (const record of records) {
+      if (!isOverdue(record) || flaggedRef.current.has(record.id)) continue;
+      flaggedRef.current.add(record.id);
+      const el = container.querySelector<HTMLElement>(`[data-record-id="${record.id}"]`);
+      if (!el) continue;
+      gsap.fromTo(
+        el,
+        { scale: 1 },
+        { keyframes: { scale: [1.035, 1] }, duration: 0.5, ease: 'power2.out' },
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [records, now, alertThresholdMinutes]);
 
   const closeConfirm = () => {
     if (exitPhase !== 'idle') return;
@@ -179,6 +216,63 @@ export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps)
         </span>
       </div>
 
+      {overdueCount > 0 && (
+        <div
+          className="attention-card"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 13,
+            background: colors.errorBgSoft,
+            border: `1px solid ${colors.error}`,
+            borderRadius: 14,
+            padding: '13px 16px',
+          }}
+        >
+          <span
+            style={{
+              position: 'relative',
+              width: 34,
+              height: 34,
+              flexShrink: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <span
+              className="attention-ping"
+              style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: colors.error }}
+            />
+            <span
+              style={{
+                position: 'relative',
+                width: 34,
+                height: 34,
+                borderRadius: '50%',
+                background: colors.bgCard,
+                border: `1.5px solid ${colors.error}`,
+                color: colors.error,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <AlertTriangle size={16} strokeWidth={2.3} />
+            </span>
+          </span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
+            <span style={{ fontWeight: 800, fontSize: 14, color: colors.error }}>
+              {overdueCount} vehículo{overdueCount === 1 ? '' : 's'}{' '}
+              {overdueCount === 1 ? 'superó' : 'superaron'} el tiempo límite
+            </span>
+            <span style={{ fontSize: 12, color: colors.textMuted }}>
+              Más de {formatDuration(alertThresholdMinutes * 60_000)} dentro del estacionamiento
+            </span>
+          </div>
+        </div>
+      )}
+
       {records.length > 0 && (
         <div data-tour="dentro-buscar">
           <SearchField value={query} onChange={setQuery} placeholder="Buscar por placa" />
@@ -226,15 +320,16 @@ export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps)
       >
         {matches.map((record) => {
           const durationMs = now - new Date(record.entradaTime).getTime();
-          const attention = durationMs > alertThresholdMinutes * 60_000;
+          const attention = isOverdue(record);
           const isFrequent = frequentPlacas.has(record.placa);
           return (
             <div
               key={record.id}
-              className="dentro-card"
+              data-record-id={record.id}
+              className={attention ? 'dentro-card attention-card' : 'dentro-card'}
               style={{
                 background: colors.bgCard,
-                border: `1px solid ${colors.border}`,
+                border: `1.5px solid ${attention ? colors.error : colors.border}`,
                 borderRadius: 14,
                 padding: 15,
                 display: 'flex',
@@ -262,21 +357,31 @@ export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps)
                 </div>
                 <span
                   style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 4,
                     fontSize: 10.5,
                     fontWeight: 700,
-                    padding: '3px 9px',
+                    padding: attention ? '3px 9px 3px 7px' : '3px 9px',
                     borderRadius: 999,
                     flexShrink: 0,
-                    background: attention ? 'rgba(240,97,110,0.14)' : colors.accentBgSoft,
+                    background: attention ? colors.errorBgSoft : colors.accentBgSoft,
                     color: attention ? colors.error : colors.accent,
                   }}
                 >
+                  {attention && <AlertTriangle size={11} strokeWidth={2.5} />}
                   {attention ? 'Atención' : 'OK'}
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, fontSize: 12, color: colors.textMuted }}>
                 <span>Entró {formatTime(record.entradaTime)}</span>
-                <span style={{ color: colors.accent, fontWeight: 700, flexShrink: 0 }}>
+                <span
+                  style={{
+                    color: attention ? colors.error : colors.accent,
+                    fontWeight: 700,
+                    flexShrink: 0,
+                  }}
+                >
                   {formatDuration(durationMs)}
                 </span>
               </div>

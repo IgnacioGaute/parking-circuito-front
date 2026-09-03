@@ -39,6 +39,9 @@ interface NavTabsProps {
   isDesktop: boolean;
   activeTab: TabKey;
   insideCount: number;
+  // Vehicles inside past the admin-configured alert threshold — surfaced
+  // here so the alert is visible from the nav itself, before opening Dentro.
+  overdueCount: number;
   isAdmin: boolean;
   onSelect: (tab: TabKey) => void;
   collapsed: boolean;
@@ -49,6 +52,7 @@ export function NavTabs({
   isDesktop,
   activeTab,
   insideCount,
+  overdueCount,
   isAdmin,
   onSelect,
   collapsed,
@@ -86,6 +90,7 @@ export function NavTabs({
       <MobileNavTabs
         activeTab={activeTab}
         insideCount={insideCount}
+        overdueCount={overdueCount}
         isAdmin={isAdmin}
         onSelect={onSelect}
       />
@@ -272,7 +277,21 @@ export function NavTabs({
                       width: 8,
                       height: 8,
                       borderRadius: '50%',
-                      background: colors.accent,
+                      background: tab.key === 'dentro' && overdueCount > 0 ? colors.error : colors.accent,
+                    }}
+                  />
+                )}
+                {rail && tab.key === 'dentro' && overdueCount > 0 && (
+                  <span
+                    className="attention-ping"
+                    style={{
+                      position: 'absolute',
+                      top: -6,
+                      right: -7,
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      background: colors.error,
                     }}
                   />
                 )}
@@ -292,14 +311,38 @@ export function NavTabs({
                   {tab.label}
                 </span>
               )}
+              {!rail && isDesktop && tab.key === 'dentro' && overdueCount > 0 && (
+                <span
+                  title={`${overdueCount} con alerta`}
+                  style={{ position: 'relative', width: 8, height: 8, flexShrink: 0 }}
+                >
+                  <span
+                    className="attention-ping"
+                    style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: colors.error }}
+                  />
+                  <span
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      borderRadius: '50%',
+                      background: colors.error,
+                    }}
+                  />
+                </span>
+              )}
               {!rail && tab.badge != null && (
                 <span
                   style={{
                     position: isDesktop ? 'static' : 'absolute',
                     top: isDesktop ? 'auto' : 2,
                     right: isDesktop ? 'auto' : 14,
-                    background: active ? colors.accentBgBadge : colors.bgInputAlt,
-                    color: active ? colors.accent : colors.textPrimary,
+                    background:
+                      tab.key === 'dentro' && overdueCount > 0
+                        ? colors.errorBgSoft
+                        : active
+                          ? colors.accentBgBadge
+                          : colors.bgInputAlt,
+                    color: tab.key === 'dentro' && overdueCount > 0 ? colors.error : active ? colors.accent : colors.textPrimary,
                     fontSize: 10.5,
                     fontWeight: 700,
                     padding: '1px 7px',
@@ -364,6 +407,7 @@ export function NavTabs({
 interface MobileNavTabsProps {
   activeTab: TabKey;
   insideCount: number;
+  overdueCount: number;
   isAdmin: boolean;
   onSelect: (tab: TabKey) => void;
 }
@@ -382,7 +426,7 @@ const MOBILE_PILLS: MobilePillDef[] = [
   { key: 'more', label: 'Más', Icon: MoreHorizontal },
 ];
 
-function MobileNavTabs({ activeTab, insideCount, isAdmin, onSelect }: MobileNavTabsProps) {
+function MobileNavTabs({ activeTab, insideCount, overdueCount, isAdmin, onSelect }: MobileNavTabsProps) {
   const [moreOpen, setMoreOpen] = useState(false);
   const inMore = activeTab === 'estadisticas' || activeTab === 'usuarios' || activeTab === 'admin';
 
@@ -462,8 +506,32 @@ function MobileNavTabs({ activeTab, insideCount, isAdmin, onSelect }: MobileNavT
                 transition: 'flex .18s ease, background .15s, color .15s',
               }}
             >
-              <span style={{ display: 'flex', flexShrink: 0 }}>
+              <span style={{ display: 'flex', flexShrink: 0, position: 'relative' }}>
                 <Icon size={21} strokeWidth={2} />
+                {isDentro && overdueCount > 0 && (
+                  <span
+                    style={{ position: 'absolute', top: -4, right: -5, width: 10, height: 10 }}
+                  >
+                    <span
+                      className="attention-ping"
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        borderRadius: '50%',
+                        background: colors.error,
+                      }}
+                    />
+                    <span
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        borderRadius: '50%',
+                        background: colors.error,
+                        border: `1.5px solid ${colors.bgHeader}`,
+                      }}
+                    />
+                  </span>
+                )}
               </span>
               {active && (
                 <span
