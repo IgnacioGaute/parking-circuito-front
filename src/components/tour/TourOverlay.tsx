@@ -272,6 +272,11 @@ export function TourOverlay({ steps, stepIndex, onNext, onBack, onClose }: TourO
     </div>
   );
 
+  // 'use client' components still render on the server for the initial
+  // HTML, where `document` doesn't exist — createPortal(..., document.body)
+  // would throw there.
+  if (typeof document === 'undefined') return null;
+
   return createPortal(
     <>
       <div

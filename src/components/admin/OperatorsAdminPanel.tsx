@@ -130,6 +130,7 @@ export function OperatorsAdminPanel({ currentOperatorId, onToast }: AdminPanelPr
               value={newName}
               onChange={(event) => setNewName(event.target.value)}
               placeholder="Nombre"
+              aria-label="Nombre"
               style={{ ...inputStyle, flex: 2, minWidth: 160 }}
               autoFocus
             />
@@ -139,11 +140,13 @@ export function OperatorsAdminPanel({ currentOperatorId, onToast }: AdminPanelPr
                 setNewPin(event.target.value.replace(/\D/g, '').slice(0, 4))
               }
               placeholder="PIN (4 dígitos)"
+              aria-label="PIN (4 dígitos)"
               style={{ ...inputStyle, flex: 1, minWidth: 120 }}
             />
             <select
               value={newRole}
               onChange={(event) => setNewRole(event.target.value as Role)}
+              aria-label="Rol"
               style={{ ...inputStyle, flex: 1, minWidth: 120, cursor: 'pointer' }}
             >
               <option value="user">Usuario</option>
@@ -341,17 +344,20 @@ function OperatorEditRow({ operator, onCancel, onSaved, onError }: OperatorEditR
       <input
         value={name}
         onChange={(event) => setName(event.target.value)}
+        aria-label="Nombre"
         style={{ ...inputStyle, flex: 2, minWidth: 140 }}
       />
       <input
         value={pin}
         onChange={(event) => setPin(event.target.value.replace(/\D/g, '').slice(0, 4))}
         placeholder="Nuevo PIN (opcional)"
+        aria-label="Nuevo PIN (opcional)"
         style={{ ...inputStyle, flex: 1, minWidth: 150 }}
       />
       <select
         value={role}
         onChange={(event) => setRole(event.target.value as Role)}
+        aria-label="Rol"
         style={{ ...inputStyle, flex: 1, minWidth: 120, cursor: 'pointer' }}
       >
         <option value="user">Usuario</option>

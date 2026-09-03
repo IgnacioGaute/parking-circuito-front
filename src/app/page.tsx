@@ -58,15 +58,13 @@ export default function DashboardPage() {
   }, []);
 
   const toggleSidebarCollapsed = () => {
-    setSidebarCollapsed((current) => {
-      const next = !current;
-      try {
-        localStorage.setItem(SIDEBAR_COLLAPSED_KEY, String(next));
-      } catch {
-        // Private browsing / storage disabled — collapse just won't persist.
-      }
-      return next;
-    });
+    const next = !sidebarCollapsed;
+    setSidebarCollapsed(next);
+    try {
+      localStorage.setItem(SIDEBAR_COLLAPSED_KEY, String(next));
+    } catch {
+      // Private browsing / storage disabled — collapse just won't persist.
+    }
   };
 
   // Drives the actual screen (and, for admin steps, the Operadores/Campos

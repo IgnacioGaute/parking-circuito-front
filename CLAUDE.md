@@ -94,10 +94,16 @@ Parking lot check-in/check-out system; UI and field names are in Spanish.
   `extraFields`/movement history, separate from the live `ParkingRecord` list.
 
 `src/components/dashboard/*` maps roughly 1:1 to the tabs in `NavTabs`
-(`TabKey` in `NavTabs.tsx`: registrar/dentro/frecuentes/historial/usuarios/admin);
+(`TabKey` in `NavTabs.tsx`: registrar/dentro/frecuentes/historial/estadisticas/usuarios/admin);
 `admin` tab components are gated on `Operator.role === 'admin'` and only
 mounted for admins. `HistorialTab` also exports history to PDF via
-`jspdf`/`jspdf-autotable`.
+`jspdf`/`jspdf-autotable`. `EstadisticasTab` derives its numbers client-side
+from `getHistoryAction`/`getInsideAction` records via pure functions in
+`src/lib/analytics.ts` (filtering, bucketing by day/hour/operator/vehicle
+type, etc.) and renders them through the chart components in
+`src/components/dashboard/charts/` (`DonutChart`, `MultiLineChart`,
+`RankedBarChart`, `StatTile`, `ChartCard`) — there's no separate
+stats/analytics endpoint on the backend.
 
 ### Onboarding tour
 
@@ -124,7 +130,11 @@ reading from CSS custom properties:
   blocking inline script in `layout.tsx`'s `<head>` sets the attribute before
   hydration to avoid a flash of the wrong theme.
 - Keyframe animations are defined globally in `globals.css` and referenced by
-  name from inline styles.
+  name from inline styles for simple CSS transitions; GSAP (`gsap` dep)
+  handles anything imperative/staggered — e.g. `src/lib/use-stagger-reveal.ts`
+  (list/grid entrance animations) and the chart components. All GSAP-driven
+  animation should check `prefersReducedMotion()` (`src/lib/motion.ts`) first,
+  the way existing call sites do.
 
 ### PWA
 

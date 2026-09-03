@@ -275,8 +275,9 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
 
   const renderPlaca = () => (
     <div key="placa" style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-      <label style={labelStyle}>Placa</label>
+      <label htmlFor="entrada-placa" style={labelStyle}>Placa</label>
       <input
+        id="entrada-placa"
         value={placa}
         onChange={(event) => setPlaca(event.target.value.toUpperCase())}
         placeholder="ABC-123"
@@ -304,8 +305,10 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
   // measuring needed, unlike NavTabs' variable-width sidebar pill.
   const renderTipo = () => (
     <div key="tipo" style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-      <label style={labelStyle}>Tipo de vehículo</label>
+      <div style={labelStyle}>Tipo de vehículo</div>
       <div
+        role="group"
+        aria-label="Tipo de vehículo"
         style={{
           position: 'relative',
           display: 'flex',
@@ -383,14 +386,16 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
 
   const renderCustom = (field: FieldDefinition) => {
     const value = customValues[field.key];
+    const fieldId = `entrada-field-${field.id}`;
     return (
       <div key={field.id} style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-        <label style={labelStyle}>
+        <label htmlFor={fieldId} style={labelStyle}>
           {field.label}
           {field.required ? '' : ' (opcional)'}
         </label>
         {field.type === 'select' ? (
           <select
+            id={fieldId}
             value={typeof value === 'string' ? value : ''}
             onChange={(event) => setCustomValue(field.key, event.target.value)}
             className="ui-input"
@@ -405,6 +410,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
           </select>
         ) : field.type === 'boolean' ? (
           <label
+            htmlFor={fieldId}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -415,6 +421,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
             }}
           >
             <input
+              id={fieldId}
               type="checkbox"
               checked={value === true}
               onChange={(event) => setCustomValue(field.key, event.target.checked)}
@@ -423,6 +430,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
           </label>
         ) : field.type === 'number' ? (
           <input
+            id={fieldId}
             type="number"
             value={typeof value === 'number' ? value : ''}
             onChange={(event) =>
@@ -436,6 +444,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
           />
         ) : (
           <input
+            id={fieldId}
             type="text"
             value={typeof value === 'string' ? value : ''}
             onChange={(event) => setCustomValue(field.key, event.target.value)}

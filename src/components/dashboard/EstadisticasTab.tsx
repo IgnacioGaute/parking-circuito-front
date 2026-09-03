@@ -152,7 +152,12 @@ export function EstadisticasTab() {
           <span style={{ width: 1, height: 22, background: colors.border, margin: '0 2px' }} />
 
           <div style={{ position: 'relative' }}>
-            <select value={tipo} onChange={(e) => setTipo(e.target.value as VehicleType | 'todos')} style={selectStyle}>
+            <select
+              value={tipo}
+              onChange={(e) => setTipo(e.target.value as VehicleType | 'todos')}
+              aria-label="Filtrar por tipo de vehículo"
+              style={selectStyle}
+            >
               <option value="todos">Todos los vehículos</option>
               <option value="auto">Auto</option>
               <option value="moto">Moto</option>
@@ -160,7 +165,12 @@ export function EstadisticasTab() {
           </div>
 
           <div style={{ position: 'relative' }}>
-            <select value={operatorId} onChange={(e) => setOperatorId(e.target.value)} style={selectStyle}>
+            <select
+              value={operatorId}
+              onChange={(e) => setOperatorId(e.target.value)}
+              aria-label="Filtrar por operador"
+              style={selectStyle}
+            >
               <option value="todos">Todos los operadores</option>
               {operators.map((op) => (
                 <option key={op.id} value={op.id}>

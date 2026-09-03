@@ -39,10 +39,16 @@ export function ConfirmActionSheet({
     return () => window.removeEventListener('keydown', onKey);
   }, [onCancel, busy]);
 
+  // 'use client' components still render on the server for the initial
+  // HTML, where `document` doesn't exist — createPortal(..., document.body)
+  // would throw there.
+  if (typeof document === 'undefined') return null;
+
   return createPortal(
     <>
       <div
         onClick={busy ? undefined : onCancel}
+        aria-hidden
         style={{
           position: 'fixed',
           inset: 0,

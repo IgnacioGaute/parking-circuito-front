@@ -504,6 +504,7 @@ function MobileNavTabs({ activeTab, insideCount, isAdmin, onSelect }: MobileNavT
           <>
             <div
               onClick={() => setMoreOpen(false)}
+              aria-hidden
               style={{
                 position: 'fixed',
                 inset: 0,

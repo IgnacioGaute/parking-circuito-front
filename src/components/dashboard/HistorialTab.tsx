@@ -612,10 +612,11 @@ export function HistorialTab({ isAdmin, onToast }: HistorialTabProps) {
           onCancel={closeCancel}
           extraContent={
             <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: colors.textMuted }}>
+              <label htmlFor="historial-cancel-reason" style={{ fontSize: 12, fontWeight: 600, color: colors.textMuted }}>
                 Motivo (opcional)
               </label>
               <textarea
+                id="historial-cancel-reason"
                 value={cancelReason}
                 onChange={(event) => setCancelReason(event.target.value)}
                 rows={3}
@@ -728,10 +729,16 @@ function DateTimeFiltersSheet({
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
 
+  // 'use client' components still render on the server for the initial
+  // HTML, where `document` doesn't exist — createPortal(..., document.body)
+  // would throw there.
+  if (typeof document === 'undefined') return null;
+
   return createPortal(
     <>
       <div
         onClick={onClose}
+        aria-hidden
         style={{
           position: 'fixed',
           inset: 0,

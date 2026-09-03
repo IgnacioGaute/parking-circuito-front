@@ -186,10 +186,7 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
     if (!draggedId) return;
     event.currentTarget.releasePointerCapture(event.pointerId);
     setDraggedId(null);
-    setFields((current) => {
-      persistOrder(current);
-      return current;
-    });
+    persistOrder(fields);
   };
 
   return (
@@ -317,12 +314,14 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
                 value={label}
                 onChange={(event) => setLabel(event.target.value)}
                 placeholder="Nombre del campo (ej: Color)"
+                aria-label="Nombre del campo"
                 style={{ ...inputStyle, flex: 2, minWidth: 180 }}
                 autoFocus
               />
               <select
                 value={type}
                 onChange={(event) => setType(event.target.value as FieldType)}
+                aria-label="Tipo de campo"
                 style={{ ...inputStyle, flex: 1, minWidth: 130, cursor: 'pointer' }}
               >
                 {(Object.keys(TYPE_LABELS) as FieldType[]).map((t) => (
@@ -354,6 +353,7 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
                 value={optionsText}
                 onChange={(event) => setOptionsText(event.target.value)}
                 placeholder="Opciones separadas por coma (ej: Rojo, Verde, Azul)"
+                aria-label="Opciones separadas por coma"
                 style={inputStyle}
               />
             )}

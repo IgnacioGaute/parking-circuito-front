@@ -116,14 +116,16 @@ export function EditRecordModal({ record, onSaved, onCancel }: EditRecordModalPr
 
   const renderCustom = (field: FieldDefinition) => {
     const value = customValues[field.key];
+    const fieldId = `edit-record-field-${field.id}`;
     return (
       <div key={field.id} style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-        <label style={labelStyle}>
+        <label htmlFor={fieldId} style={labelStyle}>
           {field.label}
           {field.required ? '' : ' (opcional)'}
         </label>
         {field.type === 'select' ? (
           <select
+            id={fieldId}
             value={typeof value === 'string' ? value : ''}
             onChange={(event) => setCustomValue(field.key, event.target.value)}
             style={{ ...inputStyle, cursor: 'pointer' }}
@@ -137,6 +139,7 @@ export function EditRecordModal({ record, onSaved, onCancel }: EditRecordModalPr
           </select>
         ) : field.type === 'boolean' ? (
           <label
+            htmlFor={fieldId}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -147,6 +150,7 @@ export function EditRecordModal({ record, onSaved, onCancel }: EditRecordModalPr
             }}
           >
             <input
+              id={fieldId}
               type="checkbox"
               checked={value === true}
               onChange={(event) => setCustomValue(field.key, event.target.checked)}
@@ -155,6 +159,7 @@ export function EditRecordModal({ record, onSaved, onCancel }: EditRecordModalPr
           </label>
         ) : field.type === 'number' ? (
           <input
+            id={fieldId}
             type="number"
             value={typeof value === 'number' ? value : ''}
             onChange={(event) =>
@@ -167,6 +172,7 @@ export function EditRecordModal({ record, onSaved, onCancel }: EditRecordModalPr
           />
         ) : (
           <input
+            id={fieldId}
             type="text"
             value={typeof value === 'string' ? value : ''}
             onChange={(event) => setCustomValue(field.key, event.target.value)}
@@ -177,10 +183,16 @@ export function EditRecordModal({ record, onSaved, onCancel }: EditRecordModalPr
     );
   };
 
+  // 'use client' components still render on the server for the initial
+  // HTML, where `document` doesn't exist — createPortal(..., document.body)
+  // would throw there.
+  if (typeof document === 'undefined') return null;
+
   return createPortal(
     <>
       <div
         onClick={busy ? undefined : onCancel}
+        aria-hidden
         style={{
           position: 'fixed',
           inset: 0,
@@ -257,8 +269,9 @@ export function EditRecordModal({ record, onSaved, onCancel }: EditRecordModalPr
         >
           <div style={{ width: '100%', maxWidth: 420, display: 'flex', flexDirection: 'column', gap: 18 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-              <label style={labelStyle}>Placa</label>
+              <label htmlFor="edit-record-placa" style={labelStyle}>Placa</label>
               <input
+                id="edit-record-placa"
                 value={placa}
                 onChange={(event) => setPlaca(event.target.value.toUpperCase())}
                 className="ui-input"
@@ -273,8 +286,12 @@ export function EditRecordModal({ record, onSaved, onCancel }: EditRecordModalPr
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-              <label style={labelStyle}>Tipo de vehículo</label>
-              <div style={{ display: 'flex', border: `1px solid ${colors.border}`, borderRadius: 12, overflow: 'hidden' }}>
+              <div style={labelStyle}>Tipo de vehículo</div>
+              <div
+                role="group"
+                aria-label="Tipo de vehículo"
+                style={{ display: 'flex', border: `1px solid ${colors.border}`, borderRadius: 12, overflow: 'hidden' }}
+              >
                 <button
                   onClick={() => setTipo('auto')}
                   style={{

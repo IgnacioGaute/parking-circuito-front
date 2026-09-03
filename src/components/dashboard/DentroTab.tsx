@@ -386,10 +386,11 @@ export function DentroTab({ isDesktop, onCountChange, onToast }: DentroTabProps)
           onCancel={closeCancel}
           extraContent={
             <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-              <label style={{ fontSize: 12, fontWeight: 600, color: colors.textMuted }}>
+              <label htmlFor="dentro-cancel-reason" style={{ fontSize: 12, fontWeight: 600, color: colors.textMuted }}>
                 Motivo (opcional)
               </label>
               <textarea
+                id="dentro-cancel-reason"
                 value={cancelReason}
                 onChange={(event) => setCancelReason(event.target.value)}
                 rows={3}
@@ -475,12 +476,18 @@ function ExitConfirmModal({
 
   const busy = phase !== 'idle';
 
+  // 'use client' components still render on the server for the initial
+  // HTML, where `document` doesn't exist — createPortal(..., document.body)
+  // would throw there.
+  if (typeof document === 'undefined') return null;
+
   return createPortal(
     <>
       {phase !== 'success' && phase !== 'closing' && (
         <>
           <div
             onClick={onCancel}
+            aria-hidden
             style={{
               position: 'fixed',
               inset: 0,

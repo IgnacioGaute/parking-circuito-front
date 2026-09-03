@@ -6,3 +6,14 @@
 [   84209ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3001/:0
 [  164987ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
 [  165312ms] [LOG] [Fast Refresh] done in 444ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[ 1014235ms] [ERROR] WebSocket connection to 'ws://localhost:3001/_next/webpack-hmr?id=eA3KdNfYa74wH0Srledvq' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3001/_next/static/chunks/0a48_next_dist_client_0ig4d6g._.js:13422
+[ 1019766ms] [LOG] [HMR] connected @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[ 1021290ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[ 1021344ms] [LOG] [HMR] connected @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[ 1022146ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[ 1022151ms] [LOG] [Fast Refresh] done in 116ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[ 1415793ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[ 1415834ms] [LOG] [Fast Refresh] done in 141ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[ 2425098ms] [LOG] [HMR] connected @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[10754937ms] [LOG] [HMR] connected @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[22009635ms] [LOG] [HMR] connected @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
