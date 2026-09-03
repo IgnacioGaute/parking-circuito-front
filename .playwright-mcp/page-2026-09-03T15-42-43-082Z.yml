@@ -1,0 +1,9 @@
+- generic [ref=e2]:
+  - button "Cambiar a tema claro" [ref=e3] [cursor=pointer]
+  - generic [ref=e10]:
+    - generic [ref=e14]:
+      - generic [ref=e15]: Control de Estacionamiento
+      - generic [ref=e16]: Sistema activo
+    - generic [ref=e19]:
+      - generic [ref=e20]: Seleccioná tu turno
+      - status "Cargando" [ref=e22]

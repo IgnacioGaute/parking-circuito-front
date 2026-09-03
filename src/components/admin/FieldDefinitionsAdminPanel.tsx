@@ -8,6 +8,7 @@ import {
   getFieldDefinitionsAction,
   updateFieldDefinitionAction,
 } from '@/actions/field-definitions.actions';
+import { LoadingSquares } from '@/components/ui/LoadingSquares';
 import { colors } from '@/styles/theme';
 import type { FieldDefinition, FieldType } from '@/types';
 
@@ -199,7 +200,11 @@ export function FieldDefinitionsAdminPanel({ onToast }: FieldDefinitionsAdminPan
         </div>
       </div>
 
-      {loading && <div style={{ color: colors.textDim, fontSize: 13 }}>Cargando…</div>}
+      {loading && (
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '24px 0' }}>
+          <LoadingSquares />
+        </div>
+      )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {fields.map((field) => (

@@ -20,6 +20,7 @@ import {
   getHistoryAction,
   reopenRecordAction,
 } from '@/actions/parking-records.actions';
+import { LoadingSquares } from '@/components/ui/LoadingSquares';
 import { SearchField } from '@/components/ui/SearchField';
 import { SelectField } from '@/components/ui/SelectField';
 import { readActiveOperator } from '@/lib/active-operator';
@@ -369,6 +370,20 @@ export function HistorialTab({ isAdmin, onToast }: HistorialTabProps) {
           )}
         </button>
       </div>
+
+      {loading && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            padding: '60px 16px',
+            border: `1px dashed ${colors.border}`,
+            borderRadius: 12,
+          }}
+        >
+          <LoadingSquares />
+        </div>
+      )}
 
       {!loading && filteredRecords.length === 0 && (
         <div

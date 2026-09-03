@@ -12,6 +12,7 @@ import {
   registerSalidaAction,
 } from '@/actions/parking-records.actions';
 import { getSettingsAction } from '@/actions/settings.actions';
+import { LoadingSquares } from '@/components/ui/LoadingSquares';
 import { SearchField } from '@/components/ui/SearchField';
 import { formatDuration, formatTime, tipoColors, tipoLabel } from '@/lib/format';
 import { prefersReducedMotion } from '@/lib/motion';
@@ -276,6 +277,20 @@ export function DentroTab({ isDesktop, onCountChange, onOverdueChange, onToast }
       {records.length > 0 && (
         <div data-tour="dentro-buscar">
           <SearchField value={query} onChange={setQuery} placeholder="Buscar por placa" />
+        </div>
+      )}
+
+      {loading && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            padding: '60px 16px',
+            border: `1px dashed ${colors.border}`,
+            borderRadius: 10,
+          }}
+        >
+          <LoadingSquares />
         </div>
       )}
 

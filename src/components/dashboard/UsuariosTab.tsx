@@ -2,17 +2,24 @@
 
 import { useEffect, useState } from 'react';
 import { getOperatorsAction } from '@/actions/operators.actions';
+import { LoadingSquares } from '@/components/ui/LoadingSquares';
 import { colors, fonts } from '@/styles/theme';
 import type { Operator } from '@/types';
 
 export function UsuariosTab() {
   const [operators, setOperators] = useState<Operator[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
-    getOperatorsAction().then((result) => {
-      if (!cancelled) setOperators(result);
-    });
+    getOperatorsAction()
+      .then((result) => {
+        if (!cancelled) setOperators(result);
+      })
+      .catch(() => undefined)
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
     return () => {
       cancelled = true;
     };
@@ -21,6 +28,21 @@ export function UsuariosTab() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18, animation: 'fadeUp .3s both' }}>
       <div style={{ fontSize: 18, fontWeight: 700 }}>Registro de operadores</div>
+
+      {loading && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            padding: '60px 16px',
+            border: `1px dashed ${colors.border}`,
+            borderRadius: 12,
+          }}
+        >
+          <LoadingSquares />
+        </div>
+      )}
+
       <div data-tour="usuarios-list" style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         {operators.map((op) => {
           const active = op.onDuty;

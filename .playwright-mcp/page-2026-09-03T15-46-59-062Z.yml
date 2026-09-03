@@ -1,0 +1,55 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e61] [cursor=pointer]
+  - alert [ref=e65]
+  - generic [ref=e116]:
+    - generic [ref=e117]:
+      - navigation [ref=e118]:
+        - generic [ref=e119]: Control de Estacionamiento
+        - generic [ref=e123]:
+          - button "Registrar" [ref=e124] [cursor=pointer]
+          - button "Dentro 2" [ref=e128] [cursor=pointer]:
+            - generic [ref=e134]: Dentro
+            - generic [ref=e135]: "2"
+          - button "Frecuentes" [ref=e136] [cursor=pointer]
+          - button "Historial" [ref=e141] [cursor=pointer]
+          - button "Estadísticas" [ref=e145] [cursor=pointer]
+          - button "Usuarios" [ref=e150] [cursor=pointer]
+          - button "Admin" [ref=e158] [cursor=pointer]
+        - button "Contraer" [ref=e164] [cursor=pointer]
+      - generic [ref=e169]:
+        - banner [ref=e170]:
+          - generic [ref=e171]: Carlos Ruiz
+          - generic [ref=e174]:
+            - generic [ref=e175]:
+              - generic [ref=e176]: 12:46:58
+              - button "Ver recorrido guiado" [ref=e181] [cursor=pointer]
+              - button "Cambiar a tema claro" [ref=e185] [cursor=pointer]
+            - button "Cerrar turno" [ref=e192] [cursor=pointer]
+        - main [ref=e196]:
+          - generic [ref=e791]:
+            - generic [ref=e792]:
+              - button "Operadores" [ref=e793] [cursor=pointer]
+              - button "Campos de registro" [ref=e794] [cursor=pointer]
+              - button "Alertas" [ref=e795] [cursor=pointer]
+            - generic [ref=e853]:
+              - generic [ref=e859]:
+                - generic [ref=e860]: Alerta de tiempo dentro
+                - generic [ref=e861]: Un vehículo se marca "Atención" en la pestaña Dentro cuando lleva más de este tiempo sin registrar salida.
+              - generic [ref=e862]:
+                - generic [ref=e863]:
+                  - generic [ref=e864]: Presets rápidos
+                  - generic [ref=e865]:
+                    - button "15m" [ref=e866] [cursor=pointer]
+                    - button "30m" [ref=e867] [cursor=pointer]
+                    - button "1h 0m" [ref=e868] [cursor=pointer]
+                    - button "1h 30m" [ref=e869] [cursor=pointer]
+                    - button "2h 0m" [ref=e870] [cursor=pointer]
+                    - button "3h 0m" [ref=e871] [cursor=pointer]
+                - generic [ref=e872]:
+                  - generic [ref=e873]:
+                    - generic [ref=e874]: Minutos dentro antes de la alerta
+                    - spinbutton [ref=e875]: "60"
+                  - slider [ref=e876]: "60"
+                - generic [ref=e877]: "Ejemplo: un vehículo que entra a las 14:00 se marca \"Atención\" a las 15:00 (1h 0m después)."
+                - button "Guardado" [ref=e881] [cursor=pointer]
+    - generic [ref=e884]: Configuración guardada

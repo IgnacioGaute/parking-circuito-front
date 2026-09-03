@@ -5,6 +5,7 @@ import { CalendarClock, Car, Timer } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getOperatorsAction } from '@/actions/operators.actions';
 import { getHistoryAction, getInsideAction } from '@/actions/parking-records.actions';
+import { LoadingSquares } from '@/components/ui/LoadingSquares';
 import { colors } from '@/styles/theme';
 import type { Operator, ParkingRecord, VehicleType } from '@/types';
 import {
@@ -207,6 +208,22 @@ export function EstadisticasTab() {
         )}
       </div>
 
+      {loading && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            padding: '60px 16px',
+            border: `1px dashed ${colors.border}`,
+            borderRadius: 12,
+          }}
+        >
+          <LoadingSquares />
+        </div>
+      )}
+
+      {!loading && (
+      <>
       <div
         style={{
           display: 'grid',
@@ -327,6 +344,8 @@ export function EstadisticasTab() {
           />
         </ChartCard>
       </div>
+      </>
+      )}
     </div>
   );
 }

@@ -1,0 +1,15 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - button "Cambiar a tema claro" [ref=e3] [cursor=pointer]
+    - generic [ref=e10]:
+      - generic [ref=e14]:
+        - generic [ref=e15]: Control de Estacionamiento
+        - generic [ref=e16]: Sistema activo
+      - generic [ref=e96]:
+        - generic [ref=e102]:
+          - generic [ref=e103]: Turno iniciado
+          - generic [ref=e104]: Carlos Ruiz · acceso concedido
+        - link "Continuar" [ref=e105] [cursor=pointer]:
+          - /url: /
+  - button "Open Next.js Dev Tools" [ref=e61] [cursor=pointer]
+  - alert [ref=e65]

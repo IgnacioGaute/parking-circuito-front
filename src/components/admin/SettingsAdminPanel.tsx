@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import { Bell, Check } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { getSettingsAction, updateSettingsAction } from '@/actions/settings.actions';
+import { LoadingSquares } from '@/components/ui/LoadingSquares';
 import { formatDuration } from '@/lib/format';
 import { prefersReducedMotion } from '@/lib/motion';
 import { colors } from '@/styles/theme';
@@ -102,7 +103,9 @@ export function SettingsAdminPanel({ onToast }: SettingsAdminPanelProps) {
       </div>
 
       {loading ? (
-        <div style={{ color: colors.textDim, fontSize: 13 }}>Cargando…</div>
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '24px 0' }}>
+          <LoadingSquares />
+        </div>
       ) : (
         <div
           ref={cardRef}

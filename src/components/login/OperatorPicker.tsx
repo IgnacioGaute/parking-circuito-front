@@ -3,6 +3,7 @@
 import { ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { getOperatorsAction } from '@/actions/operators.actions';
+import { LoadingSquares } from '@/components/ui/LoadingSquares';
 import { useStaggerReveal } from '@/lib/use-stagger-reveal';
 import { colors, fonts } from '@/styles/theme';
 import type { Operator } from '@/types';
@@ -50,8 +51,8 @@ export function OperatorPicker({ onSelect }: OperatorPickerProps) {
       </div>
 
       {loading && (
-        <div style={{ textAlign: 'center', color: colors.textDimmer, fontSize: 13, padding: '12px 0' }}>
-          Cargando operadores…
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '16px 0' }}>
+          <LoadingSquares />
         </div>
       )}
       {error && (

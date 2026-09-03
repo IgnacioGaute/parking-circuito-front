@@ -112,6 +112,26 @@ select {
   }
 }
 
+/* ---- Data-loading indicator (LoadingSquares) ----------------------------
+   Four accent-colored squares pulsing in sequence — shown wherever a
+   section is fetching its data. Loops forever, so it's disabled below
+   alongside the other continuous animations. */
+@keyframes squarePulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.5);
+    opacity: 0.3;
+  }
+}
+
+.loading-square {
+  animation: squarePulse 1.5s ease-in-out infinite;
+}
+
 @keyframes pulseDot {
   0%,
   100% {
@@ -276,7 +296,8 @@ select {
 
 @media (prefers-reduced-motion: reduce) {
   .attention-card,
-  .attention-ping {
+  .attention-ping,
+  .loading-square {
     animation: none !important;
   }
 }

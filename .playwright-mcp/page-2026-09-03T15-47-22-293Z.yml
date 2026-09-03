@@ -1,0 +1,59 @@
+- generic [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e61] [cursor=pointer]
+  - alert [ref=e65]
+  - generic [ref=e117]:
+    - navigation [ref=e118]:
+      - generic [ref=e119]: Control de Estacionamiento
+      - generic [ref=e123]:
+        - button "Registrar" [ref=e124] [cursor=pointer]
+        - button "Dentro 2" [active] [ref=e128] [cursor=pointer]:
+          - generic [ref=e134]: Dentro
+          - generic "2 con alerta" [ref=e1044]
+          - generic [ref=e1047]: "2"
+        - button "Frecuentes" [ref=e136] [cursor=pointer]
+        - button "Historial" [ref=e141] [cursor=pointer]
+        - button "Estadísticas" [ref=e145] [cursor=pointer]
+        - button "Usuarios" [ref=e150] [cursor=pointer]
+        - button "Admin" [ref=e158] [cursor=pointer]
+      - button "Contraer" [ref=e164] [cursor=pointer]
+    - generic [ref=e169]:
+      - banner [ref=e170]:
+        - generic [ref=e171]: Carlos Ruiz
+        - generic [ref=e174]:
+          - generic [ref=e175]:
+            - generic [ref=e176]: 12:47:22
+            - button "Ver recorrido guiado" [ref=e181] [cursor=pointer]
+            - button "Cambiar a tema claro" [ref=e185] [cursor=pointer]
+          - button "Cerrar turno" [ref=e192] [cursor=pointer]
+      - main [ref=e196]:
+        - generic [ref=e1048]:
+          - generic [ref=e1049]:
+            - generic [ref=e1050]: Dentro
+            - generic [ref=e1051]: 2 vehículos
+          - generic [ref=e1058]:
+            - generic [ref=e1059]: 2 vehículos superaron el tiempo límite
+            - generic [ref=e1060]: Más de 1h 0m dentro del estacionamiento
+          - textbox "Buscar por placa" [ref=e1063]
+          - generic [ref=e1064]:
+            - generic [ref=e1065]:
+              - generic [ref=e1066]:
+                - generic [ref=e1067]: A232NTM
+                - generic [ref=e1075]: Atención
+              - generic [ref=e1078]:
+                - generic [ref=e1079]: Entró 16:35
+                - generic [ref=e1080]: 20h 12m
+              - generic [ref=e1081]:
+                - button "Registrar salida" [ref=e1082] [cursor=pointer]
+                - generic "Patente frecuente — editala desde Frecuentes" [ref=e1083]
+                - button "Cancelar registro" [ref=e1086] [cursor=pointer]
+            - generic [ref=e1090]:
+              - generic [ref=e1091]:
+                - generic [ref=e1092]: AD920HV
+                - generic [ref=e1099]: Atención
+              - generic [ref=e1102]:
+                - generic [ref=e1103]: Entró 13:19
+                - generic [ref=e1104]: 23h 28m
+              - generic [ref=e1105]:
+                - button "Registrar salida" [ref=e1106] [cursor=pointer]
+                - generic "Patente frecuente — editala desde Frecuentes" [ref=e1107]
+                - button "Cancelar registro" [ref=e1110] [cursor=pointer]

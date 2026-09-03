@@ -8,6 +8,7 @@ import {
   getOperatorsAction,
   updateOperatorAction,
 } from '@/actions/operators.actions';
+import { LoadingSquares } from '@/components/ui/LoadingSquares';
 import { colors, fonts } from '@/styles/theme';
 import type { Operator, Role } from '@/types';
 
@@ -210,7 +211,11 @@ export function OperatorsAdminPanel({ currentOperatorId, onToast }: AdminPanelPr
 
       <div style={{ fontSize: 16, fontWeight: 700, marginTop: 8 }}>Operadores</div>
 
-      {loading && <div style={{ color: colors.textDim, fontSize: 13 }}>Cargando…</div>}
+      {loading && (
+        <div style={{ display: 'flex', justifyContent: 'center', padding: '24px 0' }}>
+          <LoadingSquares />
+        </div>
+      )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
         {operators.map((operator) =>

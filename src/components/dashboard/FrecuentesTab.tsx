@@ -8,6 +8,7 @@ import {
   getHistoryAction,
   getInsideAction,
 } from '@/actions/parking-records.actions';
+import { LoadingSquares } from '@/components/ui/LoadingSquares';
 import { SearchField } from '@/components/ui/SearchField';
 import { formatDate, formatDuration, formatTime, tipoLabel } from '@/lib/format';
 import { useStaggerReveal } from '@/lib/use-stagger-reveal';
@@ -120,6 +121,20 @@ export function FrecuentesTab({ onToast }: FrecuentesTabProps) {
 
       {plates.length > 0 && (
         <SearchField value={query} onChange={setQuery} placeholder="Buscar por placa" />
+      )}
+
+      {loading && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            padding: '60px 16px',
+            border: `1px dashed ${colors.border}`,
+            borderRadius: 12,
+          }}
+        >
+          <LoadingSquares />
+        </div>
       )}
 
       {!loading && plates.length === 0 && (
@@ -297,7 +312,9 @@ export function FrecuentesTab({ onToast }: FrecuentesTabProps) {
               {isExpanded && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 7, animation: 'fadeUp .2s both' }}>
                   {movementsLoading === plate.placa && (
-                    <div style={{ fontSize: 12, color: colors.textDim, padding: '4px 0' }}>Cargando…</div>
+                    <div style={{ display: 'flex', padding: '4px 0' }}>
+                      <LoadingSquares size={6} />
+                    </div>
                   )}
                   {movementsLoading !== plate.placa && plateMovements?.length === 0 && (
                     <div style={{ fontSize: 12, color: colors.textDim, padding: '4px 0' }}>
