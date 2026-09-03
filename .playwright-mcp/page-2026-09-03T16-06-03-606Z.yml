@@ -1,0 +1,182 @@
+- generic [ref=f4e1]:
+  - generic [ref=f4e81]:
+    - navigation [ref=f4e82]:
+      - generic [ref=f4e83]: Control de Estacionamiento
+      - generic [ref=f4e87]:
+        - button "Registrar" [ref=f4e88] [cursor=pointer]
+        - button "Dentro 2" [ref=f4e92] [cursor=pointer]:
+          - generic [ref=f4e98]: Dentro
+          - generic "2 con alerta" [ref=f4e422]
+          - generic [ref=f4e425]: "2"
+        - button "Frecuentes" [ref=f4e100] [cursor=pointer]
+        - button "Historial" [ref=f4e105] [cursor=pointer]
+        - button "Estadísticas" [ref=f4e109] [cursor=pointer]
+        - button "Usuarios" [ref=f4e114] [cursor=pointer]
+        - button "Admin" [ref=f4e122] [cursor=pointer]
+      - button "Contraer" [ref=f4e128] [cursor=pointer]
+    - generic [ref=f4e133]:
+      - banner [ref=f4e134]:
+        - generic [ref=f4e135]: Carlos Ruiz
+        - generic [ref=f4e138]:
+          - generic [ref=f4e139]:
+            - generic [ref=f4e140]: 13:06:02
+            - button "Ver recorrido guiado" [ref=f4e145] [cursor=pointer]
+            - button "Cambiar a tema claro" [ref=f4e149] [cursor=pointer]
+          - button "Cerrar turno" [ref=f4e156] [cursor=pointer]
+      - main [ref=f4e160]:
+        - generic [ref=f4e917]:
+          - generic [ref=f4e918]: Estadísticas
+          - generic [ref=f4e920]:
+            - button "Hoy" [ref=f4e921] [cursor=pointer]
+            - button "7 días" [ref=f4e922] [cursor=pointer]
+            - button "30 días" [ref=f4e923] [cursor=pointer]
+            - button "90 días" [ref=f4e924] [cursor=pointer]
+            - button "Personalizado" [ref=f4e925] [cursor=pointer]
+            - combobox "Filtrar por tipo de vehículo" [ref=f4e928] [cursor=pointer]:
+              - option "Todos los vehículos" [selected]
+              - option "Auto"
+              - option "Moto"
+            - combobox "Filtrar por operador" [ref=f4e930] [cursor=pointer]:
+              - option "Todos los operadores" [selected]
+              - option "Ana Torres"
+              - option "Carlos Ruiz"
+              - option "Luis Medina"
+              - option "ignacio"
+          - generic [ref=f4e931]:
+            - generic [ref=f4e933]:
+              - generic [ref=f4e934]: Tickets en el rango
+              - generic [ref=f4e941]: "23"
+              - generic [ref=f4e942]: últimos 30 días
+            - generic [ref=f4e944]:
+              - generic [ref=f4e945]: Dentro ahora mismo
+              - generic [ref=f4e952]: "2"
+              - generic [ref=f4e953]: en este momento
+            - generic [ref=f4e955]:
+              - generic [ref=f4e956]: Estadía promedio
+              - generic [ref=f4e962]: 34h 51m
+              - generic [ref=f4e963]: visitas cerradas en el rango
+          - generic [ref=f4e964]:
+            - generic [ref=f4e965]:
+              - generic [ref=f4e966]:
+                - generic [ref=f4e967]:
+                  - generic [ref=f4e968]: Tendencia diaria
+                  - generic [ref=f4e969]: Tickets registrados por día en el rango seleccionado
+                - button "Ver datos en tabla" [ref=f4e970] [cursor=pointer]: Tabla
+              - img "Tickets por día" [ref=f4e974]:
+                - generic [ref=f4e975]: "0"
+                - generic [ref=f4e977]: "5"
+                - generic [ref=f4e979]: "10"
+                - generic [ref=f4e981]: "15"
+                - generic [ref=f4e983]: "20"
+                - generic [ref=f4e985]: 05 ago
+                - generic [ref=f4e986]: 08 ago
+                - generic [ref=f4e987]: 11 ago
+                - generic [ref=f4e988]: 14 ago
+                - generic [ref=f4e989]: 17 ago
+                - generic [ref=f4e990]: 20 ago
+                - generic [ref=f4e991]: 23 ago
+                - generic [ref=f4e992]: 26 ago
+                - generic [ref=f4e993]: 29 ago
+                - generic [ref=f4e994]: 01 sept
+            - generic [ref=f4e1000]:
+              - generic [ref=f4e1001]:
+                - generic [ref=f4e1002]:
+                  - generic [ref=f4e1003]: Actividad por hora
+                  - generic [ref=f4e1004]: Entradas y salidas agregadas por franja horaria
+                - button "Ver datos en tabla" [ref=f4e1005] [cursor=pointer]: Tabla
+              - generic [ref=f4e1008]:
+                - generic [ref=f4e1009]:
+                  - generic [ref=f4e1010]: Entradas
+                  - generic [ref=f4e1013]: Salidas
+                - img "Actividad por hora del día" [ref=f4e1016]:
+                  - generic [ref=f4e1017]: "0"
+                  - generic [ref=f4e1019]: "3"
+                  - generic [ref=f4e1021]: "5"
+                  - generic [ref=f4e1023]: "8"
+                  - generic [ref=f4e1025]: "10"
+                  - generic [ref=f4e1027]: 0h
+                  - generic [ref=f4e1028]: 3h
+                  - generic [ref=f4e1029]: 6h
+                  - generic [ref=f4e1030]: 9h
+                  - generic [ref=f4e1031]: 12h
+                  - generic [ref=f4e1032]: 15h
+                  - generic [ref=f4e1033]: 18h
+                  - generic [ref=f4e1034]: 21h
+            - generic [ref=f4e1042]:
+              - generic [ref=f4e1043]:
+                - generic [ref=f4e1044]:
+                  - generic [ref=f4e1045]:
+                    - generic [ref=f4e1046]: Mezcla de vehículos
+                    - generic [ref=f4e1047]: Auto vs. moto en el rango
+                  - button "Ver datos en tabla" [ref=f4e1048] [cursor=pointer]: Tabla
+                - generic [ref=f4e1051]:
+                  - generic [ref=f4e1052]:
+                    - img "Mezcla de tipos de vehículo" [ref=f4e1053]:
+                      - generic [ref=f4e1055] [cursor=pointer]
+                      - generic [ref=f4e1056] [cursor=pointer]
+                    - generic:
+                      - generic: "23"
+                      - generic: tickets
+                  - generic [ref=f4e1057]:
+                    - generic [ref=f4e1058]:
+                      - generic [ref=f4e1060]: 83%
+                      - generic [ref=f4e1061]: Auto
+                    - generic [ref=f4e1062]:
+                      - generic [ref=f4e1064]: 17%
+                      - generic [ref=f4e1065]: Moto
+              - generic [ref=f4e1066]:
+                - generic [ref=f4e1067]:
+                  - generic [ref=f4e1068]:
+                    - generic [ref=f4e1069]: Patentes más frecuentes
+                    - generic [ref=f4e1070]: Placas con más de una visita en el rango
+                  - button "Ver datos en tabla" [ref=f4e1071] [cursor=pointer]: Tabla
+                - img "Patentes más frecuentes" [ref=f4e1074]:
+                  - generic [ref=f4e1075]:
+                    - generic "AD920HV" [ref=f4e1076]
+                    - generic [ref=f4e1079]: 4 vis.
+                  - generic [ref=f4e1080]:
+                    - generic "A232NTM" [ref=f4e1081]
+                    - generic [ref=f4e1083]: 3 vis.
+                  - generic [ref=f4e1084]:
+                    - generic "MARKME1" [ref=f4e1085]
+                    - generic [ref=f4e1087]: 3 vis.
+                  - generic [ref=f4e1088]:
+                    - generic "FREQ01" [ref=f4e1089]
+                    - generic [ref=f4e1091]: 3 vis.
+                  - generic [ref=f4e1092]:
+                    - generic "EDT006" [ref=f4e1093]
+                    - generic [ref=f4e1095]: 2 vis.
+                  - generic [ref=f4e1096]:
+                    - generic "DUPTEST" [ref=f4e1097]
+                    - generic [ref=f4e1099]: 2 vis.
+            - generic [ref=f4e1100]:
+              - generic [ref=f4e1101]:
+                - generic [ref=f4e1102]:
+                  - generic [ref=f4e1103]: Actividad por operador
+                  - generic [ref=f4e1104]: Entradas registradas por cada operador
+                - button "Ver datos en tabla" [ref=f4e1105] [cursor=pointer]: Tabla
+              - img "Actividad por operador" [ref=f4e1108]:
+                - generic [ref=f4e1109]:
+                  - generic "Luis Medina" [ref=f4e1110]
+                  - generic [ref=f4e1113]: "10"
+                - generic [ref=f4e1114]:
+                  - generic "ignacio" [ref=f4e1115]
+                  - generic [ref=f4e1117]: "9"
+                - generic [ref=f4e1118]:
+                  - generic "Carlos Ruiz" [ref=f4e1119]
+                  - generic [ref=f4e1121]: "3"
+                - generic [ref=f4e1122]:
+                  - generic "Ana Torres" [ref=f4e1123]
+                  - generic [ref=f4e1125]: "1"
+  - button "Open Next.js Dev Tools" [ref=f4e77] [cursor=pointer]
+  - alert [ref=f4e240]
+  - generic [ref=f4e390]:
+    - generic [ref=f4e391]:
+      - generic [ref=f4e392]: 8/12
+      - button "Salir del recorrido" [ref=f4e406] [cursor=pointer]
+    - generic [ref=f4e410]:
+      - generic [ref=f4e411]: Estadísticas
+      - generic [ref=f4e412]: Actividad, ocupación y tendencias del estacionamiento con gráficos animados. Filtrá por rango de fechas, tipo de vehículo u operador — todos los gráficos se actualizan juntos.
+    - generic [ref=f4e413]:
+      - button "Atrás" [ref=f4e419] [cursor=pointer]
+      - button "Siguiente" [active] [ref=f4e415] [cursor=pointer]

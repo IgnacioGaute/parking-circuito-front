@@ -4,3 +4,273 @@
 [     692ms] [LOG] [HMR] connected @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
 [   93055ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
 [   93259ms] [LOG] [Fast Refresh] done in 311ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  557825ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  558001ms] [LOG] [Fast Refresh] done in 325ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  558195ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  558334ms] [LOG] [Fast Refresh] done in 244ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  568291ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  568311ms] [LOG] [Fast Refresh] done in 108ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  568496ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  568555ms] [LOG] [Fast Refresh] done in 166ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  587402ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  587465ms] [ERROR] ./src/components/dashboard/RegistrarTab.tsx:161:7
+Expected '</', got 'ident'
+  159 |       </div>
+  160 |       <EntradaForm onRegistered={handleRegistered} />
+> 161 |     </div>
+      |       ^^^
+  162 |   );
+  163 | }
+  164 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component] @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:3330
+[  587593ms] [ERROR] ./src/components/dashboard/RegistrarTab.tsx:161:7
+Expected '</', got 'ident'
+  159 |       </div>
+  160 |       <EntradaForm onRegistered={handleRegistered} />
+> 161 |     </div>
+      |       ^^^
+  162 |   );
+  163 | }
+  164 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component] @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:3330
+[  587700ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  588743ms] [ERROR] ./src/components/dashboard/RegistrarTab.tsx:161:7
+Expected '</', got 'ident'
+  159 |       </div>
+  160 |       <EntradaForm onRegistered={handleRegistered} />
+> 161 |     </div>
+      |       ^^^
+  162 |   );
+  163 | }
+  164 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component] @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:3330
+[  588855ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  589065ms] [ERROR] ./src/components/dashboard/RegistrarTab.tsx:161:7
+Expected '</', got 'ident'
+  159 |       </div>
+  160 |       <EntradaForm onRegistered={handleRegistered} />
+> 161 |     </div>
+      |       ^^^
+  162 |   );
+  163 | }
+  164 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component] @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:3330
+[  589068ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3001/?_rsc=q3mOO9BClNZHexY7:0
+[  589187ms] [ERROR] ./src/components/dashboard/RegistrarTab.tsx:161:7
+Expected '</', got 'ident'
+  159 |       </div>
+  160 |       <EntradaForm onRegistered={handleRegistered} />
+> 161 |     </div>
+      |       ^^^
+  162 |   );
+  163 | }
+  164 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component] @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:3330
+[  589205ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3001/:0
+[  589407ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3001/_next/static/chunks/162a_react-dom_1hsf_h5._.js:15305
+[  589518ms] Error: ./src/components/dashboard/RegistrarTab.tsx:161:7
+Expected '</', got 'ident'
+  159 |       </div>
+  160 |       <EntradaForm onRegistered={handleRegistered} />
+> 161 |     </div>
+      |       ^^^
+  162 |   );
+  163 | }
+  164 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./src/components/dashboard/RegistrarTab.tsx:161:7)
+    at Object.getCompilationErrors (file://C:\Users\nachi\Projects\parking-circuito-front\node_modules\.pnpm\next@16.2.12_@babel+core@7._fcaffa52850e38fd99aedba2defe1e74\node_modules\next\dist\server\dev\hot-reloader-turbopack.js:1186:59)
+    at DevBundlerService.getCompilationError (file://C:\Users\nachi\Projects\parking-circuito-front\node_modules\.pnpm\next@16.2.12_@babel+core@7._fcaffa52850e38fd99aedba2defe1e74\node_modules\next\dist\server\lib\dev-bundler-service.js:44:55)
+    at DevServer.getCompilationError (file://C:\Users\nachi\Projects\parking-circuito-front\node_modules\.pnpm\next@16.2.12_@babel+core@7._fcaffa52850e38fd99aedba2defe1e74\node_modules\next\dist\server\dev\next-dev-server.js:720:42)
+    at DevServer.findPageComponents (file://C:\Users\nachi\Projects\parking-circuito-front\node_modules\.pnpm\next@16.2.12_@babel+core@7._fcaffa52850e38fd99aedba2defe1e74\node_modules\next\dist\server\dev\next-dev-server.js:690:43)
+    at async DevServer.renderErrorToResponseImpl (file://C:\Users\nachi\Projects\parking-circuito-front\node_modules\.pnpm\next@16.2.12_@babel+core@7._fcaffa52850e38fd99aedba2defe1e74\node_modules\next\dist\server\base-server.js:1753:26)
+[  589519ms] [LOG] [HMR] connected @ http://localhost:3001/_next/static/chunks/0a48_next_dist_0eqvw9y._.js:1226
+[  589555ms] [ERROR] ./src/components/dashboard/RegistrarTab.tsx:161:7
+Expected '</', got 'ident'
+  159 |       </div>
+  160 |       <EntradaForm onRegistered={handleRegistered} />
+> 161 |     </div>
+      |       ^^^
+  162 |   );
+  163 | }
+  164 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component] @ http://localhost:3001/_next/static/chunks/0a48_next_dist_0eqvw9y._.js:1945
+[  589623ms] [ERROR] ./src/components/dashboard/RegistrarTab.tsx:161:7
+Expected '</', got 'ident'
+  159 |       </div>
+  160 |       <EntradaForm onRegistered={handleRegistered} />
+> 161 |     </div>
+      |       ^^^
+  162 |   );
+  163 | }
+  164 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component] @ http://localhost:3001/_next/static/chunks/0a48_next_dist_0eqvw9y._.js:1945
+[  589685ms] [ERROR] ./src/components/dashboard/RegistrarTab.tsx:161:7
+Expected '</', got 'ident'
+  159 |       </div>
+  160 |       <EntradaForm onRegistered={handleRegistered} />
+> 161 |     </div>
+      |       ^^^
+  162 |   );
+  163 | }
+  164 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component] @ http://localhost:3001/_next/static/chunks/0a48_next_dist_0eqvw9y._.js:1945
+[  589855ms] [ERROR] ./src/components/dashboard/RegistrarTab.tsx:161:7
+Expected '</', got 'ident'
+  159 |       </div>
+  160 |       <EntradaForm onRegistered={handleRegistered} />
+> 161 |     </div>
+      |       ^^^
+  162 |   );
+  163 | }
+  164 |
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component Browser]
+    ./src/app/page.tsx [Client Component Browser]
+    ./src/app/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/dashboard/RegistrarTab.tsx [Client Component SSR]
+    ./src/app/page.tsx [Client Component SSR]
+    ./src/app/page.tsx [Server Component] @ http://localhost:3001/_next/static/chunks/0a48_next_dist_0eqvw9y._.js:1945
+[  589958ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_0eqvw9y._.js:1226
+[  594272ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_0eqvw9y._.js:1226
+[  594376ms] [LOG] [Fast Refresh] done in 199ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_0eqvw9y._.js:1226
+[  594527ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_0eqvw9y._.js:1226
+[  594537ms] [LOG] [Fast Refresh] done in 111ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_0eqvw9y._.js:1226
+[  594665ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_0eqvw9y._.js:1226
+[  595145ms] [LOG] [Fast Refresh] done in 599ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_0eqvw9y._.js:1226
+[  595556ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  595595ms] [LOG] [HMR] connected @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  618890ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  618938ms] [LOG] [Fast Refresh] done in 82ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  619110ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  619213ms] [LOG] [Fast Refresh] done in 217ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  637405ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  637406ms] [LOG] [Fast Refresh] done in 108ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  673985ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  674006ms] [LOG] [Fast Refresh] done in 119ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  674205ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  674258ms] [LOG] [Fast Refresh] done in 164ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  682231ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  682277ms] [LOG] [Fast Refresh] done in 96ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  682436ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  682515ms] [LOG] [Fast Refresh] done in 185ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  713076ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  713109ms] [LOG] [Fast Refresh] done in 100ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  713309ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489
+[  713418ms] [LOG] [Fast Refresh] done in 213ms @ http://localhost:3001/_next/static/chunks/0a48_next_dist_1dtl2yb._.js:2489

@@ -3,7 +3,7 @@ import type { TabKey } from '@/components/dashboard/NavTabs';
 export interface TourStep {
   id: string;
   tab: TabKey;
-  adminSection?: 'operadores' | 'campos';
+  adminSection?: 'operadores' | 'campos' | 'alertas';
   target: string | null;
   title: string;
   description: string;
@@ -28,6 +28,14 @@ export const TOUR_STEPS: TourStep[] = [
       'Completá la placa y el tipo de vehículo para registrar un ingreso. Los campos marcados "(opcional)" no son obligatorios. Al confirmar, el vehículo pasa a la lista de "Dentro".',
   },
   {
+    id: 'registrar-frecuentes',
+    tab: 'registrar',
+    target: '[data-tour="registrar-frecuentes"]',
+    title: '¿Es un vehículo frecuente?',
+    description:
+      'Buscá por placa o nombre para traer los datos de una visita anterior y registrar la entrada en un toque, sin volver a tipear todo.',
+  },
+  {
     id: 'dentro-buscar',
     tab: 'dentro',
     target: '[data-tour="dentro-buscar"]',
@@ -41,6 +49,14 @@ export const TOUR_STEPS: TourStep[] = [
     title: 'Registrar salida',
     description:
       'Cada tarjeta muestra hace cuánto entró el vehículo. Si pasó el tiempo límite configurado en Admin se marca "Atención". Tocá "Registrar salida" para confirmar el egreso.',
+  },
+  {
+    id: 'frecuentes-lista',
+    tab: 'frecuentes',
+    target: '[data-tour="frecuentes-lista"]',
+    title: 'Vehículos frecuentes',
+    description:
+      'Una patente aparece acá a partir de su segunda visita. Tocá una tarjeta para ver su historial de movimientos o editar sus datos.',
   },
   {
     id: 'historial-filtros',
@@ -57,6 +73,13 @@ export const TOUR_STEPS: TourStep[] = [
     title: 'Historial de registros',
     description:
       'Los registros se agrupan por día. Si hay muchos, tocá "Cargar más" para ir viendo el resto sin sobrecargar la pantalla.',
+  },
+  {
+    id: 'historial-pdf',
+    tab: 'historial',
+    target: '[data-tour="historial-pdf"]',
+    title: 'Exportar a PDF',
+    description: 'Descargá el historial de un día puntual como PDF, listo para imprimir o compartir.',
   },
   {
     id: 'estadisticas',
@@ -90,6 +113,16 @@ export const TOUR_STEPS: TourStep[] = [
     title: 'Campos del formulario',
     description:
       'Agregá campos personalizados al formulario de registro, o arrastrá cualquier campo para cambiar su orden. Los campos fijos (placa, tipo) no se pueden eliminar.',
+    adminOnly: true,
+  },
+  {
+    id: 'admin-alertas',
+    tab: 'admin',
+    adminSection: 'alertas',
+    target: '[data-tour="admin-alertas"]',
+    title: 'Alerta de tiempo dentro',
+    description:
+      'Configurá cuántos minutos puede estar un vehículo dentro antes de marcarse "Atención" en la pestaña Dentro. Se aplica para todos los operadores.',
     adminOnly: true,
   },
 ];

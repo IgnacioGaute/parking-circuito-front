@@ -425,6 +425,7 @@ export function HistorialTab({ isAdmin, onToast }: HistorialTabProps) {
                 </span>
               </div>
               <button
+                data-tour="historial-pdf"
                 onClick={() => downloadDayPdf(key)}
                 aria-label={`Descargar PDF del ${formatDateHeading(key)}`}
                 title="Descargar PDF del día"

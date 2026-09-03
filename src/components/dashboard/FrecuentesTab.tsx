@@ -169,7 +169,7 @@ export function FrecuentesTab({ onToast }: FrecuentesTabProps) {
         </div>
       )}
 
-      <div ref={listRef} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+      <div data-tour="frecuentes-lista" ref={listRef} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         {matches.map((plate) => {
           const extraEntries = getExtraEntries(plate, customFields);
           const isExpanded = expandedPlaca === plate.placa;

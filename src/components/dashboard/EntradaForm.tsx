@@ -460,6 +460,7 @@ export function EntradaForm({ onRegistered }: EntradaFormProps) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {frequentPlates.length > 0 && (
         <div
+          data-tour="registrar-frecuentes"
           style={{
             position: 'relative',
             overflow: 'hidden',

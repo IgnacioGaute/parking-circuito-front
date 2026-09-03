@@ -1,0 +1,65 @@
+- generic [ref=f4e1]:
+  - generic [ref=f4e81]:
+    - navigation [ref=f4e82]:
+      - generic [ref=f4e83]: Control de Estacionamiento
+      - generic [ref=f4e87]:
+        - button "Registrar" [ref=f4e88] [cursor=pointer]
+        - button "Dentro 2" [ref=f4e92] [cursor=pointer]:
+          - generic [ref=f4e98]: Dentro
+          - generic "2 con alerta" [ref=f4e422]
+          - generic [ref=f4e425]: "2"
+        - button "Frecuentes" [ref=f4e100] [cursor=pointer]
+        - button "Historial" [ref=f4e105] [cursor=pointer]
+        - button "Estadísticas" [ref=f4e109] [cursor=pointer]
+        - button "Usuarios" [ref=f4e114] [cursor=pointer]
+        - button "Admin" [ref=f4e122] [cursor=pointer]
+      - button "Contraer" [ref=f4e128] [cursor=pointer]
+    - generic [ref=f4e133]:
+      - banner [ref=f4e134]:
+        - generic [ref=f4e135]: Carlos Ruiz
+        - generic [ref=f4e138]:
+          - generic [ref=f4e139]:
+            - generic [ref=f4e140]: 13:06:11
+            - button "Ver recorrido guiado" [ref=f4e145] [cursor=pointer]
+            - button "Cambiar a tema claro" [ref=f4e149] [cursor=pointer]
+          - button "Cerrar turno" [ref=f4e156] [cursor=pointer]
+      - main [ref=f4e160]:
+        - generic [ref=f4e1126]:
+          - generic [ref=f4e1127]: Registro de operadores
+          - generic [ref=f4e1128]:
+            - generic [ref=f4e1129]:
+              - generic [ref=f4e1130]: AT
+              - generic [ref=f4e1131]:
+                - generic [ref=f4e1132]: Ana Torres
+                - generic [ref=f4e1133]: Operador
+              - generic [ref=f4e1134]: Fuera de turno
+            - generic [ref=f4e1136]:
+              - generic [ref=f4e1137]: CR
+              - generic [ref=f4e1138]:
+                - generic [ref=f4e1139]: Carlos Ruiz
+                - generic [ref=f4e1140]: Operador
+              - generic [ref=f4e1141]: En turno
+            - generic [ref=f4e1143]:
+              - generic [ref=f4e1144]: LM
+              - generic [ref=f4e1145]:
+                - generic [ref=f4e1146]: Luis Medina
+                - generic [ref=f4e1147]: Operador
+              - generic [ref=f4e1148]: Fuera de turno
+            - generic [ref=f4e1150]:
+              - generic [ref=f4e1151]: I
+              - generic [ref=f4e1152]:
+                - generic [ref=f4e1153]: ignacio
+                - generic [ref=f4e1154]: Operador
+              - generic [ref=f4e1155]: Fuera de turno
+  - button "Open Next.js Dev Tools" [ref=f4e77] [cursor=pointer]
+  - alert [ref=f4e240]
+  - generic [ref=f4e390]:
+    - generic [ref=f4e391]:
+      - generic [ref=f4e392]: 9/12
+      - button "Salir del recorrido" [ref=f4e406] [cursor=pointer]
+    - generic [ref=f4e410]:
+      - generic [ref=f4e411]: Usuarios
+      - generic [ref=f4e412]: Acá ves a todos los operadores del sistema y si están en turno o no en este momento.
+    - generic [ref=f4e413]:
+      - button "Atrás" [ref=f4e419] [cursor=pointer]
+      - button "Siguiente" [active] [ref=f4e415] [cursor=pointer]

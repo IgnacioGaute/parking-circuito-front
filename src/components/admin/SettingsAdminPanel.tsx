@@ -23,6 +23,8 @@ const PRESETS = [15, 30, 60, 90, 120, 180];
 export function SettingsAdminPanel({ onToast }: SettingsAdminPanelProps) {
   const [loading, setLoading] = useState(true);
   const [minutes, setMinutes] = useState('60');
+  const [alertsEnabled, setAlertsEnabled] = useState(true);
+  const [togglingAlerts, setTogglingAlerts] = useState(false);
   const [saving, setSaving] = useState(false);
   const [justSaved, setJustSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,13 +33,34 @@ export function SettingsAdminPanel({ onToast }: SettingsAdminPanelProps) {
 
   useEffect(() => {
     getSettingsAction()
-      .then((settings) => setMinutes(String(settings.alertThresholdMinutes)))
+      .then((settings) => {
+        setMinutes(String(settings.alertThresholdMinutes));
+        setAlertsEnabled(settings.alertsEnabled);
+      })
       .catch(() => onToast('No se pudo cargar la configuración'))
       .finally(() => setLoading(false));
     // onToast is stable across renders in this app (defined once via useToast),
     // so omitting it keeps this to a real mount-only fetch.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // A toggle, not a form field — it saves the instant it's flipped instead
+  // of waiting for "Guardar" below (that button only ever touches the
+  // minutes value). Optimistic: flips immediately, reverts on failure.
+  const handleToggleAlerts = async () => {
+    const next = !alertsEnabled;
+    setAlertsEnabled(next);
+    setTogglingAlerts(true);
+    try {
+      await updateSettingsAction({ alertsEnabled: next });
+      onToast(next ? 'Alertas activadas' : 'Alertas desactivadas');
+    } catch {
+      setAlertsEnabled(!next);
+      onToast('No se pudo cambiar el estado de las alertas');
+    } finally {
+      setTogglingAlerts(false);
+    }
+  };
 
   useEffect(() => {
     if (loading || prefersReducedMotion() || !cardRef.current) return;
@@ -119,6 +142,74 @@ export function SettingsAdminPanel({ onToast }: SettingsAdminPanelProps) {
             gap: 18,
           }}
         >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              border: `1px solid ${alertsEnabled ? colors.border : colors.borderDashed}`,
+              borderRadius: 13,
+              padding: '13px 14px',
+            }}
+          >
+            <button
+              type="button"
+              onClick={handleToggleAlerts}
+              disabled={togglingAlerts}
+              className="ui-btn"
+              aria-pressed={alertsEnabled}
+              aria-label={alertsEnabled ? 'Desactivar alertas' : 'Activar alertas'}
+              style={{
+                position: 'relative',
+                flexShrink: 0,
+                width: 40,
+                height: 23,
+                borderRadius: 999,
+                border: 'none',
+                padding: 0,
+                cursor: togglingAlerts ? 'default' : 'pointer',
+                background: alertsEnabled ? colors.accent : colors.bgInputAlt,
+                opacity: togglingAlerts ? 0.7 : 1,
+                transition: 'background .18s ease',
+              }}
+            >
+              <span
+                style={{
+                  position: 'absolute',
+                  top: 2.5,
+                  left: 2.5,
+                  width: 18,
+                  height: 18,
+                  borderRadius: '50%',
+                  background: '#fff',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                  transform: alertsEnabled ? 'translateX(17px)' : 'translateX(0)',
+                  transition: 'transform .22s cubic-bezier(.4,0,.2,1)',
+                }}
+              />
+            </button>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: 13.5, fontWeight: 700 }}>
+                {alertsEnabled ? 'Alertas activadas' : 'Alertas desactivadas'}
+              </div>
+              <div style={{ fontSize: 12, color: colors.textMuted, marginTop: 2 }}>
+                {alertsEnabled
+                  ? 'Un vehículo se marca "Atención" al superar el tiempo configurado abajo.'
+                  : 'Ningún vehículo se va a marcar "Atención", sin importar cuánto tiempo lleve dentro.'}
+              </div>
+            </div>
+          </div>
+
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 18,
+              opacity: alertsEnabled ? 1 : 0.45,
+              pointerEvents: alertsEnabled ? 'auto' : 'none',
+              transition: 'opacity .15s ease',
+            }}
+          >
           <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
             <span style={{ fontSize: 12, fontWeight: 600, color: colors.textMuted }}>
               Presets rápidos
@@ -245,6 +336,7 @@ export function SettingsAdminPanel({ onToast }: SettingsAdminPanelProps) {
               {saving ? 'Guardando…' : justSaved ? 'Guardado' : 'Guardar'}
             </button>
             {error && <div style={{ color: colors.error, fontSize: 12.5 }}>{error}</div>}
+          </div>
           </div>
         </div>
       )}

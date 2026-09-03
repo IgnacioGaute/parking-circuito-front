@@ -1,0 +1,61 @@
+- generic [active] [ref=f7e1]:
+  - generic [ref=f7e2]:
+    - generic [ref=f7e81]:
+      - navigation [ref=f7e82]:
+        - generic [ref=f7e83]: Control de Estacionamiento
+        - generic [ref=f7e87]:
+          - button "Registrar" [ref=f7e88] [cursor=pointer]
+          - button "Dentro 2" [ref=f7e92] [cursor=pointer]:
+            - generic [ref=f7e98]: Dentro
+            - generic [ref=f7e340]: "2"
+          - button "Frecuentes" [ref=f7e100] [cursor=pointer]
+          - button "Historial" [ref=f7e105] [cursor=pointer]
+          - button "Estadísticas" [ref=f7e109] [cursor=pointer]
+          - button "Usuarios" [ref=f7e114] [cursor=pointer]
+          - button "Admin" [ref=f7e122] [cursor=pointer]
+        - button "Contraer" [ref=f7e128] [cursor=pointer]
+      - generic [ref=f7e133]:
+        - banner [ref=f7e134]:
+          - generic [ref=f7e135]: Carlos Ruiz
+          - generic [ref=f7e138]:
+            - generic [ref=f7e139]:
+              - generic [ref=f7e140]: 13:18:20
+              - button "Ver recorrido guiado" [ref=f7e145] [cursor=pointer]
+              - button "Cambiar a tema claro" [ref=f7e149] [cursor=pointer]
+            - button "Cerrar turno" [ref=f7e156] [cursor=pointer]
+        - main [ref=f7e160]:
+          - generic [ref=f7e394]:
+            - generic [ref=f7e395]:
+              - button "Operadores" [ref=f7e396] [cursor=pointer]
+              - button "Campos de registro" [ref=f7e397] [cursor=pointer]
+              - button "Alertas" [ref=f7e398] [cursor=pointer]
+            - generic [ref=f7e456]:
+              - generic [ref=f7e462]:
+                - generic [ref=f7e463]: Alerta de tiempo dentro
+                - generic [ref=f7e464]: Un vehículo se marca "Atención" en la pestaña Dentro cuando lleva más de este tiempo sin registrar salida.
+              - generic [ref=f7e465]:
+                - generic [ref=f7e466]:
+                  - button "Desactivar alertas" [pressed] [ref=f7e472] [cursor=pointer]
+                  - generic [ref=f7e469]:
+                    - generic [ref=f7e470]: Alertas activadas
+                    - generic [ref=f7e471]: Un vehículo se marca "Atención" al superar el tiempo configurado abajo.
+                - generic [ref=f7e473]:
+                  - generic [ref=f7e474]:
+                    - generic [ref=f7e475]: Presets rápidos
+                    - generic [ref=f7e476]:
+                      - button "15m" [ref=f7e477] [cursor=pointer]
+                      - button "30m" [ref=f7e478] [cursor=pointer]
+                      - button "1h 0m" [ref=f7e479] [cursor=pointer]
+                      - button "1h 30m" [ref=f7e480] [cursor=pointer]
+                      - button "2h 0m" [ref=f7e481] [cursor=pointer]
+                      - button "3h 0m" [ref=f7e482] [cursor=pointer]
+                  - generic [ref=f7e483]:
+                    - generic [ref=f7e484]:
+                      - generic [ref=f7e485]: Minutos dentro antes de la alerta
+                      - spinbutton [ref=f7e486]: "60"
+                    - slider [ref=f7e487]: "60"
+                  - generic [ref=f7e488]: "Ejemplo: un vehículo que entra a las 14:00 se marca \"Atención\" a las 15:00 (1h 0m después)."
+                  - button "Guardar" [ref=f7e491] [cursor=pointer]
+    - generic [ref=f7e492]: Alertas activadas
+  - button "Open Next.js Dev Tools" [ref=f7e77] [cursor=pointer]
+  - alert [ref=f7e240]

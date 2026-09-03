@@ -4,6 +4,7 @@ import { Car, CalendarCheck, Timer } from 'lucide-react';
 import type { ComponentType } from 'react';
 import { useEffect, useState } from 'react';
 import { getHistoryAction, getInsideAction } from '@/actions/parking-records.actions';
+import { LoadingSquares } from '@/components/ui/LoadingSquares';
 import { dateKey, formatDuration } from '@/lib/format';
 import { useStaggerReveal } from '@/lib/use-stagger-reveal';
 import { colors, fonts } from '@/styles/theme';
@@ -27,20 +28,24 @@ function averageStay(records: ParkingRecord[]): string {
 export function RegistrarTab({ onEntradaRegistered }: RegistrarTabProps) {
   const [insideRecords, setInsideRecords] = useState<ParkingRecord[]>([]);
   const [todayCount, setTodayCount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
+  // Silent refresh, reused after registering a new entrada — only the
+  // initial mount (below) gates the loading icon, so submitting a new
+  // entrada updates the stats in place instead of hiding the tab again.
   const refresh = () => {
-    getInsideAction()
-      .then(setInsideRecords)
-      .catch(() => undefined);
-    const todayKey = dateKey(new Date());
-    getHistoryAction({})
-      .then((records) => {
-        setTodayCount(records.filter((record) => dateKey(record.entradaTime) === todayKey).length);
+    return Promise.all([getInsideAction(), getHistoryAction({})])
+      .then(([inside, history]) => {
+        setInsideRecords(inside);
+        const todayKey = dateKey(new Date());
+        setTodayCount(history.filter((record) => dateKey(record.entradaTime) === todayKey).length);
       })
       .catch(() => undefined);
   };
 
-  useEffect(refresh, []);
+  useEffect(() => {
+    refresh().finally(() => setLoading(false));
+  }, []);
 
   const handleRegistered = () => {
     refresh();
@@ -59,6 +64,22 @@ export function RegistrarTab({ onEntradaRegistered }: RegistrarTabProps) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, animation: 'fadeUp .3s both' }}>
+      {loading && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            padding: '60px 16px',
+            border: `1px dashed ${colors.border}`,
+            borderRadius: 12,
+          }}
+        >
+          <LoadingSquares />
+        </div>
+      )}
+
+      {!loading && (
+      <>
       <div ref={statsRef} style={{ display: 'flex', gap: 9 }}>
         {stats.map((stat) => (
           <div
@@ -136,6 +157,8 @@ export function RegistrarTab({ onEntradaRegistered }: RegistrarTabProps) {
         ))}
       </div>
       <EntradaForm onRegistered={handleRegistered} />
+      </>
+      )}
     </div>
   );
 }

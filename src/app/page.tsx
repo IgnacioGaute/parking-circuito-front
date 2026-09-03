@@ -29,9 +29,9 @@ export default function DashboardPage() {
   const [insideCount, setInsideCount] = useState(0);
   const [overdueCount, setOverdueCount] = useState(0);
   const [tourStep, setTourStep] = useState<number | null>(null);
-  const [tourAdminSection, setTourAdminSection] = useState<'operadores' | 'campos' | undefined>(
-    undefined,
-  );
+  const [tourAdminSection, setTourAdminSection] = useState<
+    'operadores' | 'campos' | 'alertas' | undefined
+  >(undefined);
   const { toast, showToast } = useToast();
   const isAdmin = activeOperator?.role === 'admin';
   const tourSteps = useMemo(

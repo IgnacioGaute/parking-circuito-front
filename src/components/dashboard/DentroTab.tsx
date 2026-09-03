@@ -49,6 +49,7 @@ export function DentroTab({ isDesktop, onCountChange, onOverdueChange, onToast }
   // 60 (1 hour) matches this app's previous hardcoded threshold — used while
   // the real, admin-configured value is still loading.
   const [alertThresholdMinutes, setAlertThresholdMinutes] = useState(60);
+  const [alertsEnabled, setAlertsEnabled] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
@@ -82,7 +83,10 @@ export function DentroTab({ isDesktop, onCountChange, onOverdueChange, onToast }
       .catch(() => undefined);
     getSettingsAction()
       .then((settings) => {
-        if (!cancelled) setAlertThresholdMinutes(settings.alertThresholdMinutes);
+        if (!cancelled) {
+          setAlertThresholdMinutes(settings.alertThresholdMinutes);
+          setAlertsEnabled(settings.alertsEnabled);
+        }
       })
       .catch(() => undefined);
     return () => {
@@ -100,7 +104,7 @@ export function DentroTab({ isDesktop, onCountChange, onOverdueChange, onToast }
   }, []);
 
   const isOverdue = (record: ParkingRecord) =>
-    now - new Date(record.entradaTime).getTime() > alertThresholdMinutes * 60_000;
+    alertsEnabled && now - new Date(record.entradaTime).getTime() > alertThresholdMinutes * 60_000;
 
   const overdueCount = records.filter(isOverdue).length;
 
@@ -136,7 +140,7 @@ export function DentroTab({ isDesktop, onCountChange, onOverdueChange, onToast }
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [records, now, alertThresholdMinutes]);
+  }, [records, now, alertThresholdMinutes, alertsEnabled]);
 
   const closeConfirm = () => {
     if (exitPhase !== 'idle') return;

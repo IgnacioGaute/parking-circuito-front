@@ -1,0 +1,25 @@
+- generic [active] [ref=f4e1]:
+  - generic [ref=f4e2]:
+    - banner [ref=f4e3]:
+      - generic [ref=f4e5]:
+        - generic [ref=f4e9]:
+          - generic [ref=f4e10]: Registrar entrada
+          - generic [ref=f4e11]: Cargá una placa o buscá un frecuente
+        - generic [ref=f4e12]:
+          - generic [ref=f4e13]: "--:--:--"
+          - button "Ver recorrido guiado" [ref=f4e18] [cursor=pointer]
+          - button "Cambiar a tema claro" [ref=f4e22] [cursor=pointer]
+      - generic [ref=f4e29]:
+        - generic [ref=f4e30]: —
+        - button "Cerrar turno" [ref=f4e33] [cursor=pointer]
+    - generic [ref=f4e37]:
+      - navigation [ref=f4e38]:
+        - button "Registrar" [ref=f4e39] [cursor=pointer]
+        - button "Dentro" [ref=f4e43] [cursor=pointer]:
+          - generic [ref=f4e49]: "0"
+        - button "Frecuentes" [ref=f4e50] [cursor=pointer]
+        - button "Historial" [ref=f4e54] [cursor=pointer]
+        - button "Más" [ref=f4e57] [cursor=pointer]
+      - main [ref=f4e63]:
+        - status "Cargando" [ref=f4e67]
+  - button "Open Next.js Dev Tools" [ref=f4e77] [cursor=pointer]

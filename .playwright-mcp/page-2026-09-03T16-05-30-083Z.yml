@@ -1,0 +1,122 @@
+- generic [ref=f4e1]:
+  - generic [ref=f4e81]:
+    - navigation [ref=f4e82]:
+      - generic [ref=f4e83]: Control de Estacionamiento
+      - generic [ref=f4e87]:
+        - button "Registrar" [ref=f4e88] [cursor=pointer]
+        - button "Dentro 2" [ref=f4e92] [cursor=pointer]:
+          - generic [ref=f4e98]: Dentro
+          - generic "2 con alerta" [ref=f4e422]
+          - generic [ref=f4e425]: "2"
+        - button "Frecuentes" [ref=f4e100] [cursor=pointer]
+        - button "Historial" [ref=f4e105] [cursor=pointer]
+        - button "Estadísticas" [ref=f4e109] [cursor=pointer]
+        - button "Usuarios" [ref=f4e114] [cursor=pointer]
+        - button "Admin" [ref=f4e122] [cursor=pointer]
+      - button "Contraer" [ref=f4e128] [cursor=pointer]
+    - generic [ref=f4e133]:
+      - banner [ref=f4e134]:
+        - generic [ref=f4e135]: Carlos Ruiz
+        - generic [ref=f4e138]:
+          - generic [ref=f4e139]:
+            - generic [ref=f4e140]: 13:05:29
+            - button "Ver recorrido guiado" [ref=f4e145] [cursor=pointer]
+            - button "Cambiar a tema claro" [ref=f4e149] [cursor=pointer]
+          - button "Cerrar turno" [ref=f4e156] [cursor=pointer]
+      - main [ref=f4e160]:
+        - generic [ref=f4e492]:
+          - generic [ref=f4e493]:
+            - generic [ref=f4e494]: Frecuentes
+            - generic [ref=f4e495]: 6 placas
+          - textbox "Buscar por placa" [ref=f4e497]
+          - generic [ref=f4e498]:
+            - generic [ref=f4e499]:
+              - generic [ref=f4e500]:
+                - generic [ref=f4e501]:
+                  - generic [ref=f4e507]: AD920HV
+                  - generic [ref=f4e508]: Auto
+                - generic [ref=f4e509]:
+                  - generic [ref=f4e510]: 4 visitas
+                  - button "Editar patente" [ref=f4e513] [cursor=pointer]
+              - generic [ref=f4e517]: "Última vez: 02 sept · 13:19"
+              - generic [ref=f4e518]:
+                - generic [ref=f4e519]: "Nombre y apellido: nacho gaute"
+                - generic [ref=f4e520]: "DNI: 44404686"
+              - button "Ver movimientos" [ref=f4e521] [cursor=pointer]
+            - generic [ref=f4e524]:
+              - generic [ref=f4e525]:
+                - generic [ref=f4e526]:
+                  - generic [ref=f4e533]: A232NTM
+                  - generic [ref=f4e534]: Moto
+                - generic [ref=f4e535]:
+                  - generic [ref=f4e536]: 3 visitas
+                  - button "Editar patente" [ref=f4e539] [cursor=pointer]
+              - generic [ref=f4e543]: "Última vez: 02 sept · 16:35"
+              - generic [ref=f4e544]:
+                - generic [ref=f4e545]: "Nombre y apellido: tomas gaute"
+                - generic [ref=f4e546]: "DNI: 44404686"
+              - button "Ver movimientos" [ref=f4e547] [cursor=pointer]
+            - generic [ref=f4e550]:
+              - generic [ref=f4e551]:
+                - generic [ref=f4e552]:
+                  - generic [ref=f4e558]: MARKME1
+                  - generic [ref=f4e559]: Auto
+                - generic [ref=f4e560]:
+                  - generic [ref=f4e561]: 3 visitas
+                  - button "Editar patente" [ref=f4e564] [cursor=pointer]
+              - generic [ref=f4e568]: "Última vez: 31 ago · 17:59"
+              - generic [ref=f4e569]:
+                - generic [ref=f4e570]: "Nombre y apellido: Test Uno"
+                - generic [ref=f4e571]: "DNI: 40555666"
+              - button "Ver movimientos" [ref=f4e572] [cursor=pointer]
+            - generic [ref=f4e575]:
+              - generic [ref=f4e576]:
+                - generic [ref=f4e577]:
+                  - generic [ref=f4e583]: FREQ01
+                  - generic [ref=f4e584]: Auto
+                - generic [ref=f4e585]:
+                  - generic [ref=f4e586]: 3 visitas
+                  - button "Editar patente" [ref=f4e589] [cursor=pointer]
+              - generic [ref=f4e593]: "Última vez: 26 ago · 14:49"
+              - generic [ref=f4e594]:
+                - generic [ref=f4e595]: "Nombre y apellido: Test Uno"
+                - generic [ref=f4e596]: "DNI: 40555111"
+              - button "Ver movimientos" [ref=f4e597] [cursor=pointer]
+            - generic [ref=f4e600]:
+              - generic [ref=f4e601]:
+                - generic [ref=f4e602]:
+                  - generic [ref=f4e608]: EDT006
+                  - generic [ref=f4e609]: Auto
+                - generic [ref=f4e610]:
+                  - generic [ref=f4e611]: 2 visitas
+                  - button "Editar patente" [ref=f4e614] [cursor=pointer]
+              - generic [ref=f4e618]: "Última vez: 31 ago · 18:16"
+              - generic [ref=f4e619]:
+                - generic [ref=f4e620]: "Nombre y apellido: Dup Test 2"
+                - generic [ref=f4e621]: "DNI: 66666667"
+              - button "Ver movimientos" [ref=f4e622] [cursor=pointer]
+            - generic [ref=f4e625]:
+              - generic [ref=f4e626]:
+                - generic [ref=f4e627]:
+                  - generic [ref=f4e633]: DUPTEST
+                  - generic [ref=f4e634]: Auto
+                - generic [ref=f4e635]:
+                  - generic [ref=f4e636]: 2 visitas
+                  - button "Editar patente" [ref=f4e639] [cursor=pointer]
+              - generic [ref=f4e643]: "Última vez: 31 ago · 17:30"
+              - generic [ref=f4e644]:
+                - generic [ref=f4e645]: "Nombre y apellido: Cuatro Test"
+                - generic [ref=f4e646]: "DNI: 44444444"
+              - button "Ver movimientos" [ref=f4e647] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=f4e77] [cursor=pointer]
+  - alert [ref=f4e240]
+  - generic [ref=f4e390]:
+    - generic [ref=f4e391]:
+      - generic [ref=f4e392]: 5/12
+      - button "Salir del recorrido" [ref=f4e406] [cursor=pointer]
+    - generic [ref=f4e410]:
+      - generic [ref=f4e411]: Vehículos frecuentes
+      - generic [ref=f4e412]: Una patente aparece acá a partir de su segunda visita. Tocá una tarjeta para ver su historial de movimientos o editar sus datos.
+    - generic [ref=f4e413]:
+      - button "Atrás" [ref=f4e419] [cursor=pointer]
+      - button "Siguiente" [active] [ref=f4e415] [cursor=pointer]
